@@ -1,4 +1,5 @@
 global using CinemaTicketingAssignment.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,15 @@ builder.Services.AddControllersWithViews();
 // Register SQL Server with an explicit database name to prevent auto-naming conflicts
 builder.Services.AddDbContext<DB>(options =>
     options.UseSqlServer($@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={builder.Environment.ContentRootPath}\CinemaDB.mdf;Database=CinemaTicketDb;Integrated Security=True;Encrypt=False;"));
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied"; // Routed if a CUSTOMER hits an ADMIN page
+    });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
