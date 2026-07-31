@@ -897,3 +897,4 @@ C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\CinemaT
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\CinemaTicketingAssignment.genruntimeconfig.cache
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\ref\CinemaTicketingAssignment.dll
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\CinemaTicketingAssignment.sourcelink.json
+C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
