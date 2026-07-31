@@ -16,21 +16,18 @@ namespace CinemaTicketingAssignment.Controllers
             _db = db;
         }
 
-        // GET: /Account/Login
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
-        // POST: /Account/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
 
-            // 1. Fetch the user from the database
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
 
             if (user == null)
@@ -39,7 +36,6 @@ namespace CinemaTicketingAssignment.Controllers
                 return View(model);
             }
 
-            // 2. Check if user account is currently locked out
             if (user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.UtcNow)
             {
                 var remainingMinutes = Math.Ceiling((user.LockoutEnd.Value - DateTime.UtcNow).TotalMinutes);
@@ -47,32 +43,24 @@ namespace CinemaTicketingAssignment.Controllers
                 return View(model);
             }
 
-            // 3. Verify Password (using your 'Hash' property name)
             if (user.Hash == model.Password)
             {
-                // Reset failed attempts upon successful login
                 user.FailedLoginAttempts = 0;
                 user.LockoutEnd = null;
                 await _db.SaveChangesAsync();
 
-                // 4. Determine the Role dynamically based on the object class type
-                string roleName = "CUSTOMER"; // Default fallback
+                string roleName = "CUSTOMER";
                 if (user is Admin)
                 {
                     roleName = "ADMIN";
                 }
-                else if (user is Member)
-                {
-                    roleName = "CUSTOMER";
-                }
 
-                // 5. Set up the manual cookie claims infrastructure
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id), // user.Id is a string now!
-                    new Claim(ClaimTypes.Name, user.Name),         // Changed to user.Name
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Name, user.Name),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, roleName)          // RBAC dynamically set
+                    new Claim(ClaimTypes.Role, roleName)
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -82,19 +70,16 @@ namespace CinemaTicketingAssignment.Controllers
                     ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30)
                 };
 
-                // Issue the authentication cookie
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
-                // Redirect based on role requirements
                 if (roleName == "ADMIN")
                 {
-                    return RedirectToAction("Index", "AdminDashboard"); // Change to your actual Admin Controller
+                    return RedirectToAction("Index", "AdminDashboard");
                 }
                 return RedirectToAction("Index", "Home");
             }
             else
             {
-                // 6. Failed password logic: Handle the 15-minute temporary lockout rules
                 user.FailedLoginAttempts++;
 
                 if (user.FailedLoginAttempts >= 3)
@@ -112,7 +97,6 @@ namespace CinemaTicketingAssignment.Controllers
             }
         }
 
-        // POST: /Account/Logout
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
