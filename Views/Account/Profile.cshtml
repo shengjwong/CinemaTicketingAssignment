@@ -1,0 +1,33 @@
+﻿@model CinemaTicketingAssignment.Models.User
+
+<h2>Account Settings</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<form asp-action="UpdateProfile" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group mb-3">
+        <label>Full Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Email Address (Read-Only)</label>
+        <input asp-for="Email" class="form-control" readonly />
+    </div>
+
+    <hr />
+    <h4>Update Password (Leave blank to keep current)</h4>
+
+    <div class="form-group mb-3">
+        <label>New Password</label>
+        <input type="password" name="newPassword" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Save Changes</button>
+</form>

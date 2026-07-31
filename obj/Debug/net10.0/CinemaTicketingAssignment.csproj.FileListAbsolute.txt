@@ -890,10 +890,10 @@ C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\staticw
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\staticwebassets.development.json
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\staticwebassets.build.endpoints.json
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\swae.build.ex.cache
-C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\CinemaTi.3CBB9B5A.Up2Date
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\CinemaTicketingAssignment.dll
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\refint\CinemaTicketingAssignment.dll
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\CinemaTicketingAssignment.pdb
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\CinemaTicketingAssignment.genruntimeconfig.cache
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\ref\CinemaTicketingAssignment.dll
+C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\CinemaTicketingAssignment.sourcelink.json
