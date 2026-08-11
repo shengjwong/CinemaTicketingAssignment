@@ -1,0 +1,26 @@
+@model Showtime
+@{
+    ViewData["Title"] = "Cancel Showtime";
+}
+
+<h1 class="mb-3">Cancel Showtime</h1>
+
+<div class="alert alert-warning">
+    Are you sure you want to cancel this showtime? This cannot be undone.
+</div>
+
+<dl class="row">
+    <dt class="col-sm-2">Movie</dt>
+    <dd class="col-sm-10">@Model.Movie.Title</dd>
+    <dt class="col-sm-2">Hall</dt>
+    <dd class="col-sm-10">@Model.CinemaHall.HallName</dd>
+    <dt class="col-sm-2">Date</dt>
+    <dd class="col-sm-10">@Model.StartDateTime.ToString("dd MMM yyyy")</dd>
+    <dt class="col-sm-2">Time</dt>
+    <dd class="col-sm-10">@Model.StartDateTime.ToString("h:mm tt") - @Model.EndDateTime.ToString("h:mm tt")</dd>
+</dl>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <button type="submit" class="btn btn-danger">Confirm Cancel</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Back</a>
+</form>

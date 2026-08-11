@@ -1,0 +1,26 @@
+@model Movie
+@{
+    ViewData["Title"] = "Delete Movie";
+}
+
+<h1 class="mb-3">Delete Movie</h1>
+
+<div class="alert alert-warning">
+    Are you sure you want to delete <strong>@Model.Title</strong>? This cannot be undone, and any showtimes for this movie should be removed first.
+</div>
+
+<dl class="row">
+    <dt class="col-sm-2">Genre</dt>
+    <dd class="col-sm-10">@Model.Genre</dd>
+    <dt class="col-sm-2">Language</dt>
+    <dd class="col-sm-10">@Model.Language</dd>
+    <dt class="col-sm-2">Rating</dt>
+    <dd class="col-sm-10">@Model.AgeClassification</dd>
+    <dt class="col-sm-2">Status</dt>
+    <dd class="col-sm-10">@Model.Status</dd>
+</dl>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+    <a asp-action="Admin" class="btn btn-outline-secondary">Cancel</a>
+</form>

@@ -1,0 +1,41 @@
+@model CinemaHall
+@{
+    ViewData["Title"] = Model.HallName;
+}
+
+<a asp-action="Index" class="btn btn-outline-secondary btn-sm mb-3">&larr; Back to Cinema Halls</a>
+
+<h1>@Model.HallName</h1>
+<p class="text-muted">@Model.HallType &middot; Seat Capacity: @Model.SeatCapacity</p>
+
+<h3 class="mt-4">Scheduled Showtimes</h3>
+@if (!Model.Showtimes.Any())
+{
+    <p class="text-muted">No showtimes scheduled in this hall yet.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Movie</th>
+                <th>Date</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in Model.Showtimes.OrderBy(s => s.StartDateTime))
+            {
+                <tr>
+                    <td>@s.Movie.Title</td>
+                    <td>@s.StartDateTime.ToString("dd MMM yyyy")</td>
+                    <td>@s.StartDateTime.ToString("h:mm tt")</td>
+                    <td>@s.EndDateTime.ToString("h:mm tt")</td>
+                    <td>RM @s.TicketPrice.ToString("0.00")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

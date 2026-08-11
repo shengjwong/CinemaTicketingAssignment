@@ -25,6 +25,18 @@ public class DB : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        // ----- Admin user (for testing the CRUD/admin pages) -----
+        // Login at /Account/Login with these credentials.
+        modelBuilder.Entity<Admin>().HasData(
+            new Admin
+            {
+                Id = "ADM001",
+                Name = "System Admin",
+                Email = "admin@cinema.com",
+                Hash = "Admin@123"
+            }
+        );
+
         // ----- Movies -----
         modelBuilder.Entity<Movie>().HasData(
             new Movie

@@ -1,0 +1,42 @@
+@model Movie
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<a asp-action="Index" class="btn btn-outline-secondary btn-sm mb-3">&larr; Back to Movies</a>
+
+<h1>@Model.Title</h1>
+<p class="text-muted">@Model.Genre &middot; @Model.Language &middot; @Model.AgeClassification &middot; Released @Model.ReleaseDate.ToString("dd MMM yyyy")</p>
+<p>@Model.Synopsis</p>
+
+<h3 class="mt-4">Showtimes</h3>
+@if (!Model.Showtimes.Any())
+{
+    <p class="text-muted">No showtimes scheduled for this movie yet.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Hall</th>
+                <th>Date</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in Model.Showtimes.OrderBy(s => s.StartDateTime))
+            {
+                <tr>
+                    <td>@s.CinemaHall.HallName (@s.CinemaHall.HallType)</td>
+                    <td>@s.StartDateTime.ToString("dd MMM yyyy")</td>
+                    <td>@s.StartDateTime.ToString("h:mm tt")</td>
+                    <td>@s.EndDateTime.ToString("h:mm tt")</td>
+                    <td>RM @s.TicketPrice.ToString("0.00")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

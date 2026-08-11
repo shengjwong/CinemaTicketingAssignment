@@ -1,0 +1,36 @@
+@model CinemaHall
+@{
+    ViewData["Title"] = "Edit Cinema Hall";
+}
+
+<h1 class="mb-3">Edit Cinema Hall</h1>
+
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="HallName" class="form-label">Hall Name</label>
+        <input asp-for="HallName" class="form-control" />
+        <span asp-validation-for="HallName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="HallType" class="form-label">Hall Type</label>
+        <input asp-for="HallType" class="form-control" />
+        <span asp-validation-for="HallType" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SeatCapacity" class="form-label">Seat Capacity</label>
+        <input asp-for="SeatCapacity" type="number" class="form-control" min="1" />
+        <span asp-validation-for="SeatCapacity" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

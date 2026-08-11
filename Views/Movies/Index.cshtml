@@ -1,0 +1,86 @@
+@model List<Movie>
+@{
+    ViewData["Title"] = "Movies";
+    var status = (MovieStatus)ViewBag.SelectedStatus;
+}
+
+<h1 class="mb-3">Movies</h1>
+
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <a class="nav-link @(status == MovieStatus.NowShowing ? "active" : "")"
+           asp-action="Index" asp-route-status="NowShowing"
+           asp-route-genre="@ViewBag.SelectedGenre" asp-route-language="@ViewBag.SelectedLanguage" asp-route-age="@ViewBag.SelectedAge">
+            Now Showing
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(status == MovieStatus.ComingSoon ? "active" : "")"
+           asp-action="Index" asp-route-status="ComingSoon"
+           asp-route-genre="@ViewBag.SelectedGenre" asp-route-language="@ViewBag.SelectedLanguage" asp-route-age="@ViewBag.SelectedAge">
+            Coming Soon
+        </a>
+    </li>
+</ul>
+
+<form method="get" asp-action="Index" class="row g-2 mb-4">
+    <input type="hidden" name="status" value="@status" />
+
+    <div class="col-auto">
+        <select name="genre" class="form-select" onchange="this.form.submit()">
+            <option value="">All Genres</option>
+            @foreach (var g in (List<string>)ViewBag.Genres)
+            {
+                <option value="@g" selected="@(g == ViewBag.SelectedGenre)">@g</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-auto">
+        <select name="language" class="form-select" onchange="this.form.submit()">
+            <option value="">All Languages</option>
+            @foreach (var l in (List<string>)ViewBag.Languages)
+            {
+                <option value="@l" selected="@(l == ViewBag.SelectedLanguage)">@l</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-auto">
+        <select name="age" class="form-select" onchange="this.form.submit()">
+            <option value="">All Ratings</option>
+            @foreach (var a in (List<string>)ViewBag.AgeClassifications)
+            {
+                <option value="@a" selected="@(a == ViewBag.SelectedAge)">@a</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-auto">
+        <a asp-action="Index" asp-route-status="@status" class="btn btn-outline-secondary">Clear filters</a>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No movies match these filters right now.</p>
+}
+
+<div class="row row-cols-1 row-cols-md-4 g-4">
+    @foreach (var movie in Model)
+    {
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">@movie.Title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@movie.Genre &middot; @movie.Language &middot; @movie.AgeClassification</h6>
+                    <p class="card-text">@(movie.Synopsis.Length > 100 ? movie.Synopsis[..100] + "..." : movie.Synopsis)</p>
+                    <p class="card-text"><small class="text-muted">Release: @movie.ReleaseDate.ToString("dd MMM yyyy")</small></p>
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-primary btn-sm">View Showtimes</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

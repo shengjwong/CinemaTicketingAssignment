@@ -1,0 +1,45 @@
+@model List<Showtime>
+@{
+    ViewData["Title"] = "Manage Showtimes";
+}
+
+<h1 class="mb-3">Manage Showtimes</h1>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<a asp-action="Create" class="btn btn-primary mb-3">+ Schedule Showtime</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Movie</th>
+            <th>Hall</th>
+            <th>Date</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Price</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.Movie.Title</td>
+                <td>@s.CinemaHall.HallName</td>
+                <td>@s.StartDateTime.ToString("dd MMM yyyy")</td>
+                <td>@s.StartDateTime.ToString("h:mm tt")</td>
+                <td>@s.EndDateTime.ToString("h:mm tt")</td>
+                <td>RM @s.TicketPrice.ToString("0.00")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@s.Id" class="btn btn-sm btn-outline-primary">View</a>
+                    <a asp-action="Edit" asp-route-id="@s.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@s.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

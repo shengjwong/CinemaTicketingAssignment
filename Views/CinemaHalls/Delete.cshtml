@@ -1,0 +1,22 @@
+@model CinemaHall
+@{
+    ViewData["Title"] = "Delete Cinema Hall";
+}
+
+<h1 class="mb-3">Delete Cinema Hall</h1>
+
+<div class="alert alert-warning">
+    Are you sure you want to delete <strong>@Model.HallName</strong>? This cannot be undone.
+</div>
+
+<dl class="row">
+    <dt class="col-sm-3">Hall Type</dt>
+    <dd class="col-sm-9">@Model.HallType</dd>
+    <dt class="col-sm-3">Seat Capacity</dt>
+    <dd class="col-sm-9">@Model.SeatCapacity</dd>
+</dl>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+</form>

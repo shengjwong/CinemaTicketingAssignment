@@ -1,0 +1,43 @@
+@model List<CinemaHall>
+@{
+    ViewData["Title"] = "Manage Cinema Halls";
+}
+
+<h1 class="mb-3">Manage Cinema Halls</h1>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<a asp-action="Create" class="btn btn-primary mb-3">+ Add Cinema Hall</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Hall Name</th>
+            <th>Type</th>
+            <th>Seat Capacity</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var hall in Model)
+        {
+            <tr>
+                <td>@hall.HallName</td>
+                <td>@hall.HallType</td>
+                <td>@hall.SeatCapacity</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@hall.Id" class="btn btn-sm btn-outline-primary">View</a>
+                    <a asp-action="Edit" asp-route-id="@hall.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@hall.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
