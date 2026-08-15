@@ -2,7 +2,28 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center" style="margin-top: 50px;">
+    @if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        <h1>Welcome Back, @User.Identity.Name!</h1>
+        <p class="lead">Select a section from the navigation bar above to start browsing movies or showtimes.</p>
+        <div class="mt-4">
+            <a asp-controller="Movies" asp-action="Index" class="btn btn-primary btn-lg me-2">Browse Movies</a>
+            <a asp-controller="Showtimes" asp-action="Index" class="btn btn-outline-secondary btn-lg">View Showtimes</a>
+        </div>
+    }
+    else
+    {
+        <h1>Welcome to Cinema Ticketing System</h1>
+        <p>Please select your login type to proceed:</p>
+
+        <div style="margin-top: 40px;">
+            <a asp-controller="Account" asp-action="Login" style="padding: 12px 24px; font-size: 18px; text-decoration: none; border: 1px solid #007bff; background-color: #007bff; color: white; border-radius: 5px; margin-right: 20px;">
+                User Login
+            </a>
+            <a asp-controller="Account" asp-action="AdminLogin" style="padding: 12px 24px; font-size: 18px; text-decoration: none; border: 1px solid #28a745; background-color: #28a745; color: white; border-radius: 5px;">
+                Admin Login
+            </a>
+        </div>
+    }
 </div>

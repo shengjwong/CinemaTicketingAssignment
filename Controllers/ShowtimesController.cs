@@ -51,6 +51,9 @@ public class ShowtimesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Showtime showtime)
     {
+        // 1. Clear Id validation so empty client values don't block ModelState
+        ModelState.Remove(nameof(showtime.Id));
+
         await ValidateNoHallOverlapAsync(showtime);
 
         if (!ModelState.IsValid)
@@ -59,6 +62,7 @@ public class ShowtimesController : Controller
             return View(showtime);
         }
 
+        // 2. Assign server-generated ID
         showtime.Id = await GenerateNextIdAsync();
         db.Showtimes.Add(showtime);
         await db.SaveChangesAsync();
@@ -119,6 +123,14 @@ public class ShowtimesController : Controller
         var showtime = await db.Showtimes.FindAsync(id);
         if (showtime == null) return NotFound();
 
+        // Check for existing bookings tied to this showtime
+        var hasBookings = await db.Bookings.AnyAsync(b => b.ShowtimeId == id);
+        if (hasBookings)
+        {
+            TempData["Error"] = "Cannot delete a showtime that already has customer bookings.";
+            return RedirectToAction(nameof(Index));
+        }
+
         db.Showtimes.Remove(showtime);
         await db.SaveChangesAsync();
 
@@ -152,18 +164,20 @@ public class ShowtimesController : Controller
         ViewBag.CinemaHalls = await db.CinemaHalls.OrderBy(h => h.HallName).ToListAsync();
     }
 
-    // Generates the next SHOWnnn id, matching the seed data's ID scheme.
+    // Safely parses existing SHOWnnn IDs in memory to find the highest sequence number
     private async Task<string> GenerateNextIdAsync()
     {
-        var lastId = await db.Showtimes
-            .OrderByDescending(s => s.Id)
-            .Select(s => s.Id)
-            .FirstOrDefaultAsync();
+        var allIds = await db.Showtimes.Select(s => s.Id).ToListAsync();
 
-        var nextNumber = 1;
-        if (!string.IsNullOrEmpty(lastId) && int.TryParse(lastId.Replace("SHOW", ""), out var n))
-            nextNumber = n + 1;
+        int maxNumber = 0;
+        foreach (var id in allIds)
+        {
+            if (id.StartsWith("SHOW") && int.TryParse(id.Substring(4), out var num))
+            {
+                if (num > maxNumber) maxNumber = num;
+            }
+        }
 
-        return $"SHOW{nextNumber:000}";
+        return $"SHOW{(maxNumber + 1):000}";
     }
 }

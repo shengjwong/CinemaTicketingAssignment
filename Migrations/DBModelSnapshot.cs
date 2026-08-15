@@ -395,6 +395,10 @@ namespace CinemaTicketingAssignment.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<string>("ResetToken")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
@@ -416,6 +420,16 @@ namespace CinemaTicketingAssignment.Migrations
                     b.HasBaseType("CinemaTicketingAssignment.Models.User");
 
                     b.HasDiscriminator().HasValue("Admin");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "ADM001",
+                            Email = "admin@cinema.com",
+                            FailedLoginAttempts = 0,
+                            Hash = "Admin@123",
+                            Name = "System Admin"
+                        });
                 });
 
             modelBuilder.Entity("CinemaTicketingAssignment.Models.Member", b =>

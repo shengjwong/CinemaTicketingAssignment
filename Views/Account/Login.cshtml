@@ -1,49 +1,29 @@
 ﻿@model CinemaTicketingAssignment.Models.LoginViewModel
 
-@{
-    ViewData["Title"] = "Login";
-}
+<h2>User Login</h2>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h2 class="card-title text-center mb-4">Account Login</h2>
+<form asp-controller="Account" asp-action="Login" method="post">
+    @Html.AntiForgeryToken()
 
-                    <!-- Main Form targeting your AccountController POST handler -->
-                    <form asp-controller="Account" asp-action="Login" method="post">
-                        @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly"></div>
 
-                        <!-- Displays overall system errors (like Account Lockout notices) -->
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger p-2 small" role="alert"></div>
-
-                        <!-- Email Input Group -->
-                        <div class="mb-3">
-                            <label asp-for="Email" class="form-label">Email Address</label>
-                            <input asp-for="Email" class="form-control" placeholder="name@example.com" />
-                            <span asp-validation-for="Email" class="text-danger small"></span>
-                        </div>
-
-                        <!-- Password Input Group -->
-                        <div class="mb-3">
-                            <label asp-for="Password" class="form-label">Password</label>
-                            <input asp-for="Password" class="form-control" />
-                            <span asp-validation-for="Password" class="text-danger small"></span>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="d-grid mt-4">
-                            <button type="submit" class="btn btn-primary">Sign In</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+    <div>
+        <label>Email Address:</label>
+        <input asp-for="Email" />
     </div>
-</div>
 
-@section Scripts {
-    <!-- Enables instant client-side browser validation before sending data to server -->
-    <partial name="_ValidationScriptsPartial" />
-}
+    <div>
+        <label>Password:</label>
+        <input asp-for="Password" type="password" />
+    </div>
+
+    <button type="submit">Sign In</button>
+</form>
+
+<hr />
+<!-- 快捷切换链接 -->
+<p>
+    Are you an Admin?
+    <a asp-controller="Account" asp-action="AdminLogin">Go to Admin Login</a> |
+    <a asp-controller="Home" asp-action="Index">Back to Welcome Page</a>
+</p>

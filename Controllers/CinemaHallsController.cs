@@ -45,9 +45,14 @@ public class CinemaHallsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CinemaHall hall)
     {
+        // 1. Clear Id validation since it is generated server-side
+        ModelState.Remove(nameof(hall.Id));
+
         if (!ModelState.IsValid) return View(hall);
 
+        // 2. Assign the generated ID
         hall.Id = await GenerateNextIdAsync();
+
         db.CinemaHalls.Add(hall);
         await db.SaveChangesAsync();
 
@@ -108,18 +113,20 @@ public class CinemaHallsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    // Generates the next HALLnnn id, matching the seed data's ID scheme.
+    // Generates the next HALLnnn id reliably in memory
     private async Task<string> GenerateNextIdAsync()
     {
-        var lastId = await db.CinemaHalls
-            .OrderByDescending(h => h.Id)
-            .Select(h => h.Id)
-            .FirstOrDefaultAsync();
+        var allIds = await db.CinemaHalls.Select(h => h.Id).ToListAsync();
 
-        var nextNumber = 1;
-        if (!string.IsNullOrEmpty(lastId) && int.TryParse(lastId.Replace("HALL", ""), out var n))
-            nextNumber = n + 1;
+        int maxNumber = 0;
+        foreach (var id in allIds)
+        {
+            if (id.StartsWith("HALL") && int.TryParse(id.Substring(4), out var num))
+            {
+                if (num > maxNumber) maxNumber = num;
+            }
+        }
 
-        return $"HALL{nextNumber:000}";
+        return $"HALL{(maxNumber + 1):000}";
     }
 }

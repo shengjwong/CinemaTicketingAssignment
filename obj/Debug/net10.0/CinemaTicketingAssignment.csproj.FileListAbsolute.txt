@@ -1124,3 +1124,6 @@ C:\Users\User\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\refint\Ci
 C:\Users\User\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\CinemaTicketingAssignment.pdb
 C:\Users\User\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\CinemaTicketingAssignment.genruntimeconfig.cache
 C:\Users\User\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\ref\CinemaTicketingAssignment.dll
+C:\CinemaTicketingAssignment\CinemaTicketingAssignment\bin\Debug\net10.0\EPPlus.dll
+C:\CinemaTicketingAssignment\CinemaTicketingAssignment\bin\Debug\net10.0\EPPlus.Interfaces.dll
+C:\CinemaTicketingAssignment\CinemaTicketingAssignment\bin\Debug\net10.0\Microsoft.IO.RecyclableMemoryStream.dll

@@ -80,9 +80,14 @@ public class MoviesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Movie movie)
     {
+        // 1. Remove Id from validation so empty input doesn't fail ModelState
+        ModelState.Remove(nameof(movie.Id));
+
         if (!ModelState.IsValid) return View(movie);
 
+        // 2. Generate and assign next MOVnnn key
         movie.Id = await GenerateNextIdAsync();
+
         db.Movies.Add(movie);
         await db.SaveChangesAsync();
 
@@ -133,6 +138,14 @@ public class MoviesController : Controller
         var movie = await db.Movies.FindAsync(id);
         if (movie == null) return NotFound();
 
+        // Safety check to prevent deleting movies tied to showtimes
+        var hasShowtimes = await db.Showtimes.AnyAsync(s => s.MovieId == id);
+        if (hasShowtimes)
+        {
+            TempData["Error"] = "Cannot delete a movie that is currently linked to existing showtimes.";
+            return RedirectToAction(nameof(Admin));
+        }
+
         db.Movies.Remove(movie);
         await db.SaveChangesAsync();
 
@@ -140,18 +153,20 @@ public class MoviesController : Controller
         return RedirectToAction(nameof(Admin));
     }
 
-    // Generates the next MOVnnn id, matching the seed data's ID scheme.
+    // Safely parses existing IDs in-memory to find the highest numerical sequence
     private async Task<string> GenerateNextIdAsync()
     {
-        var lastId = await db.Movies
-            .OrderByDescending(m => m.Id)
-            .Select(m => m.Id)
-            .FirstOrDefaultAsync();
+        var allIds = await db.Movies.Select(m => m.Id).ToListAsync();
 
-        var nextNumber = 1;
-        if (!string.IsNullOrEmpty(lastId) && int.TryParse(lastId.Replace("MOV", ""), out var n))
-            nextNumber = n + 1;
+        int maxNumber = 0;
+        foreach (var id in allIds)
+        {
+            if (id.StartsWith("MOV") && int.TryParse(id.Substring(3), out var num))
+            {
+                if (num > maxNumber) maxNumber = num;
+            }
+        }
 
-        return $"MOV{nextNumber:000}";
+        return $"MOV{(maxNumber + 1):000}";
     }
 }

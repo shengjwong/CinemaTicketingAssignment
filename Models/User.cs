@@ -13,6 +13,9 @@ public abstract class User
     [MaxLength(100)]
     public string Email { get; set; } = string.Empty;
 
+    [MaxLength(20)]
+    public string? Phone { get; set; }
+
     [MaxLength(255)]
     public string Hash { get; set; } = string.Empty;
 
@@ -35,7 +38,6 @@ public abstract class User
 public class Admin : User
 {
 }
-
 
 public class Member : User
 {

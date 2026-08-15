@@ -1,33 +1,107 @@
-﻿@model CinemaTicketingAssignment.Models.User
+﻿@model CinemaTicketingAssignment.Models.ProfileViewModel
 
-<h2>Account Settings</h2>
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+@{
+    ViewData["Title"] = "My Profile";
 }
 
-<form asp-action="UpdateProfile" method="post">
-    @Html.AntiForgeryToken()
-
-    <div class="form-group mb-3">
-        <label>Full Name</label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mb-3">
-        <label>Email Address (Read-Only)</label>
-        <input asp-for="Email" class="form-control" readonly />
-    </div>
-
+<div class="container mt-4">
+    <h2>User Profile Maintenance</h2>
     <hr />
-    <h4>Update Password (Leave blank to keep current)</h4>
 
-    <div class="form-group mb-3">
-        <label>New Password</label>
-        <input type="password" name="newPassword" class="form-control" />
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["PasswordError"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["PasswordError"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        @* Personal Details Form *@
+        <div class="col-md-6 border-end">
+            <h4>Personal Information</h4>
+            <form asp-controller="Profile" asp-action="UpdateProfile" method="post" enctype="multipart/form-data" class="mt-3">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+
+                @* Avatar Preview and Upload (Only Visible to Members) *@
+                @if (User.IsInRole("MEMBER"))
+                {
+                    <div class="text-center mb-3">
+                        @if (!string.IsNullOrEmpty(Model.PhotoURL))
+                        {
+                            <img src="@Model.PhotoURL" alt="Avatar" class="rounded-circle img-thumbnail" style="width: 130px; height: 130px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <img src="https://via.placeholder.com/130?text=No+Photo" alt="Avatar" class="rounded-circle img-thumbnail" />
+                        }
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="AvatarFile" class="form-label">Upload Profile Picture</label>
+                        <input asp-for="AvatarFile" type="file" class="form-control" accept="image/*" />
+                    </div>
+                }
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">Full Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email Address</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Phone" class="form-label">Phone Number</label>
+                    <input asp-for="Phone" class="form-control" placeholder="e.g. +60123456789" />
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Save Profile</button>
+            </form>
+        </div>
+
+        @* Password Change Form *@
+        <div class="col-md-6">
+            <h4>Security & Password</h4>
+            <form asp-controller="Profile" asp-action="ChangePassword" method="post" class="mt-3">
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label asp-for="CurrentPassword" class="form-label">Current Password</label>
+                    <input asp-for="CurrentPassword" type="password" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="NewPassword" class="form-label">New Password</label>
+                    <input asp-for="NewPassword" type="password" class="form-control" required />
+                    <span asp-validation-for="NewPassword" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ConfirmPassword" class="form-label">Confirm New Password</label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-control" required />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-warning w-100">Update Password</button>
+            </form>
+        </div>
     </div>
+</div>
 
-    <button type="submit" class="btn btn-success">Save Changes</button>
-</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
