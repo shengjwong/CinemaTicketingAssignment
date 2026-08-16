@@ -1,0 +1,85 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@model CinemaTicketingAssignment.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Member Sign Up";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h3 class="card-title text-center mb-4">Create an Account</h3>
+
+                <form id="registerForm" asp-controller="Account" asp-action="Register" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Hidden input to hold the reCAPTCHA token -->
+                    <input type="hidden" id="recaptchaToken" name="recaptchaToken" />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" placeholder="Enter your full name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" placeholder="name@example.com" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Phone" class="form-label"></label>
+                        <input asp-for="Phone" class="form-control" placeholder="e.g. +60123456789" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-control" placeholder="Enter password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-2">Sign Up</button>
+                </form>
+
+                <div class="text-center mt-3">
+                    <p class="mb-0">Already have an account? <a asp-controller="Account" asp-action="Login">Log in here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["RecaptchaSettings:SiteKey"]"></script>
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", function(e) {
+            var form = this;
+
+            // Trigger jQuery client-side validation first if present
+            if (window.jQuery && $(form).valid && !$(form).valid()) {
+                return;
+            }
+
+            e.preventDefault();
+            grecaptcha.ready(function() {
+                grecaptcha.execute('@Configuration["RecaptchaSettings:SiteKey"]', { action: 'register' }).then(function(token) {
+                    document.getElementById('recaptchaToken').value = token;
+                    form.submit();
+                });
+            });
+        });
+    </script>
+}

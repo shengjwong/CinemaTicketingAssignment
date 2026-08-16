@@ -1,9 +1,14 @@
-﻿@model CinemaTicketingAssignment.Models.LoginViewModel
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@model CinemaTicketingAssignment.Models.LoginViewModel
 
 <h2>Admin Portal Login</h2>
 
-<form asp-controller="Account" asp-action="AdminLogin" method="post">
+<form id="adminLoginForm" asp-controller="Account" asp-action="AdminLogin" method="post">
     @Html.AntiForgeryToken()
+
+    <!-- Hidden input to store the generated reCAPTCHA token -->
+    <input type="hidden" id="recaptchaToken" name="recaptchaToken" />
 
     <div asp-validation-summary="ModelOnly"></div>
 
@@ -27,3 +32,19 @@
     <a asp-controller="Account" asp-action="Login">Go to User Login</a> |
     <a asp-controller="Home" asp-action="Index">Back to Welcome Page</a>
 </p>
+
+@section Scripts {
+    <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["RecaptchaSettings:SiteKey"]"></script>
+    <script>
+        document.getElementById("adminLoginForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            var form = this;
+            grecaptcha.ready(function() {
+                grecaptcha.execute('@Configuration["RecaptchaSettings:SiteKey"]', { action: 'admin_login' }).then(function(token) {
+                    document.getElementById('recaptchaToken').value = token;
+                    form.submit();
+                });
+            });
+        });
+    </script>
+}

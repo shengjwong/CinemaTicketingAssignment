@@ -62,6 +62,7 @@ wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
 wwwroot\uploads\c4c50ca6-c431-4bf0-b282-f237c16ae55f_Screenshot 2026-05-18 174619.png
+wwwroot\uploads\ce078f86-4150-48f1-91b9-c9cf3aeec86d_Screenshot 2026-05-17 002030.png
 wwwroot\uploads\d6efc2a4-4cd2-4e71-96e0-406d4afdae99_Screenshot 2026-06-05 004200.png
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\wwwroot\css\site.css
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\wwwroot\favicon.ico

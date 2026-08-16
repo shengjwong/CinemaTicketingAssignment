@@ -1,29 +1,67 @@
-﻿@model CinemaTicketingAssignment.Models.LoginViewModel
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@model CinemaTicketingAssignment.Models.LoginViewModel
 
 <h2>User Login</h2>
 
-<form asp-controller="Account" asp-action="Login" method="post">
+@if (TempData["Success"] != null)
+{
+    <div>
+        @TempData["Success"]
+    </div>
+}
+
+<form id="userLoginForm" asp-controller="Account" asp-action="Login" method="post">
     @Html.AntiForgeryToken()
+
+    <!-- Hidden input to hold the reCAPTCHA token -->
+    <input type="hidden" id="recaptchaToken" name="recaptchaToken" />
 
     <div asp-validation-summary="ModelOnly"></div>
 
     <div>
-        <label>Email Address:</label>
+        <label asp-for="Email">Email Address:</label>
         <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
     </div>
 
     <div>
-        <label>Password:</label>
+        <label asp-for="Password">Password:</label>
         <input asp-for="Password" type="password" />
+        <span asp-validation-for="Password"></span>
     </div>
 
     <button type="submit">Sign In</button>
 </form>
 
 <hr />
-<!-- 快捷切换链接 -->
+
+<!-- Navigation & Account Links -->
+<p>
+    Don't have an account?
+    <a asp-controller="Account" asp-action="Register">Sign Up Now</a>
+</p>
+<p>
+    <a asp-controller="Account" asp-action="ForgotPassword">Forgot Password?</a>
+</p>
 <p>
     Are you an Admin?
     <a asp-controller="Account" asp-action="AdminLogin">Go to Admin Login</a> |
     <a asp-controller="Home" asp-action="Index">Back to Welcome Page</a>
 </p>
+
+@section Scripts {
+    <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["RecaptchaSettings:SiteKey"]"></script>
+    <script>
+        document.getElementById("userLoginForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            var form = this;
+            grecaptcha.ready(function() {
+                grecaptcha.execute('@Configuration["RecaptchaSettings:SiteKey"]', { action: 'user_login' }).then(function(token) {
+                    document.getElementById('recaptchaToken').value = token;
+                    form.submit();
+                });
+            });
+        });
+    </script>
+}

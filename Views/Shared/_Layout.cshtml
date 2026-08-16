@@ -20,6 +20,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
+                        <!-- Left Navigation Links -->
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -29,11 +30,6 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-
-                            @* Visible to ALL Authenticated Users *@
-                            <li class="nav-item">
-                                <a class="nav-link text-dark fw-bold" asp-area="" asp-controller="Profile" asp-action="Index">My Profile</a>
                             </li>
 
                             @* Admin Links *@
@@ -51,11 +47,17 @@
                             }
                         </ul>
 
-                        <ul class="navbar-nav">
+                        <!-- Right Actions (Profile + Logout) -->
+                        <ul class="navbar-nav d-flex align-items-center gap-2">
+                            <li class="nav-item">
+                                <a class="btn btn-outline-primary btn-sm fw-bold" asp-area="" asp-controller="Profile" asp-action="Index">
+                                    My Profile 
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
                                     @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn btn-link nav-link text-dark border-0">Logout</button>
+                                    <button type="submit" class="btn btn-outline-danger btn-sm fw-bold">Logout</button>
                                 </form>
                             </li>
                         </ul>

@@ -1127,3 +1127,6 @@ C:\Users\User\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\ref\Cinem
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\bin\Debug\net10.0\EPPlus.dll
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\bin\Debug\net10.0\EPPlus.Interfaces.dll
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\bin\Debug\net10.0\Microsoft.IO.RecyclableMemoryStream.dll
+C:\CinemaTicketingAssignment\CinemaTicketingAssignment\bin\Debug\net10.0\BouncyCastle.Cryptography.dll
+C:\CinemaTicketingAssignment\CinemaTicketingAssignment\bin\Debug\net10.0\MailKit.dll
+C:\CinemaTicketingAssignment\CinemaTicketingAssignment\bin\Debug\net10.0\MimeKit.dll

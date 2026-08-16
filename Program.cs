@@ -4,8 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. 注册 MVC 视图服务
+// 1. 注册 MVC 视图服务与 HttpClient (用于 reCAPTCHA 验证)
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient();
 
 // 2. 注册数据库上下文 (LocalDB)
 builder.Services.AddDbContext<DB>(options =>
@@ -21,7 +22,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 builder.Services.AddAuthorization();
-
 builder.Services.AddScoped<Microsoft.AspNetCore.Identity.IPasswordHasher<User>, Microsoft.AspNetCore.Identity.PasswordHasher<User>>();
 
 var app = builder.Build();
@@ -42,7 +42,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 // 认证与授权中间件顺序非常重要

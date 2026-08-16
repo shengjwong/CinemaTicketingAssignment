@@ -113,9 +113,25 @@ public class ProfileController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-        // 1. Verify Current Password using PasswordHasher (supports plain text fallback for existing db rows)
-        var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.Hash, model.CurrentPassword);
-        bool isCurrentValid = (verificationResult == PasswordVerificationResult.Success) || (user.Hash == model.CurrentPassword);
+        // 1. Verify Current Password safely (plain text check first + try-catch wrapper)
+        bool isCurrentValid = false;
+
+        if (user.Hash.Trim() == model.CurrentPassword.Trim())
+        {
+            isCurrentValid = true;
+        }
+        else
+        {
+            try
+            {
+                var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.Hash, model.CurrentPassword);
+                isCurrentValid = (verificationResult == PasswordVerificationResult.Success);
+            }
+            catch (FormatException)
+            {
+                isCurrentValid = false;
+            }
+        }
 
         if (!isCurrentValid)
         {
@@ -124,7 +140,7 @@ public class ProfileController : Controller
         }
 
         // 2. Prevent setting identical password
-        if (model.CurrentPassword == model.NewPassword)
+        if (model.CurrentPassword.Trim() == model.NewPassword.Trim())
         {
             TempData["PasswordError"] = "New password cannot be the same as your current password.";
             return RedirectToAction(nameof(Index));
