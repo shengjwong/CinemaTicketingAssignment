@@ -1,183 +1,168 @@
-using CinemaTicketingAssignment.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using CinemaTicketingAssignment.Models;
 
 namespace CinemaTicketingAssignment.Controllers;
 
-[Authorize(Roles = "ADMIN")]
 public class ShowtimesController : Controller
 {
-    private readonly DB db;
+    private readonly DB _db;
 
     public ShowtimesController(DB db)
     {
-        this.db = db;
+        _db = db;
     }
 
-    // GET: /Showtimes
+    // 1. Admin 专属排片管理列表
     public async Task<IActionResult> Index()
     {
-        var showtimes = await db.Showtimes
+        if (!User.IsInRole("ADMIN")) return Forbid();
+
+        var showtimes = await _db.Showtimes
             .Include(s => s.Movie)
             .Include(s => s.CinemaHall)
+            .OrderByDescending(s => s.StartDateTime)
+            .ToListAsync();
+
+        return View(showtimes);
+    }
+
+    // 2. 普通用户场次选择页面 (支持按 MovieId 过滤)
+    public async Task<IActionResult> CustomerIndex(string movieId)
+    {
+        var query = _db.Showtimes
+            .Include(s => s.Movie)
+            .Include(s => s.CinemaHall)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(movieId))
+        {
+            query = query.Where(s => s.MovieId == movieId);
+            ViewBag.SelectedMovie = await _db.Movies.FindAsync(movieId);
+        }
+
+        var showtimes = await query
+            .Where(s => s.StartDateTime >= DateTime.Now)
             .OrderBy(s => s.StartDateTime)
             .ToListAsync();
 
         return View(showtimes);
     }
 
-    // GET: /Showtimes/Details/SHOW001
+    // 3. 查看场次详情
     public async Task<IActionResult> Details(string id)
     {
-        var showtime = await db.Showtimes
+        if (string.IsNullOrEmpty(id)) return NotFound();
+
+        var showtime = await _db.Showtimes
             .Include(s => s.Movie)
             .Include(s => s.CinemaHall)
-            .FirstOrDefaultAsync(s => s.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id);
 
         if (showtime == null) return NotFound();
+
         return View(showtime);
     }
 
-    // GET: /Showtimes/Create
+    // 4. 新建场次 (GET)
     public async Task<IActionResult> Create()
     {
-        await PopulateDropdownsAsync();
+        if (!User.IsInRole("ADMIN")) return Forbid();
+
+        ViewBag.Movies = await _db.Movies.ToListAsync();
+        ViewBag.CinemaHalls = await _db.CinemaHalls.ToListAsync();
         return View();
     }
 
-    // POST: /Showtimes/Create
+    // 4. 新建场次 (POST)
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Showtime showtime)
     {
-        // 1. Clear Id validation so empty client values don't block ModelState
-        ModelState.Remove(nameof(showtime.Id));
+        if (!User.IsInRole("ADMIN")) return Forbid();
 
-        await ValidateNoHallOverlapAsync(showtime);
-
-        if (!ModelState.IsValid)
+        if (string.IsNullOrEmpty(showtime.Id))
         {
-            await PopulateDropdownsAsync();
-            return View(showtime);
+            showtime.Id = "SHOW" + Guid.NewGuid().ToString("N")[..5].ToUpper();
         }
 
-        // 2. Assign server-generated ID
-        showtime.Id = await GenerateNextIdAsync();
-        db.Showtimes.Add(showtime);
-        await db.SaveChangesAsync();
+        ModelState.Remove("Movie");
+        ModelState.Remove("CinemaHall");
 
-        TempData["Success"] = "Showtime scheduled.";
-        return RedirectToAction(nameof(Index));
-    }
+        if (ModelState.IsValid)
+        {
+            _db.Add(showtime);
+            await _db.SaveChangesAsync();
+            TempData["Success"] = "Showtime created successfully!";
+            return RedirectToAction(nameof(Index));
+        }
 
-    // GET: /Showtimes/Edit/SHOW001
-    public async Task<IActionResult> Edit(string id)
-    {
-        var showtime = await db.Showtimes.FindAsync(id);
-        if (showtime == null) return NotFound();
-
-        await PopulateDropdownsAsync();
+        ViewBag.Movies = await _db.Movies.ToListAsync();
+        ViewBag.CinemaHalls = await _db.CinemaHalls.ToListAsync();
         return View(showtime);
     }
 
-    // POST: /Showtimes/Edit/SHOW001
+    // 5. 编辑场次 (GET)
+    public async Task<IActionResult> Edit(string id)
+    {
+        if (!User.IsInRole("ADMIN")) return Forbid();
+        if (string.IsNullOrEmpty(id)) return NotFound();
+
+        var showtime = await _db.Showtimes.FindAsync(id);
+        if (showtime == null) return NotFound();
+
+        ViewBag.Movies = await _db.Movies.ToListAsync();
+        ViewBag.CinemaHalls = await _db.CinemaHalls.ToListAsync();
+        return View(showtime);
+    }
+
+    // 5. 编辑场次 (POST)
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(string id, Showtime showtime)
     {
+        if (!User.IsInRole("ADMIN")) return Forbid();
         if (id != showtime.Id) return NotFound();
 
-        await ValidateNoHallOverlapAsync(showtime, excludingId: id);
+        ModelState.Remove("Movie");
+        ModelState.Remove("CinemaHall");
 
-        if (!ModelState.IsValid)
+        if (ModelState.IsValid)
         {
-            await PopulateDropdownsAsync();
-            return View(showtime);
-        }
-
-        db.Showtimes.Update(showtime);
-        await db.SaveChangesAsync();
-
-        TempData["Success"] = "Showtime updated.";
-        return RedirectToAction(nameof(Index));
-    }
-
-    // GET: /Showtimes/Delete/SHOW001
-    public async Task<IActionResult> Delete(string id)
-    {
-        var showtime = await db.Showtimes
-            .Include(s => s.Movie)
-            .Include(s => s.CinemaHall)
-            .FirstOrDefaultAsync(s => s.Id == id);
-
-        if (showtime == null) return NotFound();
-        return View(showtime);
-    }
-
-    // POST: /Showtimes/Delete/SHOW001
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(string id)
-    {
-        var showtime = await db.Showtimes.FindAsync(id);
-        if (showtime == null) return NotFound();
-
-        // Check for existing bookings tied to this showtime
-        var hasBookings = await db.Bookings.AnyAsync(b => b.ShowtimeId == id);
-        if (hasBookings)
-        {
-            TempData["Error"] = "Cannot delete a showtime that already has customer bookings.";
+            try
+            {
+                _db.Update(showtime);
+                await _db.SaveChangesAsync();
+                TempData["Success"] = "Showtime updated successfully!";
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_db.Showtimes.Any(e => e.Id == showtime.Id)) return NotFound();
+                else throw;
+            }
             return RedirectToAction(nameof(Index));
         }
 
-        db.Showtimes.Remove(showtime);
-        await db.SaveChangesAsync();
+        ViewBag.Movies = await _db.Movies.ToListAsync();
+        ViewBag.CinemaHalls = await _db.CinemaHalls.ToListAsync();
+        return View(showtime);
+    }
 
-        TempData["Success"] = "Showtime cancelled.";
+    // 6. 删除场次 (POST)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(string id)
+    {
+        if (!User.IsInRole("ADMIN")) return Forbid();
+
+        var showtime = await _db.Showtimes.FindAsync(id);
+        if (showtime != null)
+        {
+            _db.Showtimes.Remove(showtime);
+            await _db.SaveChangesAsync();
+            TempData["Success"] = "Showtime deleted successfully.";
+        }
+
         return RedirectToAction(nameof(Index));
-    }
-
-    // Prevents scheduling two showtimes in the same hall with overlapping time ranges.
-    private async Task ValidateNoHallOverlapAsync(Showtime showtime, string? excludingId = null)
-    {
-        if (showtime.EndDateTime <= showtime.StartDateTime)
-        {
-            ModelState.AddModelError(nameof(Showtime.EndDateTime), "End time must be after the start time.");
-            return;
-        }
-
-        var overlapExists = await db.Showtimes
-            .Where(s => s.CinemaHallId == showtime.CinemaHallId && s.Id != excludingId)
-            .AnyAsync(s => showtime.StartDateTime < s.EndDateTime && s.StartDateTime < showtime.EndDateTime);
-
-        if (overlapExists)
-        {
-            ModelState.AddModelError(string.Empty,
-                "This hall already has a showtime scheduled that overlaps with the selected time range.");
-        }
-    }
-
-    private async Task PopulateDropdownsAsync()
-    {
-        ViewBag.Movies = await db.Movies.OrderBy(m => m.Title).ToListAsync();
-        ViewBag.CinemaHalls = await db.CinemaHalls.OrderBy(h => h.HallName).ToListAsync();
-    }
-
-    // Safely parses existing SHOWnnn IDs in memory to find the highest sequence number
-    private async Task<string> GenerateNextIdAsync()
-    {
-        var allIds = await db.Showtimes.Select(s => s.Id).ToListAsync();
-
-        int maxNumber = 0;
-        foreach (var id in allIds)
-        {
-            if (id.StartsWith("SHOW") && int.TryParse(id.Substring(4), out var num))
-            {
-                if (num > maxNumber) maxNumber = num;
-            }
-        }
-
-        return $"SHOW{(maxNumber + 1):000}";
     }
 }

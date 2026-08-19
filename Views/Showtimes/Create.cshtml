@@ -1,11 +1,11 @@
 @model Showtime
 @{
-    ViewData["Title"] = "Schedule Showtime";
-    var movies = (List<Movie>)ViewBag.Movies;
-    var halls = (List<CinemaHall>)ViewBag.CinemaHalls;
+    ViewData["Title"] = "Create Showtime";
+    var movies = (List<Movie>)ViewBag.Movies ?? new List<Movie>();
+    var halls = (List<CinemaHall>)ViewBag.CinemaHalls ?? new List<CinemaHall>();
 }
 
-<h1 class="mb-3">Schedule Showtime</h1>
+<h1 class="mb-3">Create Showtime</h1>
 
 <form asp-action="Create" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -25,7 +25,7 @@
     <div class="mb-3">
         <label asp-for="CinemaHallId" class="form-label">Cinema Hall</label>
         <select asp-for="CinemaHallId" class="form-select">
-            <option value="">-- Select Hall --</option>
+            <option value="">-- Select Cinema Hall --</option>
             @foreach (var h in halls)
             {
                 <option value="@h.Id">@h.HallName (@h.HallType)</option>
@@ -53,10 +53,12 @@
         <span asp-validation-for="TicketPrice" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-primary">Create Showtime</button>
     <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
 </form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

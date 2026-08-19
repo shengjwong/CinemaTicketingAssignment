@@ -6,62 +6,74 @@
     <title>@ViewData["Title"] - CinemaTicketingAssignment</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/CinemaTicketingAssignment.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CinemaTicketingAssignment</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand fw-bold text-primary" asp-controller="Home" asp-action="Index">🎬 CINE-TICKETING</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    @if (User.Identity != null && User.Identity.IsAuthenticated)
-                    {
-                        <!-- Left Navigation Links -->
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="Index">Movies</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index" data-i18n="nav-home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Movies" asp-action="Index" data-i18n="nav-movies">Movies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Concessions" asp-action="Index" data-i18n="nav-snacks">🍿 Snacks & Combos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Locations" data-i18n="nav-locations">📍 Cinema Branches</a>
+                        </li>
 
-                            @* Admin Links *@
-                            @if (User.IsInRole("ADMIN"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Showtimes" asp-action="Index">Showtimes</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="CinemaHalls" asp-action="Index">Cinema Halls</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-danger fw-bold" asp-area="" asp-controller="Movies" asp-action="Admin">Manage Movies</a>
-                                </li>
-                            }
-                        </ul>
+                        @* 普通用户专属购物车按钮 *@
+                        @if (!User.IsInRole("ADMIN"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark fw-bold" asp-controller="Cart" asp-action="Index" data-i18n="nav-cart">🛒 Cart</a>
+                            </li>
+                        }
 
-                        <!-- Right Actions (Profile + Logout) -->
-                        <ul class="navbar-nav d-flex align-items-center gap-2">
-                            <li class="nav-item">
-                                <a class="btn btn-outline-primary btn-sm fw-bold" asp-area="" asp-controller="Profile" asp-action="Index">
-                                    My Profile 
-                                </a>
+                        @if (User.IsInRole("ADMIN"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-danger fw-bold" href="#" role="button" data-bs-toggle="dropdown" data-i18n="nav-admin">Admin Management</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-controller="Movies" asp-action="Admin">Manage Movies</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Showtimes" asp-action="Index">Manage Showtimes</a></li>
+                                    <li><a class="dropdown-item" asp-controller="CinemaHalls" asp-action="Index">Manage Halls</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Concessions" asp-action="Manage">Manage Snacks</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-success fw-bold" asp-controller="Reports" asp-action="Dashboard">📊 Revenue Analytics</a></li>
+                                </ul>
                             </li>
-                            <li class="nav-item">
-                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn btn-outline-danger btn-sm fw-bold">Logout</button>
-                                </form>
-                            </li>
-                        </ul>
-                    }
+                        }
+                    </ul>
+
+                    <!-- 多语言与账号状态 -->
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-outline-primary" onclick="changeGlobalLang('en')">EN</button>
+                            <button type="button" class="btn btn-outline-success" onclick="changeGlobalLang('ms')">BM</button>
+                        </div>
+
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <a class="btn btn-outline-primary btn-sm" asp-controller="Profile" asp-action="Index">Profile</a>
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger btn-sm">Logout</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a class="btn btn-outline-primary btn-sm" asp-controller="Account" asp-action="Login">Login</a>
+                        }
+                    </div>
                 </div>
             </div>
         </nav>
@@ -73,15 +85,80 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - CinemaTicketingAssignment - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+            const i18nDict = {
+                en: {
+                    "nav-home": "Home",
+                    "nav-movies": "Movies",
+                    "nav-snacks": "🍿 Snacks & Combos",
+                    "nav-locations": "📍 Cinema Locations",
+                    "nav-cart": "🛒 Cart",
+                    "nav-admin": "Admin Management",
+                    "btn-book-tickets": "🎟️ Book Tickets",
+                    "label-rating": "Rating:",
+                    "review-heading": "Customer Reviews & Ratings",
+                    "review-star-label": "Select Star Rating",
+                    "review-placeholder": "Write your thoughts...",
+                    "btn-post-review": "Post Review",
+                    "review-empty": "No reviews yet. Be the first to review!",
+                    "btn-delete-admin": "Delete Review (Admin)",
+                    "snack-title": "🍿 Cinema Snacks & Combos",
+                    "label-qty": "Qty:",
+                    "label-total": "Selected Snack Total:",
+                    "btn-add-snack": "🛒 Add to Cart",
+                    "showtime-title": "🎬 Available Showtimes",
+                    "showtime-none": "No showtimes available for this movie right now.",
+                    "btn-select-seats": "🎟️ Select Seats & Book"
+                },
+                ms: {
+                    "nav-home": "Utama",
+                    "nav-movies": "Filem",
+                    "nav-snacks": "🍿 Makanan & Minuman",
+                    "nav-locations": "📍 Lokasi Pawagam",
+                    "nav-cart": "🛒 Troli",
+                    "nav-admin": "Pengurusan Admin",
+                    "btn-book-tickets": "🎟️ Tempah Tiket",
+                    "label-rating": "Penilaian:",
+                    "review-heading": "Ulasan & Penilaian Pelanggan",
+                    "review-star-label": "Pilih Bintang Penilaian",
+                    "review-placeholder": "Tulis ulasan anda...",
+                    "btn-post-review": "Hantar Ulasan",
+                    "review-empty": "Tiada ulasan lagi. Jadi yang pertama memberi ulasan!",
+                    "btn-delete-admin": "Padam Ulasan (Admin)",
+                    "snack-title": "🍿 Makanan & Minuman Pawagam",
+                    "label-qty": "Kuantiti:",
+                    "label-total": "Jumlah Makanan Dipilih:",
+                    "btn-add-snack": "🛒 Tambah ke Troli",
+                    "showtime-title": "🎬 Waktu Tayangan Disediakan",
+                    "showtime-none": "Tiada waktu tayangan untuk filem ini pada masa ini.",
+                    "btn-select-seats": "🎟️ Pilih Tempat Duduk & Tempah"
+                }
+            };
+
+            function changeGlobalLang(lang) {
+                localStorage.setItem('app_lang', lang);
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (i18nDict[lang] && i18nDict[lang][key]) {
+                        el.innerText = i18nDict[lang][key];
+                    }
+                });
+                document.querySelectorAll('[data-i18n-holder]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-holder');
+                    if (i18nDict[lang] && i18nDict[lang][key]) {
+                        el.setAttribute('placeholder', i18nDict[lang][key]);
+                    }
+                });
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+                const savedLang = localStorage.getItem('app_lang') || 'en';
+                changeGlobalLang(savedLang);
+            });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

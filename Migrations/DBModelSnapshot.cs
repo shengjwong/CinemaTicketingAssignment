@@ -134,6 +134,32 @@ namespace CinemaTicketingAssignment.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Concessions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "CON001",
+                            ItemName = "Caramel Popcorn Combo (Large Popcorn + Drink)",
+                            Price = 18.50m
+                        },
+                        new
+                        {
+                            Id = "CON002",
+                            ItemName = "Royale Hotdog Combo",
+                            Price = 16.00m
+                        },
+                        new
+                        {
+                            Id = "CON003",
+                            ItemName = "Cheesy Nachos Dip",
+                            Price = 14.50m
+                        },
+                        new
+                        {
+                            Id = "CON004",
+                            ItemName = "Fountain Soft Drink (Regular)",
+                            Price = 7.00m
+                        });
                 });
 
             modelBuilder.Entity("CinemaTicketingAssignment.Models.Movie", b =>
@@ -236,6 +262,60 @@ namespace CinemaTicketingAssignment.Migrations
                             Status = 0,
                             Synopsis = "A team of explorers travel through a wormhole in space to save humanity.",
                             Title = "Interstellar"
+                        });
+                });
+
+            modelBuilder.Entity("CinemaTicketingAssignment.Models.Review", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MovieId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "REV001",
+                            Comment = "An absolute masterpiece of cinematic superhero drama!",
+                            CreatedAt = new DateTime(2026, 8, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            MovieId = "MOV001",
+                            Rating = 5,
+                            UserId = "ADM001"
+                        },
+                        new
+                        {
+                            Id = "REV002",
+                            Comment = "Mind-bending visual effects and incredible score.",
+                            CreatedAt = new DateTime(2026, 8, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            MovieId = "MOV002",
+                            Rating = 5,
+                            UserId = "ADM001"
                         });
                 });
 
@@ -459,6 +539,25 @@ namespace CinemaTicketingAssignment.Migrations
                         .IsRequired();
 
                     b.Navigation("Showtime");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CinemaTicketingAssignment.Models.Review", b =>
+                {
+                    b.HasOne("CinemaTicketingAssignment.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CinemaTicketingAssignment.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
 
                     b.Navigation("User");
                 });

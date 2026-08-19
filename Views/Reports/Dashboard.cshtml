@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Revenue Analytics";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">📊 Cinema Revenue Analytics (Admin)</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">Movie Box-Office Ticket Revenue (RM)</h5>
+        </div>
+        <div class="card-body">
+            <canvas id="revenueChart" style="max-height: 400px;"></canvas>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+            fetch('/Reports/GetRevenueData')
+                .then(res => res.json())
+                    .then(data => {
+                    const labels = data.map(item => item.movieTitle);
+                    const revenues = data.map(item => item.totalRevenue);
+
+                    const ctx = document.getElementById('revenueChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Total Box Office Revenue (RM)',
+                        data: revenues,
+                        backgroundColor: 'rgba(13, 110, 253, 0.6)',
+                        borderColor: 'rgba(13, 110, 253, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        });
+    </script>
+}

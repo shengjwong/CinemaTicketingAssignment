@@ -1,42 +1,91 @@
-@model Movie
+@model CinemaTicketingAssignment.Models.Movie
 @{
     ViewData["Title"] = Model.Title;
+    var reviews = (List<CinemaTicketingAssignment.Models.Review>)ViewBag.Reviews ?? new List<CinemaTicketingAssignment.Models.Review>();
+    double avgRating = reviews.Any() ? reviews.Average(r => r.Rating) : 0;
 }
 
-<a asp-action="Index" class="btn btn-outline-secondary btn-sm mb-3">&larr; Back to Movies</a>
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <img src="@(Model.PosterImagePath ?? "/images/default-poster.jpg")" class="img-fluid rounded shadow" alt="@Model.Title" />
+        </div>
+        <div class="col-md-8">
+            <h2>@Model.Title</h2>
+            <p class="text-muted">@Model.Genre | @Model.Language | <span data-i18n="label-rating">Rating:</span> <span class="badge bg-warning text-dark">⭐ @avgRating.ToString("0.0")/5.0</span></p>
+            <p>@Model.Synopsis</p>
 
-<h1>@Model.Title</h1>
-<p class="text-muted">@Model.Genre &middot; @Model.Language &middot; @Model.AgeClassification &middot; Released @Model.ReleaseDate.ToString("dd MMM yyyy")</p>
-<p>@Model.Synopsis</p>
+            <!-- 指向普通用户的 Showtimes 选座路由 -->
+            <a asp-controller="Showtimes" asp-action="CustomerIndex" asp-route-movieId="@Model.Id" class="btn btn-primary btn-lg mt-3" data-i18n="btn-book-tickets">
+                🎟️ Book Tickets
+            </a>
+        </div>
+    </div>
 
-<h3 class="mt-4">Showtimes</h3>
-@if (!Model.Showtimes.Any())
-{
-    <p class="text-muted">No showtimes scheduled for this movie yet.</p>
-}
-else
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Hall</th>
-                <th>Date</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var s in Model.Showtimes.OrderBy(s => s.StartDateTime))
+    <hr />
+
+    <!-- 评论与评分展示模块 -->
+    <h3 class="mb-3" data-i18n="review-heading">Customer Reviews & Ratings</h3>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <!-- 用户发表评价框 -->
+    @if (User.Identity != null && User.Identity.IsAuthenticated && !User.IsInRole("ADMIN"))
+    {
+        <form asp-controller="Reviews" asp-action="AddReview" method="post" class="card card-body bg-light mb-4 shadow-sm">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="movieId" value="@Model.Id" />
+
+            <div class="mb-3">
+                <label class="form-label fw-bold" data-i18n="review-star-label">Select Star Rating</label>
+                <select name="rating" class="form-select" style="width: 160px;" required>
+                    <option value="5">⭐⭐⭐⭐⭐ (5/5)</option>
+                    <option value="4">⭐⭐⭐⭐ (4/5)</option>
+                    <option value="3">⭐⭐⭐ (3/5)</option>
+                    <option value="2">⭐⭐ (2/5)</option>
+                    <option value="1">⭐ (1/5)</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <textarea name="comment" class="form-control" rows="3" placeholder="Write your thoughts..." data-i18n-holder="review-placeholder" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-success" style="width: 150px;" data-i18n="btn-post-review">Post Review</button>
+        </form>
+    }
+
+    <!-- 评论展示列表 -->
+    <div class="list-group">
+        @if (!reviews.Any())
+        {
+            <p class="text-muted" data-i18n="review-empty">No reviews yet. Be the first to review!</p>
+        }
+        else
+        {
+            @foreach (var rev in reviews)
             {
-                <tr>
-                    <td>@s.CinemaHall.HallName (@s.CinemaHall.HallType)</td>
-                    <td>@s.StartDateTime.ToString("dd MMM yyyy")</td>
-                    <td>@s.StartDateTime.ToString("h:mm tt")</td>
-                    <td>@s.EndDateTime.ToString("h:mm tt")</td>
-                    <td>RM @s.TicketPrice.ToString("0.00")</td>
-                </tr>
+                <div class="list-group-item list-group-item-action flex-column align-items-start mb-2 rounded shadow-sm">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1 fw-bold">⭐ @rev.Rating/5 Stars</h6>
+                        <small class="text-muted">@rev.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small>
+                    </div>
+                    <p class="mb-1 text-secondary">@rev.Comment</p>
+
+                    @if (User.IsInRole("ADMIN"))
+                    {
+                        <form asp-controller="Reviews" asp-action="DeleteReview" method="post" class="mt-2 text-end">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@rev.Id" />
+                            <input type="hidden" name="movieId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm" data-i18n="btn-delete-admin">Delete Review (Admin)</button>
+                        </form>
+                    }
+                </div>
             }
-        </tbody>
-    </table>
-}
+        }
+    </div>
+</div>

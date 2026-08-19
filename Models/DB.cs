@@ -9,24 +9,22 @@ public class DB : DbContext
     }
 
     public DbSet<User> Users { get; set; }
-
-    // --- ADD THESE TWO LINES TO FIX THE ERROR ---
     public DbSet<Admin> Admins { get; set; }
     public DbSet<Member> Members { get; set; }
-    // --------------------------------------------
-
     public DbSet<Movie> Movies { get; set; }
     public DbSet<CinemaHall> CinemaHalls { get; set; }
     public DbSet<Showtime> Showtimes { get; set; }
     public DbSet<Booking> Bookings { get; set; }
     public DbSet<Concession> Concessions { get; set; }
 
+    // --- Added for Student 4 (Movie Reviews & Rating) ---
+    public DbSet<Review> Reviews { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // ----- Admin user (for testing the CRUD/admin pages) -----
-        // Login at /Account/Login with these credentials.
+        // ----- Admin user -----
         modelBuilder.Entity<Admin>().HasData(
             new Admin
             {
@@ -110,7 +108,7 @@ public class DB : DbContext
             new CinemaHall { Id = "HALL005", HallName = "70MM IMAX", HallType = "IMAX", SeatCapacity = 200 }
         );
 
-        // ----- Showtimes (10:45 AM & 2:10 PM slots, spread across halls) -----
+        // ----- Showtimes -----
         var showDate = new DateTime(2026, 8, 1);
         var slotMorning = showDate.AddHours(10).AddMinutes(45);   // 10:45 AM
         var slotAfternoon = showDate.AddHours(14).AddMinutes(10); // 2:10 PM
@@ -130,6 +128,36 @@ public class DB : DbContext
 
             new Showtime { Id = "SHOW009", MovieId = "MOV005", CinemaHallId = "HALL004", StartDateTime = slotMorning, EndDateTime = slotMorning.AddMinutes(169), TicketPrice = 40.00m },
             new Showtime { Id = "SHOW010", MovieId = "MOV005", CinemaHallId = "HALL005", StartDateTime = slotAfternoon, EndDateTime = slotAfternoon.AddMinutes(169), TicketPrice = 45.00m }
+        );
+
+        // ----- Seed Concessions (Student 4: Food & Drinks) -----
+        modelBuilder.Entity<Concession>().HasData(
+            new Concession { Id = "CON001", ItemName = "Caramel Popcorn Combo (Large Popcorn + Drink)", Price = 18.50m },
+            new Concession { Id = "CON002", ItemName = "Royale Hotdog Combo", Price = 16.00m },
+            new Concession { Id = "CON003", ItemName = "Cheesy Nachos Dip", Price = 14.50m },
+            new Concession { Id = "CON004", ItemName = "Fountain Soft Drink (Regular)", Price = 7.00m }
+        );
+
+        // ----- Seed Initial Reviews (Student 4: Feedback System) -----
+        modelBuilder.Entity<Review>().HasData(
+            new Review
+            {
+                Id = "REV001",
+                MovieId = "MOV001",
+                UserId = "ADM001",
+                Rating = 5,
+                Comment = "An absolute masterpiece of cinematic superhero drama!",
+                CreatedAt = new DateTime(2026, 8, 10)
+            },
+            new Review
+            {
+                Id = "REV002",
+                MovieId = "MOV002",
+                UserId = "ADM001",
+                Rating = 5,
+                Comment = "Mind-bending visual effects and incredible score.",
+                CreatedAt = new DateTime(2026, 8, 12)
+            }
         );
     }
 }

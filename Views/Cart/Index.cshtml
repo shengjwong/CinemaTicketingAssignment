@@ -1,0 +1,103 @@
+﻿@{
+    ViewData["Title"] = "My Shopping Cart";
+}
+
+<div class="container mt-4">
+    <h2>🛒 My Shopping Cart</h2>
+    <hr />
+
+    <div id="cartContent">
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Item Description</th>
+                        <th class="text-center">Price</th>
+                        <th class="text-center" style="width: 120px;">Quantity</th>
+                        <th class="text-end">Subtotal</th>
+                        <th class="text-center" style="width: 100px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="cartTableBody">
+                    <!-- JS 自动渲染项目 -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <button class="btn btn-outline-danger" onclick="clearCart()">🗑️ Clear Cart</button>
+            <div class="text-end">
+                <h4>Total: <span class="text-success fw-bold" id="cartTotal">RM 0.00</span></h4>
+                <button class="btn btn-success btn-lg mt-2" onclick="checkout()">💳 Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="emptyCartMsg" class="alert alert-info text-center py-5 shadow-sm d-none">
+        <h4>Your cart is empty!</h4>
+        <p class="text-muted">Explore our movies and snacks to add items to your cart.</p>
+        <a asp-controller="Movies" asp-action="Index" class="btn btn-primary mt-2">Browse Movies</a>
+        <a asp-controller="Concessions" asp-action="Index" class="btn btn-outline-primary mt-2">Browse Snacks</a>
+    </div>
+</div>
+
+<script>
+    function renderCart() {
+        const cartItems = JSON.parse(localStorage.getItem('snack_cart') || '[]');
+        const tbody = document.getElementById('cartTableBody');
+        const cartContent = document.getElementById('cartContent');
+        const emptyMsg = document.getElementById('emptyCartMsg');
+
+        if (cartItems.length === 0) {
+            cartContent.classList.add('d-none');
+            emptyMsg.classList.remove('d-none');
+            return;
+        }
+
+        cartContent.classList.remove('d-none');
+        emptyMsg.classList.add('d-none');
+        tbody.innerHTML = '';
+        let total = 0;
+
+        cartItems.forEach((item, index) => {
+            const subtotal = item.price * item.quantity;
+            total += subtotal;
+
+            tbody.innerHTML += `
+                    <tr>
+                        <td class="fw-bold">${item.name}</td>
+                        <td class="text-center">RM ${item.price.toFixed(2)}</td>
+                        <td class="text-center">${item.quantity}</td>
+                        <td class="text-end fw-bold">RM ${subtotal.toFixed(2)}</td>
+                        <td class="text-center">
+                            <button class="btn btn-danger btn-sm" onclick="removeItem(${index})">Remove</button>
+                        </td>
+                    </tr>
+                `;
+        });
+
+        document.getElementById('cartTotal').innerText = 'RM ' + total.toFixed(2);
+    }
+
+    function removeItem(index) {
+        let cartItems = JSON.parse(localStorage.getItem('snack_cart') || '[]');
+        cartItems.splice(index, 1);
+        localStorage.setItem('snack_cart', JSON.stringify(cartItems));
+        renderCart();
+    }
+
+    function clearCart() {
+        if (confirm('Are you sure you want to clear your cart?')) {
+            localStorage.removeItem('snack_cart');
+            renderCart();
+        }
+    }
+
+    function checkout() {
+        alert('Payment integration proceeding... Items confirmed!');
+        localStorage.removeItem('snack_cart');
+        window.location.href = '/Movies/Index';
+    }
+
+    document.addEventListener('DOMContentLoaded', renderCart);
+</script>

@@ -1,0 +1,57 @@
+﻿@model List<CinemaTicketingAssignment.Models.Concession>
+@{
+    ViewData["Title"] = "Manage Snacks Menu";
+}
+
+<div class="container mt-4">
+    <h2>🍿 Manage Concessions (Admin)</h2>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <!-- 添加新小吃 -->
+    <form asp-action="Create" method="post" class="card card-body bg-light mb-4">
+        @Html.AntiForgeryToken()
+        <h5>Add New Snack Item</h5>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <input type="text" name="itemName" class="form-control" placeholder="Item Name (e.g. Popcorn Combo)" required />
+            </div>
+            <div class="col-md-4">
+                <input type="number" step="0.01" name="price" class="form-control" placeholder="Price (RM)" required />
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Add Item</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- 现有菜单表格 -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Price (RM)</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.ItemName</td>
+                    <td>RM @c.Price.ToString("0.00")</td>
+                    <td>
+                        <form asp-action="Delete" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@c.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,103 @@
+﻿@model List<CinemaTicketingAssignment.Models.Concession>
+@{
+    ViewData["Title"] = "Snacks & Food Menu";
+    bool isAdmin = User.IsInRole("ADMIN");
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 data-i18n="snack-title">🍿 Cinema Snacks & Combos</h2>
+        @if (isAdmin)
+        {
+            <a asp-action="Manage" class="btn btn-warning">⚙️ Manage Snacks (Admin)</a>
+        }
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center d-flex flex-column justify-content-between">
+                        <div>
+                            <h5 class="fw-bold">@item.ItemName</h5>
+                            <p class="fs-4 text-primary fw-bold mb-3">RM @item.Price.ToString("0.00")</p>
+                        </div>
+
+                        @* 仅限普通用户显示数量选择 *@
+                        @if (!isAdmin)
+                        {
+                            <div class="d-flex justify-content-center align-items-center gap-2 mt-2">
+                                <label data-i18n="label-qty">Qty:</label>
+                                <input type="number"
+                                       class="form-control text-center qty-input"
+                                       data-id="@item.Id"
+                                       data-name="@item.ItemName"
+                                       data-price="@item.Price"
+                                       value="0"
+                                       min="0"
+                                       max="10"
+                                       style="width: 80px;"
+                                       onchange="updateTotal()" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @* 仅限普通用户显示“加入购物车”栏；Admin 显示提示面板 *@
+    @if (!isAdmin)
+    {
+        <div class="card bg-light mt-4 p-3 d-flex flex-row justify-content-between align-items-center shadow-sm">
+            <div>
+                <h4 class="mb-0"><span data-i18n="label-total">Selected Snack Total:</span> <span class="text-success fw-bold" id="grandTotal">RM 0.00</span></h4>
+            </div>
+            <button class="btn btn-success btn-lg" onclick="addToCart()" data-i18n="btn-add-snack">🛒 Add to Cart</button>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info mt-4 text-center shadow-sm">
+            ℹ️ <strong>Administrator View:</strong> Booking and Cart options are disabled for Admin users.
+        </div>
+    }
+</div>
+
+<script>
+    function updateTotal() {
+        let total = 0;
+        document.querySelectorAll('.qty-input').forEach(input => {
+            const price = parseFloat(input.getAttribute('data-price'));
+            const qty = parseInt(input.value) || 0;
+            total += price * qty;
+        });
+        document.getElementById('grandTotal').innerText = 'RM ' + total.toFixed(2);
+    }
+
+    function addToCart() {
+        let selectedItems = [];
+        document.querySelectorAll('.qty-input').forEach(input => {
+            const qty = parseInt(input.value) || 0;
+                if (qty > 0) {
+                    selectedItems.push({
+                        id: input.getAttribute('data-id'),
+                        name: input.getAttribute('data-name'),
+                        price: parseFloat(input.getAttribute('data-price')),
+                        quantity: qty
+                    });
+                }
+            });
+
+            if (selectedItems.length === 0) {
+                alert('Please select at least 1 snack before adding to cart.');
+                return;
+            }
+
+            // 保存小吃数据至本地购物车缓存
+            localStorage.setItem('snack_cart', JSON.stringify(selectedItems));
+            alert('🛒 Snacks successfully added to your Cart!');
+            window.location.href = '/Movies/Index';
+        }
+</script>

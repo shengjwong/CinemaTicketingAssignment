@@ -1,0 +1,46 @@
+﻿@model List<CinemaTicketingAssignment.Models.Showtime>
+@{
+    ViewData["Title"] = "Select Showtime";
+    var selectedMovie = ViewBag.SelectedMovie as CinemaTicketingAssignment.Models.Movie;
+}
+
+<div class="container mt-4">
+    <h2 class="mb-3" data-i18n="showtime-title">🎬 Available Showtimes</h2>
+
+    @if (selectedMovie != null)
+    {
+        <div class="alert alert-info d-flex align-items-center gap-3">
+            <h4 class="mb-0">@selectedMovie.Title</h4>
+            <span class="badge bg-secondary">@selectedMovie.Language</span>
+            <span class="badge bg-primary">@selectedMovie.AgeClassification</span>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning" data-i18n="showtime-none">No showtimes available for this movie right now.</div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            @foreach (var s in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">@s.Movie.Title</h5>
+                            <p class="card-text mb-1"><strong>Hall:</strong> @s.CinemaHall.HallName (@s.CinemaHall.HallType)</p>
+                            <p class="card-text mb-1"><strong>Date:</strong> @s.StartDateTime.ToString("dd MMM yyyy (ddd)")</p>
+                            <p class="card-text mb-1"><strong>Time:</strong> @s.StartDateTime.ToString("h:mm tt") - @s.EndDateTime.ToString("h:mm tt")</p>
+                            <p class="card-text fs-5 text-success fw-bold">RM @s.TicketPrice.ToString("0.00")</p>
+
+                            <a asp-controller="Bookings" asp-action="SelectSeats" asp-route-showtimeId="@s.Id" class="btn btn-success w-100 mt-2" data-i18n="btn-select-seats">
+                                🎟️ Select Seats & Book
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
