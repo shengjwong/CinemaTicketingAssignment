@@ -1,0 +1,26 @@
+@model CinemaTicketingAssignment.Models.Booking
+@{ ViewData["Title"] = "E-ticket"; }
+
+<div class="row justify-content-center my-4">
+    <div class="col-lg-7">
+        <div class="card shadow ticket-card">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between">
+                    <h2>🎬 E-Ticket</h2>
+                    <span class="badge bg-success align-self-start">PAID</span>
+                </div>
+                <hr />
+                <h4>@Model.Showtime.Movie.Title</h4>
+                <p class="mb-1"><strong>Booking:</strong> @Model.Id</p>
+                <p class="mb-1"><strong>Showtime:</strong> @Model.Showtime.StartDateTime.ToString("dddd, dd MMM yyyy · h:mm tt")</p>
+                <p class="mb-1"><strong>Hall:</strong> @Model.Showtime.CinemaHall.HallName</p>
+                <p class="mb-1"><strong>Seats:</strong> @Model.SelectedSeats</p>
+                <p class="mb-1"><strong>Total paid:</strong> RM @Model.TotalAmount.ToString("0.00")</p>
+                <p class="small text-muted">@Model.PaymentStatus · @Model.PaymentReference</p>
+                <hr />
+                <a asp-action="DownloadTicket" asp-route-id="@Model.Id" class="btn btn-primary">Download printable PDF</a>
+                <a asp-action="History" class="btn btn-outline-secondary">My bookings</a>
+            </div>
+        </div>
+    </div>
+</div>

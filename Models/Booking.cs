@@ -16,9 +16,17 @@ public class Booking
     [Column(TypeName = "decimal(18,2)")] // Add this line
     public decimal TotalAmount { get; set; }
 
+    [MaxLength(30)]
+    public string PaymentStatus { get; set; } = "Paid";
+
+    [MaxLength(50)]
+    public string PaymentReference { get; set; } = string.Empty;
+
     public string UserId { get; set; } = string.Empty;
     public User User { get; set; } = null!;
 
     public string ShowtimeId { get; set; } = string.Empty;
     public Showtime Showtime { get; set; } = null!;
+
+    public List<BookingSeat> Seats { get; set; } = [];
 }

@@ -1,0 +1,33 @@
+@model List<CinemaTicketingAssignment.Models.Booking>
+@{ ViewData["Title"] = "My bookings"; }
+
+<div class="container my-4">
+    <h2>My bookings</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">You have not made any ticket bookings yet.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr><th>Booking</th><th>Movie & showtime</th><th>Seats</th><th>Total</th><th></th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var booking in Model)
+                    {
+                        <tr>
+                            <td>@booking.Id<br /><small>@booking.BookingDate.ToLocalTime().ToString("dd MMM yyyy")</small></td>
+                            <td><strong>@booking.Showtime.Movie.Title</strong><br />@booking.Showtime.StartDateTime.ToString("dd MMM, h:mm tt")</td>
+                            <td>@booking.SelectedSeats</td>
+                            <td>RM @booking.TotalAmount.ToString("0.00")<br /><small class="text-success">@booking.PaymentStatus</small></td>
+                            <td><a asp-action="Receipt" asp-route-id="@booking.Id" class="btn btn-outline-primary btn-sm">Receipt</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

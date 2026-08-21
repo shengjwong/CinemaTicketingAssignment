@@ -33,6 +33,12 @@
                         @* 普通用户专属购物车按钮 *@
                         @if (!User.IsInRole("ADMIN"))
                         {
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Bookings" asp-action="History">🎟️ My Bookings</a>
+                                </li>
+                            }
                             <li class="nav-item">
                                 <a class="nav-link text-dark fw-bold" asp-controller="Cart" asp-action="Index" data-i18n="nav-cart">🛒 Cart</a>
                             </li>

@@ -20,153 +20,169 @@ build_property.TargetFrameworkVersion = v10.0
 build_property.EntryPointFilePath = 
 build_property.RootNamespace = CinemaTicketingAssignment
 build_property.RootNamespace = CinemaTicketingAssignment
-build_property.ProjectDir = C:\Users\oscar\source\repos\CinemaTicketingAssignment\
+build_property.ProjectDir = C:\Users\User\OneDrive\Documents\GitHub\TESTFORCODE\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 10.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\oscar\source\repos\CinemaTicketingAssignment
+build_property.MSBuildProjectDirectory = C:\Users\User\OneDrive\Documents\GitHub\TESTFORCODE
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Account/AdminLogin.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Account/AdminLogin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxBZG1pbkxvZ2luLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Account/ForgotPassword.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Account/ForgotPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxGb3Jnb3RQYXNzd29yZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Account/Login.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Account/Register.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Account/ResetPassword.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Account/ResetPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZXNldFBhc3N3b3JkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Cart/Index.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Bookings/History.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ3NcSGlzdG9yeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Bookings/Payment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ3NcUGF5bWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Bookings/Receipt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ3NcUmVjZWlwdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Bookings/SelectSeats.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ3NcU2VsZWN0U2VhdHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Cart/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/CinemaHalls/Create.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/CinemaHalls/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2luZW1hSGFsbHNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/CinemaHalls/Delete.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/CinemaHalls/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2luZW1hSGFsbHNcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/CinemaHalls/Details.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/CinemaHalls/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2luZW1hSGFsbHNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/CinemaHalls/Edit.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/CinemaHalls/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2luZW1hSGFsbHNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/CinemaHalls/Index.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/CinemaHalls/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2luZW1hSGFsbHNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Concessions/Index.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Concessions/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29uY2Vzc2lvbnNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Concessions/Manage.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Concessions/Manage.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29uY2Vzc2lvbnNcTWFuYWdlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Home/Index.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Home/Locations.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Home/Locations.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMb2NhdGlvbnMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Home/Privacy.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Movies/Admin.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Movies/Admin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVzXEFkbWluLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Movies/Create.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Movies/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVzXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Movies/Delete.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Movies/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVzXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Movies/Details.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Movies/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVzXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Movies/Edit.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Movies/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVzXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Movies/Index.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Movies/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Profile/Profile.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Profile/Profile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZmlsZVxQcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Reports/Dashboard.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Reports/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0c1xEYXNoYm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Shared/Error.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Showtimes/Create.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Showtimes/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvd3RpbWVzXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Showtimes/CustomerIndex.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Showtimes/CustomerIndex.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvd3RpbWVzXEN1c3RvbWVySW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Showtimes/Delete.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Showtimes/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvd3RpbWVzXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Showtimes/Details.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Showtimes/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvd3RpbWVzXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Showtimes/Edit.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Showtimes/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvd3RpbWVzXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Showtimes/Index.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Showtimes/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvd3RpbWVzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/_ViewImports.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/_ViewStart.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/oscar/source/repos/CinemaTicketingAssignment/Views/Shared/_Layout.cshtml]
+[C:/Users/User/OneDrive/Documents/GitHub/TESTFORCODE/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-ozoielwoir

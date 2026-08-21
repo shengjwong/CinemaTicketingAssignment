@@ -15,6 +15,8 @@ public class DB : DbContext
     public DbSet<CinemaHall> CinemaHalls { get; set; }
     public DbSet<Showtime> Showtimes { get; set; }
     public DbSet<Booking> Bookings { get; set; }
+    public DbSet<BookingSeat> BookingSeats { get; set; }
+    public DbSet<SeatHold> SeatHolds { get; set; }
     public DbSet<Concession> Concessions { get; set; }
 
     // --- Added for Student 4 (Movie Reviews & Rating) ---
@@ -23,6 +25,20 @@ public class DB : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // Database-level uniqueness is the final protection against double booking,
+        // including requests submitted at exactly the same time.
+        modelBuilder.Entity<BookingSeat>()
+            .HasIndex(x => new { x.ShowtimeId, x.SeatCode })
+            .IsUnique();
+        modelBuilder.Entity<SeatHold>()
+            .HasIndex(x => new { x.ShowtimeId, x.SeatCode })
+            .IsUnique();
+        modelBuilder.Entity<BookingSeat>()
+            .HasOne(x => x.Booking)
+            .WithMany(x => x.Seats)
+            .HasForeignKey(x => x.BookingId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         // ----- Admin user -----
         modelBuilder.Entity<Admin>().HasData(
