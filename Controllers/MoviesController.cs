@@ -54,6 +54,11 @@ public class MoviesController : Controller
 
         if (movie == null) return NotFound();
 
+        ViewBag.Reviews = await db.Reviews
+            .Where(r => r.MovieId == movie.Id)
+            .OrderByDescending(r => r.CreatedAt)
+            .ToListAsync();
+
         return View(movie);
     }
 
