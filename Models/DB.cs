@@ -18,6 +18,8 @@ public class DB : DbContext
     public DbSet<BookingSeat> BookingSeats { get; set; }
     public DbSet<SeatHold> SeatHolds { get; set; }
     public DbSet<Concession> Concessions { get; set; }
+    public DbSet<FoodOrder> FoodOrders { get; set; }
+    public DbSet<FoodOrderItem> FoodOrderItems { get; set; }
 
     // --- Added for Student 4 (Movie Reviews & Rating) ---
     public DbSet<Review> Reviews { get; set; }
@@ -38,6 +40,11 @@ public class DB : DbContext
             .HasOne(x => x.Booking)
             .WithMany(x => x.Seats)
             .HasForeignKey(x => x.BookingId)
+            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<FoodOrderItem>()
+            .HasOne(x => x.FoodOrder)
+            .WithMany(x => x.Items)
+            .HasForeignKey(x => x.FoodOrderId)
             .OnDelete(DeleteBehavior.Cascade);
 
         // ----- Admin user -----

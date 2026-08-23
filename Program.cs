@@ -69,6 +69,34 @@ using (var scope = app.Services.CreateScope())
             CREATE UNIQUE INDEX IX_BookingSeats_ShowtimeId_SeatCode ON dbo.BookingSeats(ShowtimeId, SeatCode);
         IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_BookingSeats_BookingId' AND object_id = OBJECT_ID(N'dbo.BookingSeats'))
             CREATE INDEX IX_BookingSeats_BookingId ON dbo.BookingSeats(BookingId);
+
+        IF OBJECT_ID(N'dbo.FoodOrders', N'U') IS NULL
+        BEGIN
+            CREATE TABLE dbo.FoodOrders (
+                Id nvarchar(12) NOT NULL CONSTRAINT PK_FoodOrders PRIMARY KEY,
+                OrderDate datetime2 NOT NULL,
+                TotalAmount decimal(18,2) NOT NULL,
+                PaymentStatus nvarchar(30) NOT NULL,
+                UserId nvarchar(10) NOT NULL,
+                CONSTRAINT FK_FoodOrders_Users_UserId FOREIGN KEY (UserId) REFERENCES dbo.Users(Id)
+            );
+        END;
+        IF OBJECT_ID(N'dbo.FoodOrderItems', N'U') IS NULL
+        BEGIN
+            CREATE TABLE dbo.FoodOrderItems (
+                Id int IDENTITY(1,1) NOT NULL CONSTRAINT PK_FoodOrderItems PRIMARY KEY,
+                FoodOrderId nvarchar(12) NOT NULL,
+                ConcessionId nvarchar(10) NOT NULL,
+                ItemName nvarchar(100) NOT NULL,
+                UnitPrice decimal(18,2) NOT NULL,
+                Quantity int NOT NULL,
+                CONSTRAINT FK_FoodOrderItems_FoodOrders_FoodOrderId FOREIGN KEY (FoodOrderId) REFERENCES dbo.FoodOrders(Id) ON DELETE CASCADE
+            );
+        END;
+        IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_FoodOrders_UserId' AND object_id = OBJECT_ID(N'dbo.FoodOrders'))
+            CREATE INDEX IX_FoodOrders_UserId ON dbo.FoodOrders(UserId);
+        IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_FoodOrderItems_FoodOrderId' AND object_id = OBJECT_ID(N'dbo.FoodOrderItems'))
+            CREATE INDEX IX_FoodOrderItems_FoodOrderId ON dbo.FoodOrderItems(FoodOrderId);
         """);
 }
 

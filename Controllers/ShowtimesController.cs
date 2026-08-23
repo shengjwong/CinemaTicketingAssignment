@@ -30,6 +30,7 @@ public class ShowtimesController : Controller
     // 2. 普通用户场次选择页面 (支持按 MovieId 过滤)
     public async Task<IActionResult> CustomerIndex(string movieId)
     {
+        var currentTime = DateTime.Now;
         var query = _db.Showtimes
             .Include(s => s.Movie)
             .Include(s => s.CinemaHall)
@@ -42,7 +43,7 @@ public class ShowtimesController : Controller
         }
 
         var showtimes = await query
-            .Where(s => s.StartDateTime >= DateTime.Now)
+            .Where(s => s.EndDateTime > currentTime)
             .OrderBy(s => s.StartDateTime)
             .ToListAsync();
 

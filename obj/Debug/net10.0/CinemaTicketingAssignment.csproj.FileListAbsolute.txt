@@ -1286,7 +1286,6 @@ C:\Users\oscar\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\rjsmcsht
 C:\Users\oscar\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\oscar\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\scopedcss\bundle\CinemaTicketingAssignment.styles.css
 C:\Users\oscar\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\scopedcss\projectbundle\CinemaTicketingAssignment.bundle.scp.css
-C:\Users\oscar\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\vw05hpltzo-{0}-b9sayid5wm-b9sayid5wm.gz
 C:\Users\oscar\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\cmrvt3b7ra-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\oscar\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\p758iw7c1f-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\oscar\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\svwci8bfv9-{0}-t1cqhe9u97-t1cqhe9u97.gz
@@ -2077,3 +2076,4 @@ C:\Users\User\OneDrive\Documents\GitHub\TESTFORCODE\obj\Debug\net10.0\refint\Cin
 C:\Users\User\OneDrive\Documents\GitHub\TESTFORCODE\obj\Debug\net10.0\CinemaTicketingAssignment.pdb
 C:\Users\User\OneDrive\Documents\GitHub\TESTFORCODE\obj\Debug\net10.0\CinemaTicketingAssignment.genruntimeconfig.cache
 C:\Users\User\OneDrive\Documents\GitHub\TESTFORCODE\obj\Debug\net10.0\ref\CinemaTicketingAssignment.dll
+C:\Users\oscar\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\vw05hpltzo-{0}-6w3z1vx7oz-6w3z1vx7oz.gz

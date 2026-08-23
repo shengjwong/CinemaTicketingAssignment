@@ -5,6 +5,7 @@
 <div class="container mt-4">
     <h2>🛒 My Shopping Cart</h2>
     <hr />
+    @Html.AntiForgeryToken()
 
     <div id="cartContent">
         <div class="table-responsive">
@@ -38,6 +39,32 @@
         <p class="text-muted">Explore our movies and snacks to add items to your cart.</p>
         <a asp-controller="Movies" asp-action="Index" class="btn btn-primary mt-2">Browse Movies</a>
         <a asp-controller="Concessions" asp-action="Index" class="btn btn-outline-primary mt-2">Browse Snacks</a>
+    </div>
+
+    <div id="checkoutPanel" class="card shadow-sm d-none">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">Confirm Your Purchase</h4>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">Please review the items below before confirming your purchase.</p>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Item Description</th>
+                            <th class="text-center">Quantity</th>
+                            <th class="text-end">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="checkoutTableBody"></tbody>
+                </table>
+            </div>
+            <h4 class="text-end">Total: <span id="checkoutTotal" class="text-success"></span></h4>
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <button type="button" class="btn btn-outline-secondary" onclick="returnToCart()">Back to Cart</button>
+                <button type="button" class="btn btn-success" onclick="confirmPurchase()">Confirm Purchase</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -94,9 +121,66 @@
     }
 
     function checkout() {
-        alert('Payment integration proceeding... Items confirmed!');
-        localStorage.removeItem('snack_cart');
-        window.location.href = '/Movies/Index';
+        const cartItems = JSON.parse(localStorage.getItem('snack_cart') || '[]');
+        if (cartItems.length === 0) {
+            renderCart();
+            return;
+        }
+
+        const checkoutBody = document.getElementById('checkoutTableBody');
+        let total = 0;
+        checkoutBody.innerHTML = '';
+
+        cartItems.forEach(item => {
+            const subtotal = item.price * item.quantity;
+            total += subtotal;
+            checkoutBody.innerHTML += `
+                <tr>
+                    <td class="fw-bold">${item.name}</td>
+                    <td class="text-center">${item.quantity}</td>
+                    <td class="text-end">RM ${subtotal.toFixed(2)}</td>
+                </tr>`;
+        });
+
+        document.getElementById('checkoutTotal').innerText = 'RM ' + total.toFixed(2);
+        document.getElementById('cartContent').classList.add('d-none');
+        document.getElementById('emptyCartMsg').classList.add('d-none');
+        document.getElementById('checkoutPanel').classList.remove('d-none');
+    }
+
+    function returnToCart() {
+        document.getElementById('checkoutPanel').classList.add('d-none');
+        renderCart();
+    }
+
+    function confirmPurchase() {
+        const cartItems = JSON.parse(localStorage.getItem('snack_cart') || '[]');
+        if (cartItems.length === 0) {
+            renderCart();
+            return;
+        }
+
+        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+        fetch('@Url.Action("ConfirmPurchase", "Cart")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': token
+            },
+            body: JSON.stringify(cartItems.map(item => ({ id: item.id, quantity: item.quantity })))
+        })
+            .then(async response => {
+                if (!response.ok) {
+                    const error = await response.json().catch(() => ({ message: 'Unable to confirm this purchase.' }));
+                    throw new Error(error.message);
+                }
+                return response.json();
+            })
+            .then(result => {
+                localStorage.removeItem('snack_cart');
+                window.location.href = result.redirectUrl;
+            })
+            .catch(error => alert(error.message));
     }
 
     document.addEventListener('DOMContentLoaded', renderCart);

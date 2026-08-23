@@ -1,0 +1,48 @@
+@model CinemaTicketingAssignment.Models.FoodOrder
+@{ ViewData["Title"] = "Food Receipt"; }
+
+<div class="row justify-content-center my-4">
+    <div class="col-lg-7">
+        <div class="card shadow receipt-card">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between">
+                    <h2>🍿 Food Receipt</h2>
+                    <span class="badge bg-success align-self-start">@Model.PaymentStatus.ToUpperInvariant()</span>
+                </div>
+                <hr />
+                <p class="mb-1"><strong>Order:</strong> @Model.Id</p>
+                <p class="mb-3"><strong>Date:</strong> @Model.OrderDate.ToLocalTime().ToString("dddd, dd MMM yyyy · h:mm tt")</p>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead><tr><th>Item</th><th class="text-center">Qty</th><th class="text-end">Subtotal</th></tr></thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td>@item.ItemName<br /><small class="text-muted">RM @item.UnitPrice.ToString("0.00") each</small></td>
+                                    <td class="text-center">@item.Quantity</td>
+                                    <td class="text-end">RM @item.Subtotal.ToString("0.00")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <hr />
+                <h4 class="text-end">Total paid: RM @Model.TotalAmount.ToString("0.00")</h4>
+                <div class="mt-4 no-print">
+                    <button type="button" class="btn btn-primary" onclick="window.print()">Print / Save as PDF</button>
+                    <a asp-action="History" class="btn btn-outline-secondary">Food History</a>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Back to Cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @@media print {
+        .no-print, header, footer { display: none !important; }
+        .receipt-card { border: 0; box-shadow: none !important; }
+        body { background: white; }
+    }
+</style>
