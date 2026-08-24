@@ -50,6 +50,26 @@ public class ShowtimesController : Controller
         return View(showtimes);
     }
 
+    // AJAX availability check for the selected hall/time.
+    [HttpGet]
+    public async Task<IActionResult> CheckAvailability(string hallId, DateTime startDateTime, DateTime endDateTime, string? excludeId = null)
+    {
+        if (string.IsNullOrWhiteSpace(hallId) || endDateTime <= startDateTime)
+            return Json(new { available = false, message = "Please provide a valid hall and time range." });
+
+        var conflict = await _db.Showtimes.AnyAsync(s =>
+            s.Id != excludeId &&
+            s.CinemaHallId == hallId &&
+            startDateTime < s.EndDateTime &&
+            endDateTime > s.StartDateTime);
+
+        return Json(new
+        {
+            available = !conflict,
+            message = conflict ? "Hall is unavailable: another showtime overlaps this period." : "Hall is available for this period."
+        });
+    }
+
     // 3. 查看场次详情
     public async Task<IActionResult> Details(string id)
     {
@@ -82,16 +102,16 @@ public class ShowtimesController : Controller
     {
         if (!User.IsInRole("ADMIN")) return Forbid();
 
-        if (string.IsNullOrEmpty(showtime.Id))
-        {
-            showtime.Id = "SHOW" + Guid.NewGuid().ToString("N")[..5].ToUpper();
-        }
-
         ModelState.Remove("Movie");
         ModelState.Remove("CinemaHall");
 
+        ValidateShowtime(showtime);
+        if (await HasHallConflictAsync(showtime))
+            ModelState.AddModelError(string.Empty, "This cinema hall already has another showtime overlapping the selected time.");
+
         if (ModelState.IsValid)
         {
+            showtime.Id = "SHOW" + Guid.NewGuid().ToString("N")[..5].ToUpper();
             _db.Add(showtime);
             await _db.SaveChangesAsync();
             TempData["Success"] = "Showtime created successfully!";
@@ -101,6 +121,26 @@ public class ShowtimesController : Controller
         ViewBag.Movies = await _db.Movies.ToListAsync();
         ViewBag.CinemaHalls = await _db.CinemaHalls.ToListAsync();
         return View(showtime);
+    }
+
+    private void ValidateShowtime(Showtime showtime)
+    {
+        if (string.IsNullOrWhiteSpace(showtime.MovieId)) ModelState.AddModelError(nameof(showtime.MovieId), "Please select a movie.");
+        if (string.IsNullOrWhiteSpace(showtime.CinemaHallId)) ModelState.AddModelError(nameof(showtime.CinemaHallId), "Please select a cinema hall.");
+        if (showtime.EndDateTime <= showtime.StartDateTime) ModelState.AddModelError(nameof(showtime.EndDateTime), "End time must be later than start time.");
+        if (showtime.StartDateTime < DateTime.Now) ModelState.AddModelError(nameof(showtime.StartDateTime), "Showtime cannot start in the past.");
+        if (showtime.TicketPrice < 0) ModelState.AddModelError(nameof(showtime.TicketPrice), "Ticket price cannot be negative.");
+    }
+
+    private async Task<bool> HasHallConflictAsync(Showtime showtime)
+    {
+        if (string.IsNullOrWhiteSpace(showtime.CinemaHallId) || showtime.EndDateTime <= showtime.StartDateTime) return false;
+
+        return await _db.Showtimes.AnyAsync(s =>
+            s.Id != showtime.Id &&
+            s.CinemaHallId == showtime.CinemaHallId &&
+            showtime.StartDateTime < s.EndDateTime &&
+            showtime.EndDateTime > s.StartDateTime);
     }
 
     // 5. 编辑场次 (GET)
@@ -127,6 +167,10 @@ public class ShowtimesController : Controller
 
         ModelState.Remove("Movie");
         ModelState.Remove("CinemaHall");
+
+        ValidateShowtime(showtime);
+        if (await HasHallConflictAsync(showtime))
+            ModelState.AddModelError(string.Empty, "This cinema hall already has another showtime overlapping the selected time.");
 
         if (ModelState.IsValid)
         {

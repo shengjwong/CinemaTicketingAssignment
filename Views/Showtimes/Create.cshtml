@@ -24,7 +24,7 @@
 
     <div class="mb-3">
         <label asp-for="CinemaHallId" class="form-label">Cinema Hall</label>
-        <select asp-for="CinemaHallId" class="form-select">
+        <select asp-for="CinemaHallId" id="CinemaHallId" class="form-select">
             <option value="">-- Select Cinema Hall --</option>
             @foreach (var h in halls)
             {
@@ -37,15 +37,17 @@
     <div class="row">
         <div class="col-md-6 mb-3">
             <label asp-for="StartDateTime" class="form-label">Start Date &amp; Time</label>
-            <input asp-for="StartDateTime" type="datetime-local" class="form-control" />
+            <input asp-for="StartDateTime" id="StartDateTime" type="datetime-local" class="form-control" />
             <span asp-validation-for="StartDateTime" class="text-danger"></span>
         </div>
         <div class="col-md-6 mb-3">
             <label asp-for="EndDateTime" class="form-label">End Date &amp; Time</label>
-            <input asp-for="EndDateTime" type="datetime-local" class="form-control" />
+            <input asp-for="EndDateTime" id="EndDateTime" type="datetime-local" class="form-control" />
             <span asp-validation-for="EndDateTime" class="text-danger"></span>
         </div>
     </div>
+
+    <div id="availabilityMessage" class="alert d-none" role="status"></div>
 
     <div class="mb-3">
         <label asp-for="TicketPrice" class="form-label">Ticket Price (RM)</label>
@@ -58,7 +60,41 @@
 </form>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+    (() => {
+        const hall = document.getElementById('CinemaHallId');
+        const start = document.getElementById('StartDateTime');
+        const end = document.getElementById('EndDateTime');
+        const box = document.getElementById('availabilityMessage');
+        let timer;
+
+        const check = () => {
+            if (!hall.value || !start.value || !end.value) {
+                box.className = 'alert d-none';
+                return;
+            }
+            const qs = new URLSearchParams({
+                hallId: hall.value,
+                startDateTime: start.value,
+                endDateTime: end.value
+            });
+            fetch('/Showtimes/CheckAvailability?' + qs.toString())
+                .then(r => r.json())
+                .then(data => {
+                    box.textContent = data.message;
+                    box.className = 'alert ' + (data.available ? 'alert-success' : 'alert-danger');
+                })
+                .catch(() => {
+                    box.textContent = 'Unable to check hall availability.';
+                    box.className = 'alert alert-warning';
+                });
+        };
+
+        [hall, start, end].forEach(x => x.addEventListener('change', () => {
+            clearTimeout(timer);
+            timer = setTimeout(check, 150);
+        }));
+    })();
+    </script>
 }

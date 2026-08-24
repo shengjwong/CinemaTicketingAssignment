@@ -8,26 +8,19 @@
 
 <ul class="nav nav-tabs mb-4">
     <li class="nav-item">
-        <a class="nav-link @(status == MovieStatus.NowShowing ? "active" : "")"
-           asp-action="Index" asp-route-status="NowShowing"
-           asp-route-genre="@ViewBag.SelectedGenre" asp-route-language="@ViewBag.SelectedLanguage" asp-route-age="@ViewBag.SelectedAge">
-            Now Showing
-        </a>
+        <button type="button" class="nav-link movie-status-tab @(status == MovieStatus.NowShowing ? "active" : "")" data-status="NowShowing">Now Showing</button>
     </li>
     <li class="nav-item">
-        <a class="nav-link @(status == MovieStatus.ComingSoon ? "active" : "")"
-           asp-action="Index" asp-route-status="ComingSoon"
-           asp-route-genre="@ViewBag.SelectedGenre" asp-route-language="@ViewBag.SelectedLanguage" asp-route-age="@ViewBag.SelectedAge">
-            Coming Soon
-        </a>
+        <button type="button" class="nav-link movie-status-tab @(status == MovieStatus.ComingSoon ? "active" : "")" data-status="ComingSoon">Coming Soon</button>
     </li>
 </ul>
 
-<form method="get" asp-action="Index" class="row g-2 mb-4">
-    <input type="hidden" name="status" value="@status" />
-
-    <div class="col-auto">
-        <select name="genre" class="form-select" onchange="this.form.submit()">
+<div class="row g-2 mb-4" id="movieFilters">
+    <div class="col-md-4">
+        <input id="movieSearch" type="search" class="form-control" placeholder="Search movie title, genre or language..." value="@ViewBag.Search" autocomplete="off" />
+    </div>
+    <div class="col-md-2">
+        <select id="movieGenre" class="form-select">
             <option value="">All Genres</option>
             @foreach (var g in (List<string>)ViewBag.Genres)
             {
@@ -35,9 +28,8 @@
             }
         </select>
     </div>
-
-    <div class="col-auto">
-        <select name="language" class="form-select" onchange="this.form.submit()">
+    <div class="col-md-2">
+        <select id="movieLanguage" class="form-select">
             <option value="">All Languages</option>
             @foreach (var l in (List<string>)ViewBag.Languages)
             {
@@ -45,9 +37,8 @@
             }
         </select>
     </div>
-
-    <div class="col-auto">
-        <select name="age" class="form-select" onchange="this.form.submit()">
+    <div class="col-md-2">
+        <select id="movieAge" class="form-select">
             <option value="">All Ratings</option>
             @foreach (var a in (List<string>)ViewBag.AgeClassifications)
             {
@@ -55,32 +46,67 @@
             }
         </select>
     </div>
-
-    <div class="col-auto">
-        <a asp-action="Index" asp-route-status="@status" class="btn btn-outline-secondary">Clear filters</a>
+    <div class="col-md-2">
+        <button type="button" id="clearMovieFilters" class="btn btn-outline-secondary w-100">Clear</button>
     </div>
-</form>
-
-@if (!Model.Any())
-{
-    <p class="text-muted">No movies match these filters right now.</p>
-}
-
-<div class="row row-cols-1 row-cols-md-4 g-4">
-    @foreach (var movie in Model)
-    {
-        <div class="col">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">@movie.Title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">@movie.Genre &middot; @movie.Language &middot; @movie.AgeClassification</h6>
-                    <p class="card-text">@(movie.Synopsis.Length > 100 ? movie.Synopsis[..100] + "..." : movie.Synopsis)</p>
-                    <p class="card-text"><small class="text-muted">Release: @movie.ReleaseDate.ToString("dd MMM yyyy")</small></p>
-                </div>
-                <div class="card-footer">
-                    <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-primary btn-sm">View Showtimes</a>
-                </div>
-            </div>
-        </div>
-    }
 </div>
+
+<div id="movieResults">
+    @await Html.PartialAsync("_MovieCatalogResults", Model)
+</div>
+
+@section Scripts {
+<script>
+(() => {
+    let status = '@status';
+    let debounceTimer;
+
+    const loadMovies = (page = 1) => {
+        const params = new URLSearchParams({
+            search: document.getElementById('movieSearch').value,
+            genre: document.getElementById('movieGenre').value,
+            language: document.getElementById('movieLanguage').value,
+            age: document.getElementById('movieAge').value,
+            status,
+            page
+        });
+
+        history.replaceState(null, '', `/Movies?${params.toString()}`);
+        fetch(`/Movies/Search?${params.toString()}`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(r => r.ok ? r.text() : Promise.reject(r.statusText))
+            .then(html => document.getElementById('movieResults').innerHTML = html)
+            .catch(() => document.getElementById('movieResults').innerHTML = '<div class="alert alert-danger">Unable to load movies. Please refresh the page.</div>');
+    };
+
+    document.getElementById('movieSearch').addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => loadMovies(1), 300);
+    });
+
+    ['movieGenre', 'movieLanguage', 'movieAge'].forEach(id => {
+        document.getElementById(id).addEventListener('change', () => loadMovies(1));
+    });
+
+    document.getElementById('clearMovieFilters').addEventListener('click', () => {
+        document.getElementById('movieSearch').value = '';
+        document.getElementById('movieGenre').value = '';
+        document.getElementById('movieLanguage').value = '';
+        document.getElementById('movieAge').value = '';
+        loadMovies(1);
+    });
+
+    document.querySelectorAll('.movie-status-tab').forEach(button => {
+        button.addEventListener('click', () => {
+            status = button.dataset.status;
+            document.querySelectorAll('.movie-status-tab').forEach(x => x.classList.toggle('active', x === button));
+            loadMovies(1);
+        });
+    });
+
+    document.getElementById('movieResults').addEventListener('click', event => {
+        const button = event.target.closest('.movie-page');
+        if (button) loadMovies(button.dataset.page);
+    });
+})();
+</script>
+}

@@ -1,0 +1,109 @@
+﻿@model IEnumerable<CinemaTicketingAssignment.Models.User>
+
+<h3 class="mt-4 mb-3">Member & User Maintenance</h3>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<table class="table table-bordered table-striped align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            bool isBlocked = user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.UtcNow;
+            <tr>
+                <td>@user.Name</td>
+                <td>@user.Email</td>
+                <td>@user.Phone</td>
+                <td>
+                    <span class="badge @(user is CinemaTicketingAssignment.Models.Admin ? "bg-danger" : "bg-primary")">
+                        @(user is CinemaTicketingAssignment.Models.Admin ? "ADMIN" : "MEMBER")
+                    </span>
+                </td>
+                <td>
+                    @if (isBlocked)
+                    {
+                        <span class="badge bg-danger">Blocked</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                </td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <!-- Block/Unblock Button -->
+                        <form asp-controller="AdminDashboard" asp-action="ToggleBlock" asp-route-id="@user.Id" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            @if (isBlocked)
+                            {
+                                <button type="submit" class="btn btn-sm btn-success">Unblock</button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Block this user?');">Block</button>
+                            }
+                        </form>
+
+                        <!-- Quick Reset Password Button -->
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#resetModal-@user.Id">
+                            Reset Password
+                        </button>
+
+                        <!-- Delete Button -->
+                        <form asp-controller="AdminDashboard" asp-action="DeleteUser" asp-route-id="@user.Id" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to PERMANENTLY delete this user?');">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Reset Password Modal -->
+                    <div class="modal fade" id="resetModal-@user.Id" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form asp-controller="AdminDashboard" asp-action="ResetPassword" asp-route-id="@user.Id" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Reset Password for @user.Name</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label class="form-label">New Password:</label>
+                                        <input type="password" name="newPassword" class="form-control" required />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Save Password</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

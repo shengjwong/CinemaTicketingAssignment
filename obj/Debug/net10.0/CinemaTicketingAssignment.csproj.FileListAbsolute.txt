@@ -821,7 +821,6 @@ C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\rjsmcsh
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\scopedcss\bundle\CinemaTicketingAssignment.styles.css
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\scopedcss\projectbundle\CinemaTicketingAssignment.bundle.scp.css
-C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\vw05hpltzo-{0}-b9sayid5wm-b9sayid5wm.gz
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\cmrvt3b7ra-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\p758iw7c1f-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\svwci8bfv9-{0}-bqjiyaj88i-bqjiyaj88i.gz
@@ -1048,7 +1047,6 @@ C:\Users\User\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\rjsmcshtm
 C:\Users\User\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\User\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\scopedcss\bundle\CinemaTicketingAssignment.styles.css
 C:\Users\User\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\scopedcss\projectbundle\CinemaTicketingAssignment.bundle.scp.css
-C:\Users\User\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\vw05hpltzo-{0}-b9sayid5wm-b9sayid5wm.gz
 C:\Users\User\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\cmrvt3b7ra-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\User\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\p758iw7c1f-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\User\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\svwci8bfv9-{0}-t1cqhe9u97-t1cqhe9u97.gz
@@ -2077,3 +2075,11 @@ C:\Users\User\OneDrive\Documents\GitHub\TESTFORCODE\obj\Debug\net10.0\CinemaTick
 C:\Users\User\OneDrive\Documents\GitHub\TESTFORCODE\obj\Debug\net10.0\CinemaTicketingAssignment.genruntimeconfig.cache
 C:\Users\User\OneDrive\Documents\GitHub\TESTFORCODE\obj\Debug\net10.0\ref\CinemaTicketingAssignment.dll
 C:\Users\oscar\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\vw05hpltzo-{0}-6w3z1vx7oz-6w3z1vx7oz.gz
+C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\vw05hpltzo-{0}-6w3z1vx7oz-6w3z1vx7oz.gz
+C:\Users\User\source\repos\CinemaTicketingAssignment\bin\Debug\net10.0\BouncyCastle.Cryptography.dll
+C:\Users\User\source\repos\CinemaTicketingAssignment\bin\Debug\net10.0\EPPlus.dll
+C:\Users\User\source\repos\CinemaTicketingAssignment\bin\Debug\net10.0\EPPlus.Interfaces.dll
+C:\Users\User\source\repos\CinemaTicketingAssignment\bin\Debug\net10.0\MailKit.dll
+C:\Users\User\source\repos\CinemaTicketingAssignment\bin\Debug\net10.0\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\User\source\repos\CinemaTicketingAssignment\bin\Debug\net10.0\MimeKit.dll
+C:\Users\User\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\vw05hpltzo-{0}-6w3z1vx7oz-6w3z1vx7oz.gz

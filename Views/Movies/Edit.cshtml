@@ -5,7 +5,7 @@
 
 <h1 class="mb-3">Edit Movie</h1>
 
-<form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
 
@@ -50,8 +50,13 @@
             <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<MovieStatus>()"></select>
         </div>
         <div class="col-md-4 mb-3">
-            <label asp-for="PosterImagePath" class="form-label">Poster Image Path</label>
-            <input asp-for="PosterImagePath" class="form-control" />
+            <label class="form-label">Movie Poster</label>
+            <input id="posterFile" name="posterFile" type="file" class="form-control" accept="image/png,image/jpeg,image/webp" />
+            <input type="hidden" name="croppedPosterData" id="croppedPosterData" />
+            <small class="text-muted">Select an image, then crop/rotate/resize before saving.</small>
+            <div class="mt-2">
+                <img id="posterPreview" src="@Model.PosterImagePath" alt="Poster preview" class="img-fluid rounded @(string.IsNullOrWhiteSpace(Model.PosterImagePath) ? "d-none" : "")" style="max-height:300px;" />
+            </div>
         </div>
     </div>
 
@@ -61,4 +66,25 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+    <script>
+    (() => {
+        const input = document.getElementById('posterFile');
+        const preview = document.getElementById('posterPreview');
+        const output = document.getElementById('croppedPosterData');
+        let cropper;
+        input.addEventListener('change', () => {
+            const file = input.files?.[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) { alert('Poster image must be 5 MB or smaller.'); input.value=''; return; }
+            const reader = new FileReader();
+            reader.onload = e => { preview.src = e.target.result; preview.classList.remove('d-none'); if (cropper) cropper.destroy(); cropper = new Cropper(preview, { aspectRatio: 2/3, viewMode: 1, autoCropArea: 0.9 }); };
+            reader.readAsDataURL(file);
+        });
+        document.querySelector('form').addEventListener('submit', () => {
+            if (cropper) output.value = cropper.getCroppedCanvas({ width: 600, height: 900, imageSmoothingEnabled: true, imageSmoothingQuality: 'high' }).toDataURL('image/jpeg', 0.88);
+        });
+    })();
+    </script>
 }
