@@ -35,6 +35,7 @@ public class ProfileController : Controller
             Name = user.Name,
             Email = user.Email,
             Phone = user.Phone,
+            // Only set PhotoURL if user is a Member
             PhotoURL = (user is Member member) ? member.PhotoURL : string.Empty
         };
 
@@ -65,23 +66,27 @@ public class ProfileController : Controller
         user.Email = model.Email;
         user.Phone = model.Phone;
 
-        if (user is Member memberUser && model.AvatarFile != null && model.AvatarFile.Length > 0)
+        // Photo upload processing ONLY for Members
+        if (user is Member memberUser)
         {
-            string uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
-            if (!Directory.Exists(uploadsFolder))
+            if (model.AvatarFile != null && model.AvatarFile.Length > 0)
             {
-                Directory.CreateDirectory(uploadsFolder);
+                string uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.AvatarFile.FileName);
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.AvatarFile.CopyToAsync(fileStream);
+                }
+
+                memberUser.PhotoURL = "/uploads/" + uniqueFileName;
             }
-
-            string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.AvatarFile.FileName);
-            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await model.AvatarFile.CopyToAsync(fileStream);
-            }
-
-            memberUser.PhotoURL = "/uploads/" + uniqueFileName;
         }
 
         _db.Users.Update(user);
@@ -113,7 +118,6 @@ public class ProfileController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-        // 1. Verify Current Password safely (plain text check first + try-catch wrapper)
         bool isCurrentValid = false;
 
         if (user.Hash.Trim() == model.CurrentPassword.Trim())
@@ -139,14 +143,12 @@ public class ProfileController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-        // 2. Prevent setting identical password
         if (model.CurrentPassword.Trim() == model.NewPassword.Trim())
         {
             TempData["PasswordError"] = "New password cannot be the same as your current password.";
             return RedirectToAction(nameof(Index));
         }
 
-        // 3. Hash the new password before saving to database
         user.Hash = _passwordHasher.HashPassword(user, model.NewPassword);
 
         _db.Users.Update(user);
