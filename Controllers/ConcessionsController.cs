@@ -35,6 +35,15 @@ public class ConcessionsController : Controller
     {
         if (!User.IsInRole("ADMIN")) return Forbid();
 
+        bool isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
+        if (string.IsNullOrWhiteSpace(itemName) || price < 0)
+        {
+            if (isAjax) return BadRequest(new { message = "Please provide a valid item name and price." });
+            TempData["Error"] = "Please provide a valid item name and price.";
+            return RedirectToAction("Manage");
+        }
+
         var item = new Concession
         {
             Id = "CON" + Guid.NewGuid().ToString("N")[..7].ToUpper(),
@@ -43,6 +52,12 @@ public class ConcessionsController : Controller
         };
         _db.Concessions.Add(item);
         await _db.SaveChangesAsync();
+
+        if (isAjax)
+        {
+            return Ok(new { id = item.Id, itemName = item.ItemName, price = item.Price.ToString("0.00") });
+        }
+
         TempData["Success"] = "New snack added successfully!";
         return RedirectToAction("Manage");
     }
@@ -53,13 +68,23 @@ public class ConcessionsController : Controller
     public async Task<IActionResult> Delete(string id)
     {
         if (!User.IsInRole("ADMIN")) return Forbid();
+
+        bool isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
         var item = await _db.Concessions.FindAsync(id);
         if (item != null)
         {
             _db.Concessions.Remove(item);
             await _db.SaveChangesAsync();
+
+            if (isAjax) return Ok(new { id });
             TempData["Success"] = "Snack item deleted.";
         }
+        else if (isAjax)
+        {
+            return NotFound();
+        }
+
         return RedirectToAction("Manage");
     }
 }

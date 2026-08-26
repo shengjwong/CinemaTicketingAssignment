@@ -6,21 +6,18 @@
 <div class="container mt-4">
     <h2>🍿 Manage Concessions (Admin)</h2>
 
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success">@TempData["Success"]</div>
-    }
+    <div id="manageAlert"></div>
 
     <!-- 添加新小吃 -->
-    <form asp-action="Create" method="post" class="card card-body bg-light mb-4">
+    <form id="addConcessionForm" class="card card-body bg-light mb-4">
         @Html.AntiForgeryToken()
         <h5>Add New Snack Item</h5>
         <div class="row g-3">
             <div class="col-md-6">
-                <input type="text" name="itemName" class="form-control" placeholder="Item Name (e.g. Popcorn Combo)" required />
+                <input type="text" name="itemName" id="itemNameInput" class="form-control" placeholder="Item Name (e.g. Popcorn Combo)" required />
             </div>
             <div class="col-md-4">
-                <input type="number" step="0.01" name="price" class="form-control" placeholder="Price (RM)" required />
+                <input type="number" step="0.01" min="0" name="price" id="priceInput" class="form-control" placeholder="Price (RM)" required />
             </div>
             <div class="col-md-2">
                 <button type="submit" class="btn btn-primary w-100">Add Item</button>
@@ -37,21 +34,90 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="concessionsTableBody">
             @foreach (var c in Model)
             {
-                <tr>
+                <tr id="concession-@c.Id">
                     <td>@c.ItemName</td>
                     <td>RM @c.Price.ToString("0.00")</td>
                     <td>
-                        <form asp-action="Delete" method="post" class="d-inline">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="id" value="@c.Id" />
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
+                        <button type="button" class="btn btn-danger btn-sm delete-concession-btn" data-id="@c.Id">Delete</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const addForm = document.getElementById('addConcessionForm');
+            const tableBody = document.getElementById('concessionsTableBody');
+            const alertBox = document.getElementById('manageAlert');
+            const antiForgeryToken = document.querySelector('#addConcessionForm input[name="__RequestVerificationToken"]')?.value;
+
+            function showAlert(message, type) {
+                alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+                setTimeout(() => { alertBox.innerHTML = ''; }, 3000);
+            }
+
+            addForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(addForm);
+                const submitBtn = addForm.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+
+                fetch('/Concessions/Create', {
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    body: formData
+                })
+                    .then(async res => {
+                        if (!res.ok) {
+                            const err = await res.json().catch(() => ({ message: 'Could not add item.' }));
+                            throw new Error(err.message);
+                        }
+                        return res.json();
+                    })
+                    .then(item => {
+                        const row = document.createElement('tr');
+                        row.id = 'concession-' + item.id;
+                        row.innerHTML = `
+                            <td></td>
+                            <td>RM ${item.price}</td>
+                            <td><button type="button" class="btn btn-danger btn-sm delete-concession-btn" data-id="${item.id}">Delete</button></td>`;
+                        row.querySelector('td').textContent = item.itemName;
+                        tableBody.appendChild(row);
+
+                        addForm.reset();
+                        showAlert('New snack added successfully!', 'success');
+                    })
+                    .catch(err => showAlert(err.message || 'Could not add item.', 'danger'))
+                    .finally(() => { submitBtn.disabled = false; });
+            });
+
+            tableBody.addEventListener('click', function (e) {
+                const btn = e.target.closest('.delete-concession-btn');
+                if (!btn) return;
+                if (!confirm('Delete this item?')) return;
+
+                const formData = new FormData();
+                formData.append('id', btn.dataset.id);
+                if (antiForgeryToken) formData.append('__RequestVerificationToken', antiForgeryToken);
+
+                fetch('/Concessions/Delete', {
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    body: formData
+                })
+                    .then(res => { if (!res.ok) throw new Error('Could not delete item.'); return res.json(); })
+                    .then(result => {
+                        document.getElementById('concession-' + result.id)?.remove();
+                        showAlert('Snack item deleted.', 'success');
+                    })
+                    .catch(err => showAlert(err.message, 'danger'));
+            });
+        })();
+    </script>
+}

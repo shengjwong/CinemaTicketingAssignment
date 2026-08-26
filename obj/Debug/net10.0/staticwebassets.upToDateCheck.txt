@@ -66,6 +66,12 @@ wwwroot\uploads\c4c50ca6-c431-4bf0-b282-f237c16ae55f_Screenshot 2026-05-18 17461
 wwwroot\uploads\ce078f86-4150-48f1-91b9-c9cf3aeec86d_Screenshot 2026-05-17 002030.png
 wwwroot\uploads\d6efc2a4-4cd2-4e71-96e0-406d4afdae99_Screenshot 2026-06-05 004200.png
 wwwroot\uploads\ec040613-c52d-4f2f-a47e-ef414e684e29_Screenshot 2026-06-05 004200.png
+wwwroot\uploads\posters\MOV001_19128f5dc8504a9d99e6b03c10b34215.jpg
+wwwroot\uploads\posters\MOV002_8a96572a404448c28072a6102ad98a3e.jpg
+wwwroot\uploads\posters\MOV003_3fc1648e274c45169eca251af70225e7.jpg
+wwwroot\uploads\posters\MOV004_e0428c9356904a95ab7ed089c59accb3.jpg
+wwwroot\uploads\posters\MOV005_6b3f179af73a4044bd95c0d18c3ff5f9.jpg
+wwwroot\uploads\posters\MOV005_e1fed8e2777143b4ac8c3d556eba02b4.jpg
 C:\Users\User\source\repos\CinemaTicketingAssignment\wwwroot\css\site.css
 C:\Users\User\source\repos\CinemaTicketingAssignment\wwwroot\favicon.ico
 C:\Users\User\source\repos\CinemaTicketingAssignment\wwwroot\js\site.js
