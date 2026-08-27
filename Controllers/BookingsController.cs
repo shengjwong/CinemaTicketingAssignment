@@ -148,6 +148,30 @@ public class BookingsController : Controller
         }
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ConfirmClientPayPalPayment([FromBody] ClientPayPalPaymentRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.OrderId))
+            return BadRequest(new { message = "A PayPal order ID is required." });
+
+        try
+        {
+            // Sandbox demonstration only: the browser captures the PayPal order using the Client ID.
+            // A production integration must verify/capture the order on the server with a Client Secret.
+            var booking = await CompleteBookingAsync(
+                request.ShowtimeId,
+                "Paid (PayPal Client Demo)",
+                $"paypal_{request.OrderId}");
+            return Ok(new { receiptUrl = Url.Action(nameof(Receipt), new { id = booking.Id }) });
+        }
+        catch (InvalidOperationException ex)
+        {
+            _db.ChangeTracker.Clear();
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
     public async Task<IActionResult> History()
     {
         var userId = CurrentUserId();
@@ -171,6 +195,62 @@ public class BookingsController : Controller
 
     private async Task<Booking?> GetOwnedBooking(string id) => await _db.Bookings.Include(b => b.Showtime).ThenInclude(s => s.Movie)
         .Include(b => b.Showtime.CinemaHall).FirstOrDefaultAsync(b => b.Id == id && b.UserId == CurrentUserId());
+
+    private async Task<(Showtime Showtime, List<SeatHold> Seats)> GetHeldShowtimeAsync(string showtimeId)
+    {
+        await ClearExpiredHoldsAsync();
+        var showtime = await _db.Showtimes.FirstOrDefaultAsync(s => s.Id == showtimeId)
+            ?? throw new InvalidOperationException("Showtime was not found.");
+        var seats = await _db.SeatHolds
+            .Where(h => h.ShowtimeId == showtimeId && h.UserId == CurrentUserId())
+            .OrderBy(h => h.SeatCode)
+            .ToListAsync();
+        if (seats.Count == 0)
+            throw new InvalidOperationException("Your seat hold expired. Please select seats again.");
+
+        return (showtime, seats);
+    }
+
+    private async Task<Booking> CompleteBookingAsync(string showtimeId, string paymentStatus, string paymentReference)
+    {
+        await using var transaction = await _db.Database.BeginTransactionAsync();
+        try
+        {
+            var (showtime, heldSeats) = await GetHeldShowtimeAsync(showtimeId);
+            var seatCodes = heldSeats.Select(h => h.SeatCode).ToList();
+            if (await _db.BookingSeats.AnyAsync(s => s.ShowtimeId == showtimeId && seatCodes.Contains(s.SeatCode)))
+                throw new InvalidOperationException("A selected seat was just booked. Please choose another seat.");
+
+            var booking = new Booking
+            {
+                Id = "BK" + Guid.NewGuid().ToString("N")[..8].ToUpperInvariant(),
+                UserId = CurrentUserId(),
+                ShowtimeId = showtimeId,
+                SelectedSeats = string.Join(", ", seatCodes),
+                TotalAmount = showtime.TicketPrice * seatCodes.Count,
+                PaymentStatus = paymentStatus,
+                PaymentReference = paymentReference,
+                BookingDate = DateTime.UtcNow
+            };
+
+            _db.Bookings.Add(booking);
+            _db.BookingSeats.AddRange(seatCodes.Select(code => new BookingSeat
+            {
+                BookingId = booking.Id,
+                ShowtimeId = showtimeId,
+                SeatCode = code
+            }));
+            _db.SeatHolds.RemoveRange(heldSeats);
+            await _db.SaveChangesAsync();
+            await transaction.CommitAsync();
+            return booking;
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
 
     private async Task ClearExpiredHoldsAsync()
     {
@@ -204,4 +284,10 @@ public class SeatHoldRequest
 {
     public string ShowtimeId { get; set; } = string.Empty;
     public List<string> Seats { get; set; } = [];
+}
+
+public class ClientPayPalPaymentRequest
+{
+    public string ShowtimeId { get; set; } = string.Empty;
+    public string OrderId { get; set; } = string.Empty;
 }

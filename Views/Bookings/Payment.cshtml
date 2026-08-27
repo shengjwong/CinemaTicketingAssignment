@@ -1,8 +1,11 @@
 @model CinemaTicketingAssignment.Models.Showtime
+@inject IConfiguration Configuration
 @{
     ViewData["Title"] = "Secure payment";
     var seats = (List<string>)ViewBag.Seats;
     var total = Model.TicketPrice * seats.Count;
+    var payPalClientId = Configuration["PayPal:ClientId"] ?? string.Empty;
+    var payPalConfigured = !string.IsNullOrWhiteSpace(payPalClientId) && !payPalClientId.StartsWith("REPLACE_", StringComparison.OrdinalIgnoreCase);
 }
 
 <div class="row justify-content-center my-4">
@@ -10,7 +13,7 @@
         <div class="card shadow-sm">
             <div class="card-body p-4">
                 <h2>Payment</h2>
-                <p class="text-muted">Stripe sandbox mockup — no real payment will be charged.</p>
+                <p class="text-muted">Choose a sandbox payment method. No real payment will be charged.</p>
 
                 @if (TempData["Error"] is string error)
                 {
@@ -24,6 +27,21 @@
                     <strong>Total: RM @total.ToString("0.00")</strong>
                 </div>
 
+                <h5 class="mt-4">PayPal Sandbox</h5>
+                @if (payPalConfigured)
+                {
+                    <p class="small text-muted">Log in with a PayPal Sandbox buyer account to approve this simulated payment. This Client ID-only flow is for Sandbox demonstrations only.</p>
+                    <div id="paypal-button-container"></div>
+                    <div id="paypal-error" class="alert alert-danger d-none mt-3"></div>
+                    <div id="paypal-antiforgery">@Html.AntiForgeryToken()</div>
+                }
+                else
+                {
+                    <div class="alert alert-warning">PayPal Sandbox is not configured. Add a Sandbox Client ID before using this option.</div>
+                }
+
+                <hr />
+                <h5>Test card mock</h5>
                 <form asp-action="ConfirmPayment" method="post">
                     <input type="hidden" name="showtimeId" value="@Model.Id" />
                     <div class="mb-3">
@@ -34,9 +52,63 @@
                         <label class="form-label">Test card number</label>
                         <input name="cardNumber" class="form-control" inputmode="numeric" placeholder="4242 4242 4242 4242" required />
                     </div>
-                    <button class="btn btn-primary w-100">Pay RM @total.ToString("0.00")</button>
+                    <button class="btn btn-outline-primary w-100">Complete test-card payment</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @if (payPalConfigured)
+    {
+        <script src="https://www.paypal.com/sdk/js?client-id=@payPalClientId&currency=MYR&intent=capture"></script>
+        <script>
+            const payPalError = document.getElementById('paypal-error');
+            const antiForgeryToken = document.querySelector('#paypal-antiforgery input').value;
+            const showtimeId = '@Model.Id';
+
+            function showPayPalError(message) {
+                payPalError.textContent = message;
+                payPalError.classList.remove('d-none');
+            }
+
+            async function postPayPal(url, payload) {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': antiForgeryToken
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(data.message || 'The PayPal Sandbox request could not be completed.');
+                return data;
+            }
+
+            paypal.Buttons({
+                createOrder: (_data, actions) => actions.order.create({
+                    intent: 'CAPTURE',
+                    purchase_units: [{
+                        description: 'Cinema ticket reservation',
+                        amount: {
+                            currency_code: 'MYR',
+                            value: '@total.ToString(System.Globalization.CultureInfo.InvariantCulture)'
+                        }
+                    }]
+                }),
+                onApprove: async (data, actions) => {
+                    await actions.order.capture();
+                    const result = await postPayPal('@Url.Action("ConfirmClientPayPalPayment", "Bookings")', {
+                        showtimeId,
+                        orderId: data.orderID
+                    });
+                    window.location.assign(result.receiptUrl);
+                },
+                onCancel: () => showPayPalError('PayPal payment was cancelled. Your seats remain held until the timer expires.'),
+                onError: error => showPayPalError(error.message || 'PayPal Sandbox could not process this payment.')
+            }).render('#paypal-button-container');
+        </script>
+    }
+}
