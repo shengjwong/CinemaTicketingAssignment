@@ -193,10 +193,26 @@ public class ShowtimesController : Controller
         return View(showtime);
     }
 
-    // 6. 删除场次 (POST)
-    [HttpPost]
-    [ValidateAntiForgeryToken]
+    // 6. 删除场次确认页 (GET)
     public async Task<IActionResult> Delete(string id)
+    {
+        if (!User.IsInRole("ADMIN")) return Forbid();
+        if (string.IsNullOrEmpty(id)) return NotFound();
+
+        var showtime = await _db.Showtimes
+            .Include(s => s.Movie)
+            .Include(s => s.CinemaHall)
+            .FirstOrDefaultAsync(s => s.Id == id);
+
+        if (showtime == null) return NotFound();
+
+        return View(showtime);
+    }
+
+    // 6. 删除场次 (POST)
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(string id)
     {
         if (!User.IsInRole("ADMIN")) return Forbid();
 

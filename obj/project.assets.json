@@ -3462,11 +3462,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\OneDrive\\Documents\\GitHub\\CinemaTicketingAssignment1\\CinemaTicketingAssignment.csproj",
+      "projectUniqueName": "C:\\Users\\User\\source\\repos\\CinemaTicketingAssignment\\CinemaTicketingAssignment.csproj",
       "projectName": "CinemaTicketingAssignment",
-      "projectPath": "C:\\Users\\User\\OneDrive\\Documents\\GitHub\\CinemaTicketingAssignment1\\CinemaTicketingAssignment.csproj",
+      "projectPath": "C:\\Users\\User\\source\\repos\\CinemaTicketingAssignment\\CinemaTicketingAssignment.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\OneDrive\\Documents\\GitHub\\CinemaTicketingAssignment1\\obj\\",
+      "outputPath": "C:\\Users\\User\\source\\repos\\CinemaTicketingAssignment\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3481,7 +3481,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

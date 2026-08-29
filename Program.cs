@@ -98,6 +98,72 @@ using (var scope = app.Services.CreateScope())
         IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_FoodOrderItems_FoodOrderId' AND object_id = OBJECT_ID(N'dbo.FoodOrderItems'))
             CREATE INDEX IX_FoodOrderItems_FoodOrderId ON dbo.FoodOrderItems(FoodOrderId);
         """);
+
+    // Seeded showtimes are pinned to a fixed date and eventually fall entirely into
+    // the past, making every movie show "No showtimes available" on the booking page.
+    // Self-heal: any movie with no upcoming showtime gets a fresh week generated.
+    {
+        var now = DateTime.Now;
+        var movies = db.Movies.ToList();
+        var halls = db.CinemaHalls.OrderBy(h => h.Id).ToList();
+        var moviesNeedingShowtimes = movies.Where(m => !db.Showtimes.Any(s => s.MovieId == m.Id && s.EndDateTime > now)).ToList();
+
+        if (moviesNeedingShowtimes.Count > 0 && halls.Count > 0)
+        {
+            // Approximate runtime per seeded movie; falls back to 150 minutes for any others.
+            var runtimeMinutes = new Dictionary<string, int>
+            {
+                ["MOV001"] = 152, // The Dark Knight
+                ["MOV002"] = 148, // Inception
+                ["MOV003"] = 130, // Spiderman Brand New Day
+                ["MOV004"] = 140, // The Odyssey
+                ["MOV005"] = 169  // Interstellar
+            };
+
+            var timeSlots = new[] { new TimeSpan(11, 0, 0), new TimeSpan(15, 30, 0), new TimeSpan(20, 0, 0) };
+            var newShowtimes = new List<Showtime>();
+
+            bool HasConflict(string hallId, DateTime start, DateTime end) =>
+                db.Showtimes.Any(s => s.CinemaHallId == hallId && start < s.EndDateTime && end > s.StartDateTime) ||
+                newShowtimes.Any(s => s.CinemaHallId == hallId && start < s.EndDateTime && end > s.StartDateTime);
+
+            foreach (var movie in moviesNeedingShowtimes)
+            {
+                var duration = runtimeMinutes.TryGetValue(movie.Id, out var mins) ? mins : 150;
+
+                for (int day = 0; day < 7; day++)
+                {
+                    foreach (var slot in timeSlots)
+                    {
+                        var start = now.Date.AddDays(day) + slot;
+                        if (start <= now) continue; // don't schedule into the past today
+
+                        var end = start.AddMinutes(duration);
+
+                        // Round-robin through halls to find one free at this exact time.
+                        var hall = halls.FirstOrDefault(h => !HasConflict(h.Id, start, end));
+                        if (hall == null) continue; // every hall busy at this slot, skip
+
+                        newShowtimes.Add(new Showtime
+                        {
+                            Id = "SHOW" + Guid.NewGuid().ToString("N")[..6].ToUpper(),
+                            MovieId = movie.Id,
+                            CinemaHallId = hall.Id,
+                            StartDateTime = start,
+                            EndDateTime = end,
+                            TicketPrice = 20.00m + hall.SeatCapacity / 10m // rough tiering by hall size
+                        });
+                    }
+                }
+            }
+
+            if (newShowtimes.Count > 0)
+            {
+                db.Showtimes.AddRange(newShowtimes);
+                db.SaveChanges();
+            }
+        }
+    }
 }
 
 // 5. 配置 HTTP 请求管道
