@@ -2,15 +2,26 @@
     ViewData["Title"] = "Revenue Analytics";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-4">📊 Cinema Revenue Analytics (Admin)</h2>
-
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="card-title mb-0">Movie Box-Office Ticket Revenue (RM)</h5>
+<div class="container my-4">
+    <!-- Page Header -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h2 class="page-title m-0">
+                <i class="bi bi-bar-chart-line text-primary me-2"></i>Cinema Revenue Analytics
+            </h2>
+            <p class="text-muted small mb-0 mt-1">Real-time revenue performance breakdown by movie box-office</p>
         </div>
-        <div class="card-body">
-            <canvas id="revenueChart" style="max-height: 400px;"></canvas>
+    </div>
+
+    <!-- Analytics Chart Card -->
+    <div class="content-card p-4">
+        <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom">
+            <h5 class="fw-bold text-dark m-0">Movie Box-Office Ticket Revenue (RM)</h5>
+            <span class="badge bg-light text-secondary border">Currency: MYR (RM)</span>
+        </div>
+
+        <div class="position-relative" style="min-height: 350px;">
+            <canvas id="revenueChart" style="max-height: 420px;"></canvas>
         </div>
     </div>
 </div>
@@ -18,30 +29,70 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-            fetch('/Reports/GetRevenueData')
-                .then(res => res.json())
-                    .then(data => {
-                    const labels = data.map(item => item.movieTitle);
-                    const revenues = data.map(item => item.totalRevenue);
+        fetch('/Reports/GetRevenueData')
+            .then(res => res.json())
+            .then(data => {
+                const labels = data.map(item => item.movieTitle);
+                const revenues = data.map(item => item.totalRevenue);
 
-                    const ctx = document.getElementById('revenueChart').getContext('2d');
-                    new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Total Box Office Revenue (RM)',
-                        data: revenues,
-                        backgroundColor: 'rgba(13, 110, 253, 0.6)',
-                        borderColor: 'rgba(13, 110, 253, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: { y: { beginAtZero: true } }
-                }
+                const ctx = document.getElementById('revenueChart').getContext('2d');
+
+                // Create modern gradient background for chart bars
+                const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+                gradient.addColorStop(0, 'rgba(13, 110, 253, 0.85)');
+                gradient.addColorStop(1, 'rgba(13, 110, 253, 0.15)');
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Total Box Office Revenue (RM)',
+                            data: revenues,
+                            backgroundColor: gradient,
+                            borderColor: 'rgba(13, 110, 253, 1)',
+                            borderWidth: 2,
+                            borderRadius: 6,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                labels: {
+                                    font: { family: 'inherit', weight: 'bold' }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return ' Revenue: RM ' + context.parsed.y.toLocaleString('en-MY', { minimumFractionDigits: 2 });
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                                ticks: {
+                                    callback: function(value) {
+                                        return 'RM ' + value;
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(err => {
+                console.error('Error loading revenue chart data:', err);
             });
-        });
     </script>
 }

@@ -1,31 +1,64 @@
 @model List<CinemaTicketingAssignment.Models.FoodOrder>
-@{ ViewData["Title"] = "Food Purchase History"; }
+@{
+    ViewData["Title"] = "Food Purchase History";
+}
 
 <div class="container my-4">
-    <h2>🍿 Food Purchase History</h2>
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="page-title m-0">🍿 Food Purchase History</h2>
+    </div>
+
     @if (!Model.Any())
     {
-        <div class="alert alert-info">You have not purchased any food items yet.</div>
+        <div class="content-card text-center py-5">
+            <i class="bi bi-basket text-muted display-4"></i>
+            <p class="text-muted mt-3 mb-0">You have not purchased any food items yet.</p>
+        </div>
     }
     else
     {
-        <div class="table-responsive">
-            <table class="table align-middle">
-                <thead>
-                    <tr><th>Order</th><th>Items</th><th>Total</th><th></th></tr>
-                </thead>
-                <tbody>
-                    @foreach (var order in Model)
-                    {
+        <div class="table-card p-0 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table custom-table mb-0 align-middle">
+                    <thead>
                         <tr>
-                            <td>@order.Id<br /><small>@order.OrderDate.ToLocalTime().ToString("dd MMM yyyy, h:mm tt")</small></td>
-                            <td>@string.Join(", ", order.Items.Select(i => $"{i.ItemName} x{i.Quantity}"))</td>
-                            <td>RM @order.TotalAmount.ToString("0.00")<br /><small class="text-success">@order.PaymentStatus</small></td>
-                            <td><a asp-action="Receipt" asp-route-id="@order.Id" class="btn btn-outline-primary btn-sm">Receipt</a></td>
+                            <th>Order ID</th>
+                            <th>Items</th>
+                            <th>Total Amount</th>
+                            <th class="text-end">Action</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="fw-bold text-dark">#@order.Id</span>
+                                    <br />
+                                    <small class="text-muted">
+                                        <i class="bi bi-clock me-1"></i>@order.OrderDate.ToLocalTime().ToString("dd MMM yyyy, h:mm tt")
+                                    </small>
+                                </td>
+                                <td>
+                                    <span class="fw-semibold text-secondary">
+                                        @string.Join(", ", order.Items.Select(i => $"{i.ItemName} x{i.Quantity}"))
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-dark">RM @order.TotalAmount.ToString("0.00")</span>
+                                    <br />
+                                    <span class="badge status-badge-active">@order.PaymentStatus</span>
+                                </td>
+                                <td class="text-end">
+                                    <a asp-action="Receipt" asp-route-id="@order.Id" class="btn btn-outline-primary btn-sm px-3 fw-semibold">
+                                        Receipt
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     }
 </div>

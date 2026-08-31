@@ -2,38 +2,57 @@
 @inject IConfiguration Configuration
 @model CinemaTicketingAssignment.Models.LoginViewModel
 
-<h2>Admin Portal Login</h2>
+@{
+    ViewData["Title"] = "Admin Login";
+}
 
-<form id="adminLoginForm" asp-controller="Account" asp-action="AdminLogin" method="post">
-    @Html.AntiForgeryToken()
+<div class="auth-container mt-5">
+    <div class="auth-card">
+        <div class="text-center mb-4">
+            <span class="badge bg-danger px-3 py-2 mb-2" style="font-size: 0.8rem; letter-spacing: 1px;">RESTRICTED AREA</span>
+            <h2 class="page-title m-0">Admin Portal Login</h2>
+            <p class="text-muted small mt-1">Please authenticate with administrator credentials</p>
+        </div>
 
-    <!-- Hidden input to store the generated reCAPTCHA token -->
-    <input type="hidden" id="recaptchaToken" name="recaptchaToken" />
+        <form id="adminLoginForm" asp-controller="Account" asp-action="AdminLogin" method="post">
+            @Html.AntiForgeryToken()
 
-    <div asp-validation-summary="ModelOnly"></div>
+            <!-- Hidden input to store the generated reCAPTCHA token -->
+            <input type="hidden" id="recaptchaToken" name="recaptchaToken" />
 
-    <div>
-        <label>Admin Email:</label>
-        <input asp-for="Email" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small" role="alert"></div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold small text-secondary">Admin Email</label>
+                <input asp-for="Email" class="form-control form-control-lg" placeholder="admin@cinema.com" required />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold small text-secondary">Password</label>
+                <input asp-for="Password" type="password" class="form-control form-control-lg" placeholder="••••••••" required />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn btn-dark btn-lg w-100 fw-bold shadow-sm mb-3">
+                Log In as Admin
+            </button>
+        </form>
+
+        <hr class="my-4" />
+
+        <div class="text-center small">
+            <p class="text-muted mb-0">
+                Not an Admin?
+                <a asp-controller="Account" asp-action="Login" class="text-decoration-none fw-bold me-1">Go to User Login</a> |
+                <a asp-controller="Home" asp-action="Index" class="text-decoration-none text-secondary ms-1">Back to Home</a>
+            </p>
+        </div>
     </div>
-
-    <div>
-        <label>Password:</label>
-        <input asp-for="Password" type="password" />
-    </div>
-
-    <button type="submit">Log In as Admin</button>
-</form>
-
-<hr />
-
-<p>
-    Not an Admin?
-    <a asp-controller="Account" asp-action="Login">Go to User Login</a> |
-    <a asp-controller="Home" asp-action="Index">Back to Welcome Page</a>
-</p>
+</div>
 
 @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
     <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["RecaptchaSettings:SiteKey"]"></script>
     <script>
         document.getElementById("adminLoginForm").addEventListener("submit", function(e) {

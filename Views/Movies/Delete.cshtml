@@ -3,24 +3,55 @@
     ViewData["Title"] = "Delete Movie";
 }
 
-<h1 class="mb-3">Delete Movie</h1>
+<div class="row justify-content-center my-4">
+    <div class="col-lg-6 col-md-8">
+        <div class="form-card border-danger">
+            <div class="text-center mb-4">
+                <span class="badge bg-danger px-3 py-2 mb-2" style="font-size: 0.8rem; letter-spacing: 1px;">WARNING</span>
+                <h2 class="page-title m-0 text-danger">Delete Movie</h2>
+                <p class="text-muted small mt-1">This action is permanent and cannot be undone.</p>
+            </div>
 
-<div class="alert alert-warning">
-    Are you sure you want to delete <strong>@Model.Title</strong>? This cannot be undone, and any showtimes for this movie should be removed first.
+            <div class="alert alert-warning border-0 shadow-sm mb-4">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                Are you sure you want to delete <strong>@Model.Title</strong>? Any showtimes for this movie should be removed first.
+            </div>
+
+            <div class="p-3 bg-light rounded-3 border mb-4">
+                <div class="row g-2 small">
+                    <div class="col-sm-4 text-secondary fw-bold">Movie Title:</div>
+                    <div class="col-sm-8 text-dark fw-bold">@Model.Title</div>
+
+                    <div class="col-sm-4 text-secondary fw-bold">Genre:</div>
+                    <div class="col-sm-8 text-dark">@Model.Genre</div>
+
+                    <div class="col-sm-4 text-secondary fw-bold">Language:</div>
+                    <div class="col-sm-8 text-dark">@Model.Language</div>
+
+                    <div class="col-sm-4 text-secondary fw-bold">Rating:</div>
+                    <div class="col-sm-8 text-dark">
+                        <span class="badge bg-white text-dark border px-2 py-1">@Model.AgeClassification</span>
+                    </div>
+
+                    <div class="col-sm-4 text-secondary fw-bold">Status:</div>
+                    <div class="col-sm-8 text-dark">
+                        <span class="badge @(Model.Status == MovieStatus.NowShowing ? "status-badge-active" : "bg-secondary")">
+                            @Model.Status
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                <div class="d-flex gap-2 pt-2">
+                    <button type="submit" class="btn btn-danger btn-lg fw-bold flex-grow-1 shadow-sm">
+                        <i class="bi bi-trash me-1"></i>Confirm Delete
+                    </button>
+                    <a asp-action="Admin" class="btn btn-outline-secondary btn-lg fw-semibold px-4">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
-
-<dl class="row">
-    <dt class="col-sm-2">Genre</dt>
-    <dd class="col-sm-10">@Model.Genre</dd>
-    <dt class="col-sm-2">Language</dt>
-    <dd class="col-sm-10">@Model.Language</dd>
-    <dt class="col-sm-2">Rating</dt>
-    <dd class="col-sm-10">@Model.AgeClassification</dd>
-    <dt class="col-sm-2">Status</dt>
-    <dd class="col-sm-10">@Model.Status</dd>
-</dl>
-
-<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
-    <button type="submit" class="btn btn-danger">Confirm Delete</button>
-    <a asp-action="Admin" class="btn btn-outline-secondary">Cancel</a>
-</form>

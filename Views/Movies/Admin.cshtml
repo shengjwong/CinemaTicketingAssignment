@@ -3,43 +3,82 @@
     ViewData["Title"] = "Manage Movies";
 }
 
-<h1 class="mb-3">Manage Movies</h1>
+<div class="container my-4">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-3 gap-2">
+        <h2 class="page-title m-0">🎬 Manage Movies</h2>
+        <a asp-action="Create" class="btn btn-primary fw-bold shadow-sm">
+            <i class="bi bi-plus-circle me-1"></i>Add Movie
+        </a>
+    </div>
 
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success">@TempData["Success"]</div>
-}
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success border-0 shadow-sm mb-3">
+            <i class="bi bi-check-circle-fill me-2"></i>@TempData["Success"]
+        </div>
+    }
 
-<a asp-action="Create" class="btn btn-primary mb-3">+ Add Movie</a>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Genre</th>
-            <th>Language</th>
-            <th>Rating</th>
-            <th>Status</th>
-            <th>Release Date</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var movie in Model)
-        {
-            <tr>
-                <td>@movie.Title</td>
-                <td>@movie.Genre</td>
-                <td>@movie.Language</td>
-                <td>@movie.AgeClassification</td>
-                <td>@movie.Status</td>
-                <td>@movie.ReleaseDate.ToString("dd MMM yyyy")</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@movie.Id" class="btn btn-sm btn-outline-danger">Delete</a>
-                    <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-sm btn-outline-primary">View</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    @if (!Model.Any())
+    {
+        <div class="content-card text-center py-5">
+            <i class="bi bi-film text-muted display-4"></i>
+            <p class="text-muted mt-3 mb-0">No movies available in the database.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-card p-0 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table custom-table mb-0 align-middle">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Genre</th>
+                            <th>Language</th>
+                            <th>Rating</th>
+                            <th>Status</th>
+                            <th>Release Date</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var movie in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="fw-bold text-dark">@movie.Title</span>
+                                </td>
+                                <td>
+                                    <span class="fw-semibold text-secondary">@movie.Genre</span>
+                                </td>
+                                <td>
+                                    <span class="text-secondary">@movie.Language</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border px-2 py-1">@movie.AgeClassification</span>
+                                </td>
+                                <td>
+                                    <span class="badge @(movie.Status == MovieStatus.NowShowing ? "status-badge-active" : "bg-secondary")">
+                                        @movie.Status
+                                    </span>
+                                </td>
+                                <td>
+                                    <small class="text-muted fw-semibold">
+                                        <i class="bi bi-calendar-event me-1"></i>@movie.ReleaseDate.ToString("dd MMM yyyy")
+                                    </small>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-outline-primary fw-semibold">View</a>
+                                        <a asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-outline-secondary fw-semibold">Edit</a>
+                                        <a asp-action="Delete" asp-route-id="@movie.Id" class="btn btn-outline-danger fw-semibold">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

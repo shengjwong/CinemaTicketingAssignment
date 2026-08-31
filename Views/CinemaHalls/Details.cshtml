@@ -3,39 +3,81 @@
     ViewData["Title"] = Model.HallName;
 }
 
-<a asp-action="Index" class="btn btn-outline-secondary btn-sm mb-3">&larr; Back to Cinema Halls</a>
+<div class="container my-4">
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm mb-3">
+        <i class="bi bi-arrow-left me-1"></i>Back to Cinema Halls
+    </a>
 
-<h1>@Model.HallName</h1>
-<p class="text-muted">@Model.HallType &middot; Seat Capacity: @Model.SeatCapacity</p>
+    <!-- Hall Header Card -->
+    <div class="content-card mb-4">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
+            <div>
+                <span class="badge bg-primary px-3 py-1 mb-2">@Model.HallType</span>
+                <h2 class="page-title m-0">@Model.HallName</h2>
+            </div>
+            <div class="text-sm-end text-muted">
+                <i class="bi bi-grid-3x3-gap me-1"></i>
+                <span class="fw-bold text-dark">@Model.SeatCapacity</span> Seats Capacity
+            </div>
+        </div>
+    </div>
 
-<h3 class="mt-4">Scheduled Showtimes</h3>
-@if (!Model.Showtimes.Any())
-{
-    <p class="text-muted">No showtimes scheduled in this hall yet.</p>
-}
-else
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Movie</th>
-                <th>Date</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var s in Model.Showtimes.OrderBy(s => s.StartDateTime))
-            {
-                <tr>
-                    <td>@s.Movie.Title</td>
-                    <td>@s.StartDateTime.ToString("dd MMM yyyy")</td>
-                    <td>@s.StartDateTime.ToString("h:mm tt")</td>
-                    <td>@s.EndDateTime.ToString("h:mm tt")</td>
-                    <td>RM @s.TicketPrice.ToString("0.00")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+    <!-- Scheduled Showtimes Section -->
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h3 class="fs-4 fw-bold text-dark m-0">Scheduled Showtimes</h3>
+    </div>
+
+    @if (!Model.Showtimes.Any())
+    {
+        <div class="content-card text-center py-5">
+            <i class="bi bi-calendar-x text-muted display-4"></i>
+            <p class="text-muted mt-3 mb-0">No showtimes scheduled in this hall yet.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-card p-0 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table custom-table mb-0 align-middle">
+                    <thead>
+                        <tr>
+                            <th>Movie Title</th>
+                            <th>Date</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th class="text-end">Ticket Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var s in Model.Showtimes.OrderBy(s => s.StartDateTime))
+                        {
+                            <tr>
+                                <td>
+                                    <span class="fw-bold text-dark">@s.Movie.Title</span>
+                                </td>
+                                <td>
+                                    <small class="text-secondary fw-semibold">
+                                        <i class="bi bi-calendar-event me-1"></i>@s.StartDateTime.ToString("dd MMM yyyy")
+                                    </small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border px-2 py-1">
+                                        @s.StartDateTime.ToString("h:mm tt")
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border px-2 py-1">
+                                        @s.EndDateTime.ToString("h:mm tt")
+                                    </span>
+                                </td>
+                                <td class="text-end fw-bold text-primary">
+                                    RM @s.TicketPrice.ToString("0.00")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

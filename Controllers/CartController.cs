@@ -12,6 +12,9 @@ public class CartController : Controller
 
     public CartController(DB db) => _db = db;
 
+    // ==========================================
+    // 1. Cart Page (Public / Member Access)
+    // ==========================================
     public IActionResult Index()
     {
         if (User.IsInRole("ADMIN"))
@@ -21,6 +24,9 @@ public class CartController : Controller
         return View();
     }
 
+    // ==========================================
+    // 2. Confirm F&B Purchase via AJAX
+    // ==========================================
     [HttpPost]
     [Authorize(Roles = "MEMBER")]
     [ValidateAntiForgeryToken]
@@ -45,10 +51,11 @@ public class CartController : Controller
         if (concessions.Count != requestedItems.Count)
             return BadRequest(new { message = "One or more food items are no longer available." });
 
+        var userId = CurrentUserId();
         var order = new FoodOrder
         {
             Id = "FOOD" + Guid.NewGuid().ToString("N")[..8].ToUpperInvariant(),
-            UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+            UserId = userId,
             OrderDate = DateTime.UtcNow,
             PaymentStatus = "Paid"
         };
@@ -72,10 +79,13 @@ public class CartController : Controller
         return Ok(new { redirectUrl = Url.Action(nameof(Receipt), new { id = order.Id }) });
     }
 
+    // ==========================================
+    // 3. User Food Order History
+    // ==========================================
     [Authorize(Roles = "MEMBER")]
     public async Task<IActionResult> History()
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userId = CurrentUserId();
         var orders = await _db.FoodOrders
             .Where(o => o.UserId == userId)
             .Include(o => o.Items)
@@ -85,16 +95,24 @@ public class CartController : Controller
         return View(orders);
     }
 
+    // ==========================================
+    // 4. Food Order Receipt
+    // ==========================================
     [Authorize(Roles = "MEMBER")]
     public async Task<IActionResult> Receipt(string id)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userId = CurrentUserId();
         var order = await _db.FoodOrders
             .Include(o => o.Items)
             .FirstOrDefaultAsync(o => o.Id == id && o.UserId == userId);
 
         return order is null ? NotFound() : View(order);
     }
+
+    // ==========================================
+    // PRIVATE HELPER METHODS & REQUEST MODELS
+    // ==========================================
+    private string CurrentUserId() => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new UnauthorizedAccessException();
 
     public sealed class CartItemRequest
     {

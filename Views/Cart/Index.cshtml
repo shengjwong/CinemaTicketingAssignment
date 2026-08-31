@@ -2,68 +2,89 @@
     ViewData["Title"] = "My Shopping Cart";
 }
 
-<div class="container mt-4">
-    <h2>🛒 My Shopping Cart</h2>
-    <hr />
+<div class="container my-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="page-title m-0">🛒 My Shopping Cart</h2>
+    </div>
+
     @Html.AntiForgeryToken()
 
+    <!-- Cart Main Content -->
     <div id="cartContent">
-        <div class="table-responsive">
-            <table class="table table-bordered align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Item Description</th>
-                        <th class="text-center">Price</th>
-                        <th class="text-center" style="width: 120px;">Quantity</th>
-                        <th class="text-end">Subtotal</th>
-                        <th class="text-center" style="width: 100px;">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="cartTableBody">
-                    <!-- JS 自动渲染项目 -->
-                </tbody>
-            </table>
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center mt-4">
-            <button class="btn btn-outline-danger" onclick="clearCart()">🗑️ Clear Cart</button>
-            <div class="text-end">
-                <h4>Total: <span class="text-success fw-bold" id="cartTotal">RM 0.00</span></h4>
-                <button class="btn btn-success btn-lg mt-2" onclick="checkout()">💳 Proceed to Checkout</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="emptyCartMsg" class="alert alert-info text-center py-5 shadow-sm d-none">
-        <h4>Your cart is empty!</h4>
-        <p class="text-muted">Explore our movies and snacks to add items to your cart.</p>
-        <a asp-controller="Movies" asp-action="Index" class="btn btn-primary mt-2">Browse Movies</a>
-        <a asp-controller="Concessions" asp-action="Index" class="btn btn-outline-primary mt-2">Browse Snacks</a>
-    </div>
-
-    <div id="checkoutPanel" class="card shadow-sm d-none">
-        <div class="card-header bg-success text-white">
-            <h4 class="mb-0">Confirm Your Purchase</h4>
-        </div>
-        <div class="card-body">
-            <p class="text-muted">Please review the items below before confirming your purchase.</p>
+        <div class="table-card p-0 overflow-hidden">
             <div class="table-responsive">
-                <table class="table align-middle">
+                <table class="table custom-table mb-0 align-middle">
                     <thead>
                         <tr>
                             <th>Item Description</th>
-                            <th class="text-center">Quantity</th>
+                            <th class="text-center">Price</th>
+                            <th class="text-center" style="width: 120px;">Quantity</th>
                             <th class="text-end">Subtotal</th>
+                            <th class="text-center" style="width: 100px;">Action</th>
                         </tr>
                     </thead>
-                    <tbody id="checkoutTableBody"></tbody>
+                    <tbody id="cartTableBody">
+                        <!-- JS Dynamic Render -->
+                    </tbody>
                 </table>
             </div>
-            <h4 class="text-end">Total: <span id="checkoutTotal" class="text-success"></span></h4>
-            <div class="d-flex justify-content-end gap-2 mt-3">
-                <button type="button" class="btn btn-outline-secondary" onclick="returnToCart()">Back to Cart</button>
-                <button type="button" class="btn btn-success" onclick="confirmPurchase()">Confirm Purchase</button>
+        </div>
+
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mt-4 gap-3">
+            <button class="btn btn-outline-danger fw-semibold align-self-start align-self-sm-center" onclick="clearCart()">
+                <i class="bi bi-trash me-1"></i>Clear Cart
+            </button>
+            <div class="text-end">
+                <div class="mb-2">
+                    <span class="text-muted small me-2">Total Amount:</span>
+                    <span class="fs-4 fw-bold text-success" id="cartTotal">RM 0.00</span>
+                </div>
+                <button class="btn btn-success btn-lg fw-bold px-4 shadow-sm" onclick="checkout()">
+                    <i class="bi bi-credit-card me-1"></i>Proceed to Checkout
+                </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Empty Cart Message -->
+    <div id="emptyCartMsg" class="content-card text-center py-5 d-none">
+        <i class="bi bi-cart-x text-muted display-4"></i>
+        <h4 class="fw-bold mt-3">Your cart is empty!</h4>
+        <p class="text-muted">Explore our movies and snacks to add items to your cart.</p>
+        <div class="d-flex justify-content-center gap-2 mt-3">
+            <a asp-controller="Movies" asp-action="Index" class="btn btn-primary fw-semibold">Browse Movies</a>
+            <a asp-controller="Concessions" asp-action="Index" class="btn btn-outline-primary fw-semibold">Browse Snacks</a>
+        </div>
+    </div>
+
+    <!-- Checkout Panel -->
+    <div id="checkoutPanel" class="form-card d-none">
+        <div class="border-bottom pb-3 mb-3">
+            <h4 class="fw-bold text-dark m-0">Confirm Your Purchase</h4>
+            <p class="text-muted small m-0 mt-1">Please review the items below before confirming your purchase.</p>
+        </div>
+
+        <div class="table-responsive mb-3">
+            <table class="table custom-table mb-0 align-middle">
+                <thead>
+                    <tr>
+                        <th>Item Description</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-end">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody id="checkoutTableBody"></tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+            <span class="fw-bold text-secondary">Final Total</span>
+            <span id="checkoutTotal" class="fs-4 fw-bold text-success">RM 0.00</span>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <button type="button" class="btn btn-outline-secondary fw-semibold" onclick="returnToCart()">Back to Cart</button>
+            <button type="button" class="btn btn-success fw-bold px-4" onclick="confirmPurchase()">Confirm Purchase</button>
         </div>
     </div>
 </div>
@@ -92,12 +113,12 @@
 
             tbody.innerHTML += `
                     <tr>
-                        <td class="fw-bold">${item.name}</td>
+                        <td class="fw-bold text-dark">${item.name}</td>
                         <td class="text-center">RM ${item.price.toFixed(2)}</td>
-                        <td class="text-center">${item.quantity}</td>
-                        <td class="text-end fw-bold">RM ${subtotal.toFixed(2)}</td>
+                        <td class="text-center"><span class="badge bg-light text-dark border px-2 py-1">${item.quantity}</span></td>
+                        <td class="text-end fw-bold text-primary">RM ${subtotal.toFixed(2)}</td>
                         <td class="text-center">
-                            <button class="btn btn-danger btn-sm" onclick="removeItem(${index})">Remove</button>
+                            <button class="btn btn-outline-danger btn-sm fw-semibold" onclick="removeItem(${index})">Remove</button>
                         </td>
                     </tr>
                 `;
@@ -135,11 +156,11 @@
             const subtotal = item.price * item.quantity;
             total += subtotal;
             checkoutBody.innerHTML += `
-                <tr>
-                    <td class="fw-bold">${item.name}</td>
-                    <td class="text-center">${item.quantity}</td>
-                    <td class="text-end">RM ${subtotal.toFixed(2)}</td>
-                </tr>`;
+                    <tr>
+                        <td class="fw-bold text-dark">${item.name}</td>
+                        <td class="text-center"><span class="badge bg-light text-dark border px-2 py-1">${item.quantity}</span></td>
+                        <td class="text-end fw-bold text-primary">RM ${subtotal.toFixed(2)}</td>
+                    </tr>`;
         });
 
         document.getElementById('checkoutTotal').innerText = 'RM ' + total.toFixed(2);

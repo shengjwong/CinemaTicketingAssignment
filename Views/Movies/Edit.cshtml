@@ -3,88 +3,109 @@
     ViewData["Title"] = "Edit Movie";
 }
 
-<h1 class="mb-3">Edit Movie</h1>
-
-<form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
-
-    <div class="mb-3">
-        <label asp-for="Title" class="form-label"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Synopsis" class="form-label"></label>
-        <textarea asp-for="Synopsis" class="form-control" rows="3"></textarea>
-        <span asp-validation-for="Synopsis" class="text-danger"></span>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <label asp-for="Genre" class="form-label"></label>
-            <input asp-for="Genre" class="form-control" />
-            <span asp-validation-for="Genre" class="text-danger"></span>
-        </div>
-        <div class="col-md-4 mb-3">
-            <label asp-for="Language" class="form-label"></label>
-            <input asp-for="Language" class="form-control" />
-            <span asp-validation-for="Language" class="text-danger"></span>
-        </div>
-        <div class="col-md-4 mb-3">
-            <label asp-for="AgeClassification" class="form-label">Age Classification</label>
-            <input asp-for="AgeClassification" class="form-control" placeholder="e.g. U, PG13, 18" />
-            <span asp-validation-for="AgeClassification" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <label asp-for="ReleaseDate" class="form-label"></label>
-            <input asp-for="ReleaseDate" type="date" class="form-control" value="@Model.ReleaseDate.ToString("yyyy-MM-dd")" />
-            <span asp-validation-for="ReleaseDate" class="text-danger"></span>
-        </div>
-        <div class="col-md-4 mb-3">
-            <label asp-for="Status" class="form-label"></label>
-            <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<MovieStatus>()"></select>
-        </div>
-        <div class="col-md-4 mb-3">
-            <label class="form-label">Movie Poster</label>
-            <input id="posterFile" name="posterFile" type="file" class="form-control" accept="image/png,image/jpeg,image/webp" />
-            <input type="hidden" name="croppedPosterData" id="croppedPosterData" />
-            <small class="text-muted">Select an image, then crop/rotate/resize before saving.</small>
-            <div class="mt-2">
-                <img id="posterPreview" src="@Model.PosterImagePath" alt="Poster preview" class="img-fluid rounded @(string.IsNullOrWhiteSpace(Model.PosterImagePath) ? "d-none" : "")" style="max-height:300px;" />
+<div class="row justify-content-center my-4">
+    <div class="col-lg-8 col-md-10">
+        <div class="form-card">
+            <div class="text-center mb-4">
+                <h2 class="page-title m-0">Edit Movie</h2>
+                <p class="text-muted small mt-1">Update the movie information and poster below</p>
             </div>
+
+            <form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small" role="alert"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label fw-bold small text-secondary">Movie Title</label>
+                    <input asp-for="Title" class="form-control form-control-lg" placeholder="e.g. Inception" required />
+                    <span asp-validation-for="Title" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Synopsis" class="form-label fw-bold small text-secondary">Synopsis</label>
+                    <textarea asp-for="Synopsis" class="form-control" rows="3" placeholder="Brief movie description..." required></textarea>
+                    <span asp-validation-for="Synopsis" class="text-danger small"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Genre" class="form-label fw-bold small text-secondary">Genre</label>
+                        <input asp-for="Genre" class="form-control" placeholder="e.g. Action, Sci-Fi" required />
+                        <span asp-validation-for="Genre" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Language" class="form-label fw-bold small text-secondary">Language</label>
+                        <input asp-for="Language" class="form-control" placeholder="e.g. English, Malay" required />
+                        <span asp-validation-for="Language" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="AgeClassification" class="form-label fw-bold small text-secondary">Age Classification</label>
+                        <input asp-for="AgeClassification" class="form-control" placeholder="e.g. U, PG13, 18" required />
+                        <span asp-validation-for="AgeClassification" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="ReleaseDate" class="form-label fw-bold small text-secondary">Release Date</label>
+                        <input asp-for="ReleaseDate" type="date" class="form-control" value="@Model.ReleaseDate.ToString("yyyy-MM-dd")" required />
+                        <span asp-validation-for="ReleaseDate" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Status" class="form-label fw-bold small text-secondary">Movie Status</label>
+                        <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<MovieStatus>()"></select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold small text-secondary">Movie Poster</label>
+                        <input id="posterFile" name="posterFile" type="file" class="form-control" accept="image/png,image/jpeg,image/webp" />
+                        <input type="hidden" name="croppedPosterData" id="croppedPosterData" />
+                        <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">Select an image, then crop/rotate/resize before saving.</small>
+                    </div>
+                </div>
+
+                <!-- Poster Preview / Crop Area -->
+                <div class="mb-4">
+                    <div class="p-2 border rounded bg-light text-center">
+                        <img id="posterPreview" src="@Model.PosterImagePath" alt="Poster preview" class="img-fluid rounded @(string.IsNullOrWhiteSpace(Model.PosterImagePath) ? "d-none" : "")" style="max-height: 320px;" />
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 pt-2">
+                    <button type="submit" class="btn btn-primary btn-lg fw-bold flex-grow-1 shadow-sm">
+                        <i class="bi bi-check-circle me-1"></i>Save Changes
+                    </button>
+                    <a asp-action="Admin" class="btn btn-outline-secondary btn-lg fw-semibold px-4">
+                        Cancel
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
-
-    <button type="submit" class="btn btn-primary">Save Changes</button>
-    <a asp-action="Admin" class="btn btn-outline-secondary">Cancel</a>
-</form>
+</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
     <script>
-    (() => {
-        const input = document.getElementById('posterFile');
-        const preview = document.getElementById('posterPreview');
-        const output = document.getElementById('croppedPosterData');
-        let cropper;
-        input.addEventListener('change', () => {
-            const file = input.files?.[0];
-            if (!file) return;
-            if (file.size > 5 * 1024 * 1024) { alert('Poster image must be 5 MB or smaller.'); input.value=''; return; }
-            const reader = new FileReader();
-            reader.onload = e => { preview.src = e.target.result; preview.classList.remove('d-none'); if (cropper) cropper.destroy(); cropper = new Cropper(preview, { aspectRatio: 2/3, viewMode: 1, autoCropArea: 0.9 }); };
-            reader.readAsDataURL(file);
-        });
-        document.querySelector('form').addEventListener('submit', () => {
-            if (cropper) output.value = cropper.getCroppedCanvas({ width: 600, height: 900, imageSmoothingEnabled: true, imageSmoothingQuality: 'high' }).toDataURL('image/jpeg', 0.88);
-        });
-    })();
+        (() => {
+            const input = document.getElementById('posterFile');
+            const preview = document.getElementById('posterPreview');
+            const output = document.getElementById('croppedPosterData');
+            let cropper;
+            input.addEventListener('change', () => {
+                const file = input.files?.[0];
+                if (!file) return;
+                if (file.size > 5 * 1024 * 1024) { alert('Poster image must be 5 MB or smaller.'); input.value = ''; return; }
+                const reader = new FileReader();
+                reader.onload = e => { preview.src = e.target.result; preview.classList.remove('d-none'); if (cropper) cropper.destroy(); cropper = new Cropper(preview, { aspectRatio: 2 / 3, viewMode: 1, autoCropArea: 0.9 }); };
+                reader.readAsDataURL(file);
+            });
+            document.querySelector('form').addEventListener('submit', () => {
+                if (cropper) output.value = cropper.getCroppedCanvas({ width: 600, height: 900, imageSmoothingEnabled: true, imageSmoothingQuality: 'high' }).toDataURL('image/jpeg', 0.88);
+            });
+        })();
     </script>
 }

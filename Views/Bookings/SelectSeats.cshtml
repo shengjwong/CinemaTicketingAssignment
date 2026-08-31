@@ -5,81 +5,142 @@
 }
 
 <div class="container my-4">
-    <a asp-controller="Showtimes" asp-action="CustomerIndex" asp-route-movieId="@Model.Showtime.MovieId" class="btn btn-outline-secondary btn-sm mb-3">&larr; Showtimes</a>
+    <a asp-controller="Showtimes" asp-action="CustomerIndex" asp-route-movieId="@Model.Showtime.MovieId" class="btn btn-outline-secondary btn-sm mb-3">
+        <i class="bi bi-arrow-left me-1"></i>Back to Showtimes
+    </a>
+
     <div class="row g-4">
+        <!-- Main Seat Map View -->
         <div class="col-lg-8">
-            <h2>Choose your seats</h2>
-            <p class="text-muted mb-1"><strong>@Model.Showtime.Movie.Title</strong> · @Model.Showtime.CinemaHall.HallName · @Model.Showtime.StartDateTime.ToString("dd MMM, h:mm tt")</p>
-            <div class="screen">SCREEN</div>
-            <div class="seat-legend"><span><i class="seat available"></i> Available</span><span><i class="seat selected"></i> Your selection</span><span><i class="seat occupied"></i> Booked / temporarily locked</span></div>
-            <div id="seat-grid" class="seat-grid" style="grid-template-columns: repeat(@Model.Columns, 1fr)">
-                @for (var index = 0; index < capacity; index++)
-                {
-                    var row = (char)('A' + index / Model.Columns);
-                    var seat = $"{row}{index % Model.Columns + 1}";
-                    var isBooked = Model.BookedSeats.Contains(seat);
-                    var isLocked = Model.LockedSeats.Contains(seat);
-                    var isMine = Model.MyHeldSeats.Contains(seat);
-                    <button type="button" class="seat @(isBooked || isLocked ? "occupied" : isMine ? "selected" : "available")" data-seat="@seat" disabled="@(isBooked || isLocked)">@seat</button>
-                }
+            <div class="content-card">
+                <div class="mb-4">
+                    <h2 class="page-title m-0">Choose Your Seats</h2>
+                    <p class="text-muted small mt-1 mb-0">
+                        <strong>@Model.Showtime.Movie.Title</strong> ·
+                        <i class="bi bi-geo-alt me-1"></i>@Model.Showtime.CinemaHall.HallName ·
+                        <i class="bi bi-clock me-1"></i>@Model.Showtime.StartDateTime.ToString("dd MMM, h:mm tt")
+                    </p>
+                </div>
+
+                <!-- Screen & Legend -->
+                <div class="screen">SCREEN</div>
+
+                <div class="seat-legend">
+                    <span><i class="seat available"></i> Available</span>
+                    <span><i class="seat selected"></i> Your selection</span>
+                    <span><i class="seat occupied"></i> Booked / Locked</span>
+                </div>
+
+                <!-- Seats Grid Container -->
+                <div class="p-3 bg-light rounded-3 border">
+                    <div id="seat-grid" class="seat-grid" style="grid-template-columns: repeat(@Model.Columns, 1fr)">
+                        @for (var index = 0; index < capacity; index++)
+                        {
+                            var row = (char)('A' + index / Model.Columns);
+                            var seat = $"{row}{index % Model.Columns + 1}";
+                            var isBooked = Model.BookedSeats.Contains(seat);
+                            var isLocked = Model.LockedSeats.Contains(seat);
+                            var isMine = Model.MyHeldSeats.Contains(seat);
+                            <button type="button"
+                                    class="seat @(isBooked || isLocked ? "occupied" : isMine ? "selected" : "available")"
+                                    data-seat="@seat"
+                                    disabled="@(isBooked || isLocked)">
+                                @seat
+                            </button>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- Order Summary Sidebar -->
         <aside class="col-lg-4">
-            <div class="card shadow-sm border-0 sticky-lg-top" style="top:1rem">
-                <div class="card-body">
-                    <h4>Your booking</h4>
-                    <p class="mb-1">Price per seat: <strong>RM @Model.Showtime.TicketPrice.ToString("0.00")</strong></p>
-                    <p class="mb-1">Selected: <strong id="chosen-seats">None</strong></p>
-                    <p class="fs-4 text-success">Total: <strong id="total">RM 0.00</strong></p>
-                    <p id="hold-note" class="small text-muted">Seats are held for 8 minutes while you pay.</p>
-                    <div id="seat-error" class="alert alert-danger d-none small"></div>
-                    <form id="payment-form" asp-action="Payment" method="get">
-                        <input type="hidden" name="showtimeId" value="@Model.Showtime.Id" />
-                        <button id="pay-button" class="btn btn-success w-100" disabled>Continue to payment</button>
-                    </form>
-                    @Html.AntiForgeryToken()
+            <div class="form-card sticky-lg-top" style="top: 1rem;">
+                <h4 class="fw-bold text-dark mb-3">Booking Summary</h4>
+
+                <div class="mb-3 small">
+                    <div class="d-flex justify-content-between py-1">
+                        <span class="text-secondary">Price per seat:</span>
+                        <strong class="text-dark">RM @Model.Showtime.TicketPrice.ToString("0.00")</strong>
+                    </div>
+                    <div class="d-flex justify-content-between py-1">
+                        <span class="text-secondary">Selected Seats:</span>
+                        <strong id="chosen-seats" class="text-primary text-end">None</strong>
+                    </div>
                 </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="fw-bold text-secondary">Total Price</span>
+                    <span id="total" class="fs-4 fw-bold text-success">RM 0.00</span>
+                </div>
+
+                <p id="hold-note" class="small text-muted mb-3">
+                    <i class="bi bi-info-circle me-1"></i>Seats are held for 8 minutes while you pay.
+                </p>
+
+                <div id="seat-error" class="alert alert-danger border-0 shadow-sm d-none small mb-3"></div>
+
+                <form id="payment-form" asp-action="Payment" method="get">
+                    <input type="hidden" name="showtimeId" value="@Model.Showtime.Id" />
+                    <button id="pay-button" class="btn btn-success btn-lg w-100 fw-bold shadow-sm" disabled>
+                        Continue to Payment
+                    </button>
+                </form>
+
+                @Html.AntiForgeryToken()
             </div>
         </aside>
     </div>
 </div>
 
 @section Scripts {
-<script>
-    const selected = new Set(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MyHeldSeats)));
-    const price = @Model.Showtime.TicketPrice.ToString(System.Globalization.CultureInfo.InvariantCulture);
-    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
-    const showtimeId = '@Model.Showtime.Id';
-    const errorBox = document.getElementById('seat-error');
+    <script>
+        const selected = new Set(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MyHeldSeats)));
+        const price = @Model.Showtime.TicketPrice.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+        const showtimeId = '@Model.Showtime.Id';
+        const errorBox = document.getElementById('seat-error');
 
-    function render() {
-        document.querySelectorAll('.seat:not(.occupied)').forEach(button => button.classList.toggle('selected', selected.has(button.dataset.seat)));
-        const seats = [...selected].sort();
-        document.getElementById('chosen-seats').textContent = seats.length ? seats.join(', ') : 'None';
-        document.getElementById('total').textContent = `RM ${(seats.length * price).toFixed(2)}`;
-        document.getElementById('pay-button').disabled = seats.length === 0;
-    }
-
-    async function updateHolds() {
-        const response = await fetch('@Url.Action("UpdateSeatHolds", "Bookings")', {
-            method: 'POST', headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': token },
-            body: JSON.stringify({ showtimeId, seats: [...selected] })
-        });
-        if (!response.ok) {
-            const body = await response.json().catch(() => ({ message: 'Could not hold the selected seats.' }));
-            errorBox.textContent = body.message; errorBox.classList.remove('d-none');
-            return false;
+        function render() {
+            document.querySelectorAll('.seat:not(.occupied)').forEach(button => button.classList.toggle('selected', selected.has(button.dataset.seat)));
+            const seats = [...selected].sort();
+            document.getElementById('chosen-seats').textContent = seats.length ? seats.join(', ') : 'None';
+            document.getElementById('total').textContent = `RM ${(seats.length * price).toFixed(2)}`;
+            document.getElementById('pay-button').disabled = seats.length === 0;
         }
-        errorBox.classList.add('d-none'); return true;
-    }
 
-    document.querySelectorAll('.seat.available, .seat.selected').forEach(button => button.addEventListener('click', async () => {
-        const seat = button.dataset.seat;
-        const wasSelected = selected.has(seat);
-        wasSelected ? selected.delete(seat) : selected.add(seat);
+        async function updateHolds() {
+            const response = await fetch('@Url.Action("UpdateSeatHolds", "Bookings")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': token
+                },
+                body: JSON.stringify({ showtimeId, seats: [...selected] })
+            });
+            if (!response.ok) {
+                const body = await response.json().catch(() => ({ message: 'Could not hold the selected seats.' }));
+                errorBox.textContent = body.message;
+                errorBox.classList.remove('d-none');
+                return false;
+            }
+            errorBox.classList.add('d-none');
+            return true;
+        }
+
+        document.querySelectorAll('.seat.available, .seat.selected').forEach(button => button.addEventListener('click', async () => {
+            const seat = button.dataset.seat;
+            const wasSelected = selected.has(seat);
+            wasSelected ? selected.delete(seat) : selected.add(seat);
+            render();
+            if (!await updateHolds()) {
+                wasSelected ? selected.add(seat) : selected.delete(seat);
+                render();
+            }
+        }));
+
         render();
-        if (!await updateHolds()) { wasSelected ? selected.add(seat) : selected.delete(seat); render(); }
-    }));
-    render();
-</script>
+    </script>
 }

@@ -1,7 +1,7 @@
 @model CinemaTicketingAssignment.Models.Showtime
 @inject IConfiguration Configuration
 @{
-    ViewData["Title"] = "Secure payment";
+    ViewData["Title"] = "Secure Payment";
     var seats = (List<string>)ViewBag.Seats;
     var total = Model.TicketPrice * seats.Count;
     var payPalClientId = Configuration["PayPal:ClientId"] ?? string.Empty;
@@ -10,49 +10,81 @@
 
 <div class="row justify-content-center my-4">
     <div class="col-lg-7">
-        <div class="card shadow-sm">
-            <div class="card-body p-4">
-                <h2>Payment</h2>
-                <p class="text-muted">Choose a sandbox payment method. No real payment will be charged.</p>
+        <div class="form-card">
+            <div class="text-center mb-4">
+                <h2 class="page-title m-0">Secure Payment</h2>
+                <p class="text-muted small mt-1">Choose a sandbox payment method. No real payment will be charged.</p>
+            </div>
 
-                @if (TempData["Error"] is string error)
-                {
-                    <div class="alert alert-danger">@error</div>
-                }
+            @if (TempData["Error"] is string error)
+            {
+                <div class="alert alert-danger border-0 shadow-sm mb-4">@error</div>
+            }
 
-                <div class="alert alert-light border">
-                    <strong>@Model.Movie.Title</strong><br />
-                    @Model.StartDateTime.ToString("dd MMM yyyy, h:mm tt") · @Model.CinemaHall.HallName<br />
-                    Seats: @string.Join(", ", seats)<br />
-                    <strong>Total: RM @total.ToString("0.00")</strong>
+            <!-- Booking Summary Box -->
+            <div class="p-3 mb-4 rounded-3 border bg-light">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <h5 class="fw-bold text-dark m-0">@Model.Movie.Title</h5>
+                        <small class="text-secondary">
+                            <i class="bi bi-geo-alt me-1"></i>@Model.CinemaHall.HallName
+                        </small>
+                    </div>
+                    <span class="badge bg-primary px-2 py-1">@seats.Count Seats</span>
                 </div>
+                <div class="small text-muted mb-2">
+                    <i class="bi bi-clock me-1"></i>@Model.StartDateTime.ToString("dd MMM yyyy, h:mm tt")
+                </div>
+                <div class="small text-muted mb-3">
+                    <strong>Seats:</strong> @string.Join(", ", seats)
+                </div>
+                <div class="border-top pt-2 d-flex justify-content-between align-items-center">
+                    <span class="fw-bold text-secondary">Total Amount</span>
+                    <span class="fs-5 fw-bold text-primary">RM @total.ToString("0.00")</span>
+                </div>
+            </div>
 
-                <h5 class="mt-4">PayPal Sandbox</h5>
+            <!-- PayPal Section -->
+            <div class="mb-4">
+                <h5 class="fw-bold fs-6 text-dark mb-2">
+                    <i class="bi bi-paypal text-primary me-1"></i>PayPal Sandbox
+                </h5>
                 @if (payPalConfigured)
                 {
-                    <p class="small text-muted">Log in with a PayPal Sandbox buyer account to approve this simulated payment. This Client ID-only flow is for Sandbox demonstrations only.</p>
-                    <div id="paypal-button-container"></div>
-                    <div id="paypal-error" class="alert alert-danger d-none mt-3"></div>
+                    <p class="small text-muted mb-3">Log in with a PayPal Sandbox buyer account to approve this simulated payment.</p>
+                    <div id="paypal-button-container" class="mb-2"></div>
+                    <div id="paypal-error" class="alert alert-danger border-0 shadow-sm d-none mt-3"></div>
                     <div id="paypal-antiforgery">@Html.AntiForgeryToken()</div>
                 }
                 else
                 {
-                    <div class="alert alert-warning">PayPal Sandbox is not configured. Add a Sandbox Client ID before using this option.</div>
+                    <div class="alert alert-warning border-0 small">PayPal Sandbox is not configured. Add a Sandbox Client ID before using this option.</div>
                 }
+            </div>
 
-                <hr />
-                <h5>Test card mock</h5>
+            <div class="position-relative my-4 text-center">
+                <hr class="text-muted" />
+                <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small fw-semibold">OR</span>
+            </div>
+
+            <!-- Test Card Section -->
+            <div>
+                <h5 class="fw-bold fs-6 text-dark mb-3">
+                    <i class="bi bi-credit-card me-1"></i>Test Card Mock
+                </h5>
                 <form asp-action="ConfirmPayment" method="post">
                     <input type="hidden" name="showtimeId" value="@Model.Id" />
                     <div class="mb-3">
-                        <label class="form-label">Cardholder name</label>
-                        <input name="cardHolder" class="form-control" required />
+                        <label class="form-label fw-bold small text-secondary">Cardholder Name</label>
+                        <input name="cardHolder" class="form-control form-control-lg" placeholder="John Doe" required />
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Test card number</label>
-                        <input name="cardNumber" class="form-control" inputmode="numeric" placeholder="4242 4242 4242 4242" required />
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small text-secondary">Test Card Number</label>
+                        <input name="cardNumber" class="form-control form-control-lg" inputmode="numeric" placeholder="4242 4242 4242 4242" required />
                     </div>
-                    <button class="btn btn-outline-primary w-100">Complete test-card payment</button>
+                    <button class="btn btn-outline-primary btn-lg w-100 fw-bold shadow-sm">
+                        Complete Test-Card Payment
+                    </button>
                 </form>
             </div>
         </div>

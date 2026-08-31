@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CinemaTicketingAssignment.Models;
 
@@ -13,35 +14,40 @@ public class ConcessionsController : Controller
         _db = db;
     }
 
-    // 用户浏览加购页面
+    // ==========================================
+    // 1. 用户浏览加购页面 (Public / Member Access)
+    // ==========================================
     public async Task<IActionResult> Index()
     {
         var concessions = await _db.Concessions.ToListAsync();
         return View(concessions);
     }
 
-    // Admin 餐饮菜单管理列表
+    // ==========================================
+    // 2. Admin 餐饮菜单管理列表
+    // ==========================================
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> Manage()
     {
-        if (!User.IsInRole("ADMIN")) return Forbid();
         var concessions = await _db.Concessions.ToListAsync();
         return View(concessions);
     }
 
-    // Admin 新建小吃
+    // ==========================================
+    // 3. Admin 新建小吃
+    // ==========================================
     [HttpPost]
+    [Authorize(Roles = "ADMIN")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(string itemName, decimal price)
     {
-        if (!User.IsInRole("ADMIN")) return Forbid();
-
         bool isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 
         if (string.IsNullOrWhiteSpace(itemName) || price < 0)
         {
             if (isAjax) return BadRequest(new { message = "Please provide a valid item name and price." });
             TempData["Error"] = "Please provide a valid item name and price.";
-            return RedirectToAction("Manage");
+            return RedirectToAction(nameof(Manage));
         }
 
         var item = new Concession
@@ -50,6 +56,7 @@ public class ConcessionsController : Controller
             ItemName = itemName,
             Price = price
         };
+
         _db.Concessions.Add(item);
         await _db.SaveChangesAsync();
 
@@ -59,16 +66,17 @@ public class ConcessionsController : Controller
         }
 
         TempData["Success"] = "New snack added successfully!";
-        return RedirectToAction("Manage");
+        return RedirectToAction(nameof(Manage));
     }
 
-    // Admin 删除小吃
+    // ==========================================
+    // 4. Admin 删除小吃
+    // ==========================================
     [HttpPost]
+    [Authorize(Roles = "ADMIN")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(string id)
     {
-        if (!User.IsInRole("ADMIN")) return Forbid();
-
         bool isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 
         var item = await _db.Concessions.FindAsync(id);
@@ -82,9 +90,9 @@ public class ConcessionsController : Controller
         }
         else if (isAjax)
         {
-            return NotFound();
+            return NotFound(new { message = "Snack item not found." });
         }
 
-        return RedirectToAction("Manage");
+        return RedirectToAction(nameof(Manage));
     }
 }

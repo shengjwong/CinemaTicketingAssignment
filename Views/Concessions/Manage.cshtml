@@ -3,66 +3,78 @@
     ViewData["Title"] = "Manage Snacks Menu";
 }
 
-<div class="container mt-4">
-    <h2>🍿 Manage Concessions (Admin)</h2>
+<div class="container my-4">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-3 gap-2">
+        <h2 class="page-title m-0">🍿 Manage Concessions (Admin)</h2>
+    </div>
 
     <div id="manageAlert"></div>
 
-    <!-- 添加新小吃 -->
-    <form id="addConcessionForm" class="card card-body bg-light mb-4">
+    <!-- Add New Snack Form -->
+    <form id="addConcessionForm" class="form-card mb-4">
         @Html.AntiForgeryToken()
-        <h5>Add New Snack Item</h5>
+        <h5 class="fw-bold text-dark mb-3">Add New Snack Item</h5>
         <div class="row g-3">
             <div class="col-md-6">
-                <input type="text" name="itemName" id="itemNameInput" class="form-control" placeholder="Item Name (e.g. Popcorn Combo)" required />
+                <label class="form-label fw-bold small text-secondary">Item Name</label>
+                <input type="text" name="itemName" id="itemNameInput" class="form-control form-control-lg" placeholder="e.g. Popcorn Combo" required />
             </div>
             <div class="col-md-4">
-                <input type="number" step="0.01" min="0" name="price" id="priceInput" class="form-control" placeholder="Price (RM)" required />
+                <label class="form-label fw-bold small text-secondary">Price (RM)</label>
+                <input type="number" step="0.01" min="0" name="price" id="priceInput" class="form-control form-control-lg" placeholder="0.00" required />
             </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Add Item</button>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary btn-lg fw-bold w-100 shadow-sm">
+                    <i class="bi bi-plus-lg me-1"></i>Add
+                </button>
             </div>
         </div>
     </form>
 
-    <!-- 现有菜单表格 -->
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Item Name</th>
-                <th>Price (RM)</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="concessionsTableBody">
-            @foreach (var c in Model)
-            {
-                <tr id="concession-@c.Id">
-                    <td>@c.ItemName</td>
-                    <td>RM @c.Price.ToString("0.00")</td>
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm delete-concession-btn" data-id="@c.Id">Delete</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <!-- Concessions Table -->
+    <div class="table-card p-0 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table custom-table mb-0 align-middle">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Price</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="concessionsTableBody">
+                    @foreach (var c in Model)
+                    {
+                        <tr id="concession-@c.Id">
+                            <td class="fw-bold text-dark">@c.ItemName</td>
+                            <td class="fw-bold text-primary">RM @c.Price.ToString("0.00")</td>
+                            <td class="text-end">
+                                <button type="button" class="btn btn-outline-danger btn-sm fw-semibold delete-concession-btn" data-id="@c.Id">
+                                    <i class="bi bi-trash me-1"></i>Delete
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
     <script>
-        (function () {
+        (function() {
             const addForm = document.getElementById('addConcessionForm');
             const tableBody = document.getElementById('concessionsTableBody');
             const alertBox = document.getElementById('manageAlert');
             const antiForgeryToken = document.querySelector('#addConcessionForm input[name="__RequestVerificationToken"]')?.value;
 
             function showAlert(message, type) {
-                alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+                alertBox.innerHTML = `<div class="alert alert-${type} border-0 shadow-sm mb-3">${message}</div>`;
                 setTimeout(() => { alertBox.innerHTML = ''; }, 3000);
             }
 
-            addForm.addEventListener('submit', function (e) {
+            addForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const formData = new FormData(addForm);
                 const submitBtn = addForm.querySelector('button[type="submit"]');
@@ -84,9 +96,9 @@
                         const row = document.createElement('tr');
                         row.id = 'concession-' + item.id;
                         row.innerHTML = `
-                            <td></td>
-                            <td>RM ${item.price}</td>
-                            <td><button type="button" class="btn btn-danger btn-sm delete-concession-btn" data-id="${item.id}">Delete</button></td>`;
+                                    <td class="fw-bold text-dark"></td>
+                                    <td class="fw-bold text-primary">RM ${parseFloat(item.price).toFixed(2)}</td>
+                                    <td class="text-end"><button type="button" class="btn btn-outline-danger btn-sm fw-semibold delete-concession-btn" data-id="${item.id}"><i class="bi bi-trash me-1"></i>Delete</button></td>`;
                         row.querySelector('td').textContent = item.itemName;
                         tableBody.appendChild(row);
 
@@ -97,7 +109,7 @@
                     .finally(() => { submitBtn.disabled = false; });
             });
 
-            tableBody.addEventListener('click', function (e) {
+            tableBody.addEventListener('click', function(e) {
                 const btn = e.target.closest('.delete-concession-btn');
                 if (!btn) return;
                 if (!confirm('Delete this item?')) return;

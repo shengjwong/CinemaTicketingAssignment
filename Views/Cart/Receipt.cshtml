@@ -1,39 +1,79 @@
 @model CinemaTicketingAssignment.Models.FoodOrder
-@{ ViewData["Title"] = "Food Receipt"; }
+@{
+    ViewData["Title"] = "Food Receipt";
+}
 
 <div class="row justify-content-center my-4">
     <div class="col-lg-7">
-        <div class="card shadow receipt-card">
-            <div class="card-body p-4">
-                <div class="d-flex justify-content-between">
-                    <h2>🍿 Food Receipt</h2>
-                    <span class="badge bg-success align-self-start">@Model.PaymentStatus.ToUpperInvariant()</span>
+        <div class="receipt-card shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="page-title m-0">🍿 Food Receipt</h2>
+                <span class="badge status-badge-active px-3 py-2 fw-bold">
+                    @Model.PaymentStatus.ToUpperInvariant()
+                </span>
+            </div>
+
+            <hr class="text-muted" />
+
+            <div class="p-3 bg-light rounded-3 border mb-4">
+                <div class="row g-2 small">
+                    <div class="col-sm-4 text-secondary">Order ID:</div>
+                    <div class="col-sm-8 fw-bold text-dark">#@Model.Id</div>
+
+                    <div class="col-sm-4 text-secondary">Order Date:</div>
+                    <div class="col-sm-8 fw-bold text-dark">
+                        <i class="bi bi-clock me-1"></i>@Model.OrderDate.ToLocalTime().ToString("dddd, dd MMM yyyy · h:mm tt")
+                    </div>
                 </div>
-                <hr />
-                <p class="mb-1"><strong>Order:</strong> @Model.Id</p>
-                <p class="mb-3"><strong>Date:</strong> @Model.OrderDate.ToLocalTime().ToString("dddd, dd MMM yyyy · h:mm tt")</p>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead><tr><th>Item</th><th class="text-center">Qty</th><th class="text-end">Subtotal</th></tr></thead>
-                        <tbody>
-                            @foreach (var item in Model.Items)
-                            {
-                                <tr>
-                                    <td>@item.ItemName<br /><small class="text-muted">RM @item.UnitPrice.ToString("0.00") each</small></td>
-                                    <td class="text-center">@item.Quantity</td>
-                                    <td class="text-end">RM @item.Subtotal.ToString("0.00")</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <hr />
-                <h4 class="text-end">Total paid: RM @Model.TotalAmount.ToString("0.00")</h4>
-                <div class="mt-4 no-print">
-                    <button type="button" class="btn btn-primary" onclick="window.print()">Print / Save as PDF</button>
-                    <a asp-action="History" class="btn btn-outline-secondary">Food History</a>
-                    <a asp-action="Index" class="btn btn-outline-secondary">Back to Cart</a>
-                </div>
+            </div>
+
+            <div class="table-responsive mb-3">
+                <table class="table custom-table mb-0 align-middle">
+                    <thead>
+                        <tr>
+                            <th>Item Description</th>
+                            <th class="text-center">Qty</th>
+                            <th class="text-end">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="fw-bold text-dark">@item.ItemName</span>
+                                    <br />
+                                    <small class="text-muted">RM @item.UnitPrice.ToString("0.00") each</small>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-light text-dark border px-2 py-1">@item.Quantity</span>
+                                </td>
+                                <td class="text-end fw-bold text-primary">
+                                    RM @item.Subtotal.ToString("0.00")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="border-top pt-3 text-end">
+                <span class="text-secondary small me-2">Total Paid:</span>
+                <span class="fs-4 fw-bold text-success">RM @Model.TotalAmount.ToString("0.00")</span>
+            </div>
+
+            <hr class="text-muted no-print" />
+
+            <div class="d-flex flex-wrap gap-2 justify-content-center mt-4 no-print">
+                <button type="button" class="btn btn-primary fw-bold px-4" onclick="window.print()">
+                    <i class="bi bi-printer me-1"></i>Print / Save as PDF
+                </button>
+                <a asp-action="History" class="btn btn-outline-secondary fw-semibold">
+                    Food History
+                </a>
+                <a asp-action="Index" class="btn btn-outline-secondary fw-semibold">
+                    Back to Cart
+                </a>
             </div>
         </div>
     </div>
@@ -41,8 +81,18 @@
 
 <style>
     @@media print {
-        .no-print, header, footer { display: none !important; }
-        .receipt-card { border: 0; box-shadow: none !important; }
-        body { background: white; }
+        .no-print, header, footer {
+            display: none !important;
+        }
+
+        .receipt-card {
+            border: 0 !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+
+        body {
+            background: white !important;
+        }
     }
 </style>

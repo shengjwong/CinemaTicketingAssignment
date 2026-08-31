@@ -10,38 +10,76 @@
     var status = ViewBag.SelectedStatus is MovieStatus s ? s : MovieStatus.NowShowing;
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <span class="text-muted">@totalCount movie(s) found</span>
-    <small class="text-muted">Page @(page) of @Math.Max(totalPages, 1)</small>
+<!-- Results Stats Header -->
+<div class="d-flex justify-content-between align-items-center mb-3 px-1">
+    <span class="text-secondary small fw-bold">
+        <i class="bi bi-film me-1"></i>@totalCount movie(s) found
+    </span>
+    <span class="badge bg-light text-dark border px-2 py-1 small">
+        Page @(page) of @Math.Max(totalPages, 1)
+    </span>
 </div>
 
 @if (!Model.Any())
 {
-    <div class="alert alert-light border">No movies match your search and filters.</div>
+    <div class="content-card text-center py-5">
+        <i class="bi bi-search text-muted display-4"></i>
+        <p class="text-muted mt-3 mb-0">No movies match your search and filters.</p>
+    </div>
 }
 else
 {
-    <div class="row row-cols-1 row-cols-md-4 g-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         @foreach (var movie in Model)
         {
             <div class="col">
-                <div class="card h-100 shadow-sm">
-                    @if (!string.IsNullOrWhiteSpace(movie.PosterImagePath))
-                    {
-                        <img src="@movie.PosterImagePath" class="card-img-top" alt="@movie.Title poster" style="height:320px;object-fit:cover;" />
-                    }
-                    else
-                    {
-                        <div class="d-flex align-items-center justify-content-center bg-light text-muted" style="height:320px;">No Poster</div>
-                    }
-                    <div class="card-body">
-                        <h5 class="card-title">@movie.Title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">@movie.Genre &middot; @movie.Language &middot; @movie.AgeClassification</h6>
-                        <p class="card-text">@(movie.Synopsis.Length > 100 ? movie.Synopsis[..100] + "..." : movie.Synopsis)</p>
-                        <p class="card-text"><small class="text-muted">Release: @movie.ReleaseDate.ToString("dd MMM yyyy")</small></p>
+                <div class="content-card h-100 p-0 overflow-hidden d-flex flex-column justify-content-between border shadow-sm">
+                    <div>
+                        <!-- Poster Image Container -->
+                        <div class="position-relative overflow-hidden bg-light" style="height: 340px;">
+                            @if (!string.IsNullOrWhiteSpace(movie.PosterImagePath))
+                            {
+                                <img src="@movie.PosterImagePath"
+                                     class="w-100 h-100"
+                                     alt="@movie.Title poster"
+                                     style="object-fit: cover; transition: transform 0.3s ease;"
+                                     onmouseover="this.style.transform='scale(1.05)'"
+                                     onmouseout="this.style.transform='scale(1)'" />
+                            }
+                            else
+                            {
+                                <div class="d-flex flex-column align-items-center justify-content-center h-100 text-muted">
+                                    <i class="bi bi-image fs-1 opacity-50"></i>
+                                    <span class="small fw-semibold mt-2">No Poster</span>
+                                </div>
+                            }
+                            <span class="badge bg-dark bg-opacity-75 position-absolute top-0 end-0 m-2 px-2 py-1 backdrop-blur">
+                                @movie.AgeClassification
+                            </span>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="p-3">
+                            <h5 class="fw-bold text-dark text-truncate mb-1" title="@movie.Title">@movie.Title</h5>
+                            <div class="text-muted small fw-semibold mb-2">
+                                @movie.Genre · @movie.Language
+                            </div>
+                            <p class="text-secondary small mb-3" style="min-height: 48px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                @(movie.Synopsis.Length > 100 ? movie.Synopsis[..100] + "..." : movie.Synopsis)
+                            </p>
+                        </div>
                     </div>
-                    <div class="card-footer">
-                        <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-primary btn-sm">View Showtimes</a>
+
+                    <!-- Card Footer -->
+                    <div class="p-3 bg-light border-top mt-auto">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <small class="text-muted" style="font-size: 0.75rem;">
+                                <i class="bi bi-calendar3 me-1"></i>@movie.ReleaseDate.ToString("dd MMM yyyy")
+                            </small>
+                        </div>
+                        <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-primary btn-sm fw-bold w-100 shadow-sm">
+                            <i class="bi bi-ticket-perforated me-1"></i>View Showtimes
+                        </a>
                     </div>
                 </div>
             </div>
@@ -49,14 +87,15 @@ else
     </div>
 }
 
+<!-- Pagination -->
 @if (totalPages > 1)
 {
     <nav class="mt-4" aria-label="Movie pagination">
-        <ul class="pagination justify-content-center">
+        <ul class="pagination justify-content-center m-0">
             @for (var i = 1; i <= totalPages; i++)
             {
                 <li class="page-item @(i == page ? "active" : "")">
-                    <button type="button" class="page-link movie-page" data-page="@i">@i</button>
+                    <button type="button" class="page-link movie-page fw-semibold" data-page="@i">@i</button>
                 </li>
             }
         </ul>

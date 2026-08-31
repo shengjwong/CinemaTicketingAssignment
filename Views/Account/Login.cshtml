@@ -2,55 +2,71 @@
 @inject IConfiguration Configuration
 @model CinemaTicketingAssignment.Models.LoginViewModel
 
-<h2>User Login</h2>
-
-@if (TempData["Success"] != null)
-{
-    <div>
-        @TempData["Success"]
-    </div>
+@{
+    ViewData["Title"] = "User Login";
 }
 
-<form id="userLoginForm" asp-controller="Account" asp-action="Login" method="post">
-    @Html.AntiForgeryToken()
+<div class="auth-container mt-5">
+    <div class="auth-card">
+        <div class="text-center mb-4">
+            <h2 class="page-title m-0">User Login</h2>
+            <p class="text-muted small mt-1">Welcome back! Please enter your details</p>
+        </div>
 
-    <!-- Hidden input to hold the reCAPTCHA token -->
-    <input type="hidden" id="recaptchaToken" name="recaptchaToken" />
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success border-0 shadow-sm mb-3">
+                @TempData["Success"]
+            </div>
+        }
 
-    <div asp-validation-summary="ModelOnly"></div>
+        <form id="userLoginForm" asp-controller="Account" asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
 
-    <div>
-        <label asp-for="Email">Email Address:</label>
-        <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
+            <!-- Hidden input to hold the reCAPTCHA token -->
+            <input type="hidden" id="recaptchaToken" name="recaptchaToken" />
+
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small" role="alert"></div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label fw-bold small text-secondary">Email Address</label>
+                <input asp-for="Email" class="form-control form-control-lg" placeholder="name@example.com" required />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <label asp-for="Password" class="form-label fw-bold small text-secondary mb-0">Password</label>
+                    <a asp-controller="Account" asp-action="ForgotPassword" class="text-decoration-none small">Forgot Password?</a>
+                </div>
+                <input asp-for="Password" type="password" class="form-control form-control-lg mt-1" placeholder="••••••••" required />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm mb-3 mt-2">
+                Sign In
+            </button>
+        </form>
+
+        <hr class="my-4" />
+
+        <!-- Navigation & Account Links -->
+        <div class="text-center small">
+            <p class="mb-2">
+                Don't have an account?
+                <a asp-controller="Account" asp-action="Register" class="text-decoration-none fw-bold ms-1">Sign Up Now</a>
+            </p>
+            <p class="text-muted mb-0">
+                Are you an Admin?
+                <a asp-controller="Account" asp-action="AdminLogin" class="text-decoration-none fw-bold me-1">Go to Admin Login</a> |
+                <a asp-controller="Home" asp-action="Index" class="text-decoration-none text-secondary ms-1">Back to Home</a>
+            </p>
+        </div>
     </div>
-
-    <div>
-        <label asp-for="Password">Password:</label>
-        <input asp-for="Password" type="password" />
-        <span asp-validation-for="Password"></span>
-    </div>
-
-    <button type="submit">Sign In</button>
-</form>
-
-<hr />
-
-<!-- Navigation & Account Links -->
-<p>
-    Don't have an account?
-    <a asp-controller="Account" asp-action="Register">Sign Up Now</a>
-</p>
-<p>
-    <a asp-controller="Account" asp-action="ForgotPassword">Forgot Password?</a>
-</p>
-<p>
-    Are you an Admin?
-    <a asp-controller="Account" asp-action="AdminLogin">Go to Admin Login</a> |
-    <a asp-controller="Home" asp-action="Index">Back to Welcome Page</a>
-</p>
+</div>
 
 @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
     <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["RecaptchaSettings:SiteKey"]"></script>
     <script>
         document.getElementById("userLoginForm").addEventListener("submit", function(e) {

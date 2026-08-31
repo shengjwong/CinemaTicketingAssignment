@@ -5,94 +5,114 @@
     double avgRating = reviews.Any() ? reviews.Average(r => r.Rating) : 0;
 }
 
-<div class="container mt-4">
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <img src="@(Model.PosterImagePath ?? "/images/default-poster.jpg")" class="img-fluid rounded shadow" alt="@Model.Title" />
-        </div>
-        <div class="col-md-8">
-            <h2>@Model.Title</h2>
-            <p class="text-muted">@Model.Genre | @Model.Language | <span data-i18n="label-rating">Rating:</span> <span class="badge bg-warning text-dark" id="avgRatingBadge">⭐ @avgRating.ToString("0.0")/5.0</span></p>
-            <p>@Model.Synopsis</p>
+<div class="container my-4">
+    <!-- Movie Details Header Card -->
+    <div class="content-card mb-4 p-4">
+        <div class="row g-4 align-items-center">
+            <div class="col-md-4 col-lg-3 text-center">
+                <img src="@(Model.PosterImagePath ?? "/images/default-poster.jpg")"
+                     class="img-fluid rounded shadow-sm w-100"
+                     alt="@Model.Title"
+                     style="max-height: 380px; object-fit: cover;" />
+            </div>
+            <div class="col-md-8 col-lg-9">
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                    <span class="badge bg-primary px-3 py-2">@Model.Genre</span>
+                    <span class="badge bg-secondary px-3 py-2">@Model.Language</span>
+                    <span class="badge bg-warning text-dark px-3 py-2 fw-bold" id="avgRatingBadge">
+                        ⭐ @avgRating.ToString("0.0")/5.0
+                    </span>
+                </div>
+                <h1 class="display-6 fw-bold text-dark mb-3">@Model.Title</h1>
+                <p class="text-secondary leading-relaxed mb-4" style="font-size: 1.05rem;">
+                    @Model.Synopsis
+                </p>
 
-            <!-- 指向普通用户的 Showtimes 选座路由 -->
-            <a asp-controller="Showtimes" asp-action="CustomerIndex" asp-route-movieId="@Model.Id" class="btn btn-primary btn-lg mt-3" data-i18n="btn-book-tickets">
-                🎟️ Book Tickets
-            </a>
+                <div class="pt-2">
+                    <a asp-controller="Showtimes" asp-action="CustomerIndex" asp-route-movieId="@Model.Id" class="btn btn-primary btn-lg fw-bold shadow-sm px-4" data-i18n="btn-book-tickets">
+                        🎟️ Book Tickets
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <hr />
+    <!-- Reviews Section -->
+    <div class="content-card p-4">
+        <h3 class="fs-4 fw-bold text-dark mb-4" data-i18n="review-heading">Customer Reviews & Ratings</h3>
 
-    <!-- 评论与评分展示模块 -->
-    <h3 class="mb-3" data-i18n="review-heading">Customer Reviews & Ratings</h3>
-
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success">@TempData["Success"]</div>
-    }
-
-    <!-- 用户发表评价框 -->
-    @if (User.Identity != null && User.Identity.IsAuthenticated && !User.IsInRole("ADMIN"))
-    {
-        <form asp-controller="Reviews" asp-action="AddReview" method="post" class="card card-body bg-light mb-4 shadow-sm" id="addReviewForm">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="movieId" value="@Model.Id" />
-
-            <div class="mb-3">
-                <label class="form-label fw-bold" data-i18n="review-star-label">Select Star Rating</label>
-                <select name="rating" class="form-select" style="width: 160px;" required>
-                    <option value="5">⭐⭐⭐⭐⭐ (5/5)</option>
-                    <option value="4">⭐⭐⭐⭐ (4/5)</option>
-                    <option value="3">⭐⭐⭐ (3/5)</option>
-                    <option value="2">⭐⭐ (2/5)</option>
-                    <option value="1">⭐ (1/5)</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <textarea name="comment" class="form-control" rows="3" placeholder="Write your thoughts..." data-i18n-holder="review-placeholder" required></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-success" style="width: 150px;" data-i18n="btn-post-review">Post Review</button>
-        </form>
-    }
-
-    <!-- 评论展示列表 -->
-    <div class="list-group" id="reviewsList">
-        @if (!reviews.Any())
+        @if (TempData["Success"] != null)
         {
-            <p class="text-muted" data-i18n="review-empty" id="noReviewsMessage">No reviews yet. Be the first to review!</p>
+            <div class="alert alert-success border-0 shadow-sm mb-4">@TempData["Success"]</div>
         }
-        else
-        {
-            @foreach (var rev in reviews)
-            {
-                <div class="list-group-item list-group-item-action flex-column align-items-start mb-2 rounded shadow-sm" id="review-@rev.Id">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h6 class="mb-1 fw-bold">⭐ @rev.Rating/5 Stars</h6>
-                        <small class="text-muted">@rev.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small>
-                    </div>
-                    <p class="mb-1 text-secondary">@rev.Comment</p>
 
-                    @if (User.IsInRole("ADMIN"))
-                    {
-                        <form asp-controller="Reviews" asp-action="DeleteReview" method="post" class="mt-2 text-end delete-review-form" data-review-id="@rev.Id">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="id" value="@rev.Id" />
-                            <input type="hidden" name="movieId" value="@Model.Id" />
-                            <button type="submit" class="btn btn-danger btn-sm" data-i18n="btn-delete-admin">Delete Review (Admin)</button>
-                        </form>
-                    }
+        <!-- User Review Form -->
+        @if (User.Identity != null && User.Identity.IsAuthenticated && !User.IsInRole("ADMIN"))
+        {
+            <form asp-controller="Reviews" asp-action="AddReview" method="post" class="form-card mb-4 bg-light" id="addReviewForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="movieId" value="@Model.Id" />
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold small text-secondary" data-i18n="review-star-label">Select Star Rating</label>
+                    <select name="rating" class="form-select form-select-lg" style="max-width: 200px;" required>
+                        <option value="5">⭐⭐⭐⭐⭐ (5/5)</option>
+                        <option value="4">⭐⭐⭐⭐ (4/5)</option>
+                        <option value="3">⭐⭐⭐ (3/5)</option>
+                        <option value="2">⭐⭐ (2/5)</option>
+                        <option value="1">⭐ (1/5)</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <textarea name="comment" class="form-control" rows="3" placeholder="Write your thoughts..." data-i18n-holder="review-placeholder" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-success fw-bold px-4 shadow-sm" data-i18n="btn-post-review">Post Review</button>
+            </form>
+        }
+
+        <!-- Reviews List -->
+        <div class="d-flex flex-column gap-3" id="reviewsList">
+            @if (!reviews.Any())
+            {
+                <div class="text-center py-4 text-muted" data-i18n="review-empty" id="noReviewsMessage">
+                    <i class="bi bi-chat-square-dots display-6 d-block mb-2 opacity-50"></i>
+                    No reviews yet. Be the first to review!
                 </div>
             }
-        }
+            else
+            {
+                @foreach (var rev in reviews)
+                {
+                    <div class="p-3 bg-light rounded-3 border shadow-sm" id="review-@rev.Id">
+                        <div class="d-flex w-100 justify-content-between align-items-center mb-2">
+                            <span class="fw-bold text-warning fs-6">⭐ @rev.Rating/5 Stars</span>
+                            <small class="text-muted fw-semibold">@rev.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small>
+                        </div>
+                        <p class="mb-2 text-dark">@rev.Comment</p>
+
+                        @if (User.IsInRole("ADMIN"))
+                        {
+                            <form asp-controller="Reviews" asp-action="DeleteReview" method="post" class="mt-2 text-end delete-review-form" data-review-id="@rev.Id">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@rev.Id" />
+                                <input type="hidden" name="movieId" value="@Model.Id" />
+                                <button type="submit" class="btn btn-outline-danger btn-sm fw-semibold" data-i18n="btn-delete-admin">
+                                    <i class="bi bi-trash me-1"></i>Delete Review (Admin)
+                                </button>
+                            </form>
+                        }
+                    </div>
+                }
+            }
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        (function () {
+        (function() {
             const addForm = document.getElementById('addReviewForm');
             const reviewsList = document.getElementById('reviewsList');
             const avgBadge = document.getElementById('avgRatingBadge');
@@ -110,7 +130,7 @@
 
             function showEmptyMessageIfNeeded() {
                 if (reviewsList.children.length === 0) {
-                    reviewsList.innerHTML = '<p class="text-muted" id="noReviewsMessage">No reviews yet. Be the first to review!</p>';
+                    reviewsList.innerHTML = '<div class="text-center py-4 text-muted" id="noReviewsMessage"><i class="bi bi-chat-square-dots display-6 d-block mb-2 opacity-50"></i>No reviews yet. Be the first to review!</div>';
                 }
             }
 
@@ -118,26 +138,26 @@
                 const stars = '⭐'.repeat(review.rating);
                 const deleteBtn = review.canDelete
                     ? `<form class="mt-2 text-end delete-review-form" data-review-id="${review.id}">
-                           <button type="button" class="btn btn-danger btn-sm delete-review-btn" data-review-id="${review.id}">Delete Review (Admin)</button>
-                       </form>`
+                                   <button type="button" class="btn btn-outline-danger btn-sm fw-semibold delete-review-btn" data-review-id="${review.id}"><i class="bi bi-trash me-1"></i>Delete Review (Admin)</button>
+                               </form>`
                     : '';
 
                 const card = document.createElement('div');
-                card.className = 'list-group-item list-group-item-action flex-column align-items-start mb-2 rounded shadow-sm';
+                card.className = 'p-3 bg-light rounded-3 border shadow-sm';
                 card.id = 'review-' + review.id;
                 card.innerHTML = `
-                    <div class="d-flex w-100 justify-content-between">
-                        <h6 class="mb-1 fw-bold">${stars} ${review.rating}/5 Stars</h6>
-                        <small class="text-muted">${review.createdAt}</small>
-                    </div>
-                    <p class="mb-1 text-secondary"></p>
-                    ${deleteBtn}`;
+                            <div class="d-flex w-100 justify-content-between align-items-center mb-2">
+                                <span class="fw-bold text-warning fs-6">${stars} ${review.rating}/5 Stars</span>
+                                <small class="text-muted fw-semibold">${review.createdAt}</small>
+                            </div>
+                            <p class="mb-2 text-dark"></p>
+                            ${deleteBtn}`;
                 card.querySelector('p').textContent = review.comment;
                 return card;
             }
 
             if (addForm) {
-                addForm.addEventListener('submit', function (e) {
+                addForm.addEventListener('submit', function(e) {
                     e.preventDefault();
                     const formData = new FormData(addForm);
                     const submitBtn = addForm.querySelector('button[type="submit"]');
@@ -189,7 +209,7 @@
             }
 
             // Existing server-rendered delete forms (present on initial page load)
-            reviewsList.addEventListener('submit', function (e) {
+            reviewsList.addEventListener('submit', function(e) {
                 const form = e.target.closest('.delete-review-form');
                 if (!form) return;
                 e.preventDefault();
@@ -197,7 +217,7 @@
             });
 
             // Delete buttons on dynamically-added reviews (built client-side, no <form> submit)
-            reviewsList.addEventListener('click', function (e) {
+            reviewsList.addEventListener('click', function(e) {
                 const btn = e.target.closest('.delete-review-btn');
                 if (!btn) return;
                 handleDelete(btn.dataset.reviewId, null);

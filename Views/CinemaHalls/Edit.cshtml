@@ -3,34 +3,51 @@
     ViewData["Title"] = "Edit Cinema Hall";
 }
 
-<h1 class="mb-3">Edit Cinema Hall</h1>
+<div class="row justify-content-center my-4">
+    <div class="col-lg-6 col-md-8">
+        <div class="form-card">
+            <div class="text-center mb-4">
+                <h2 class="page-title m-0">Edit Cinema Hall</h2>
+                <p class="text-muted small mt-1">Update the configuration for @Model.HallName</p>
+            </div>
 
-<form asp-action="Edit" asp-route-id="@Model.Id" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
+            <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small" role="alert"></div>
+                <input type="hidden" asp-for="Id" />
 
-    <div class="mb-3">
-        <label asp-for="HallName" class="form-label">Hall Name</label>
-        <input asp-for="HallName" class="form-control" />
-        <span asp-validation-for="HallName" class="text-danger"></span>
+                <div class="mb-3">
+                    <label asp-for="HallName" class="form-label fw-bold small text-secondary">Hall Name</label>
+                    <input asp-for="HallName" class="form-control form-control-lg" placeholder="e.g. Hall 1, IMAX, 3D" required />
+                    <span asp-validation-for="HallName" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="HallType" class="form-label fw-bold small text-secondary">Hall Type</label>
+                    <input asp-for="HallType" class="form-control form-control-lg" placeholder="e.g. Standard, 4DX, IMAX" required />
+                    <span asp-validation-for="HallType" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="SeatCapacity" class="form-label fw-bold small text-secondary">Seat Capacity</label>
+                    <input asp-for="SeatCapacity" type="number" class="form-control form-control-lg" min="1" placeholder="e.g. 100" required />
+                    <span asp-validation-for="SeatCapacity" class="text-danger small"></span>
+                </div>
+
+                <div class="d-flex gap-2 pt-2">
+                    <button type="submit" class="btn btn-primary btn-lg fw-bold flex-grow-1 shadow-sm">
+                        <i class="bi bi-check-circle me-1"></i>Save Changes
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg fw-semibold px-4">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <div class="mb-3">
-        <label asp-for="HallType" class="form-label">Hall Type</label>
-        <input asp-for="HallType" class="form-control" />
-        <span asp-validation-for="HallType" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="SeatCapacity" class="form-label">Seat Capacity</label>
-        <input asp-for="SeatCapacity" type="number" class="form-control" min="1" />
-        <span asp-validation-for="SeatCapacity" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Save Changes</button>
-    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
-</form>
+</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

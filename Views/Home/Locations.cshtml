@@ -4,11 +4,15 @@
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-<div class="container mt-4">
-    <h2 class="mb-3">📍 Our Cinema Branches</h2>
-    <p class="text-muted">Find our flagship cinema halls and branch locations across Klang Valley.</p>
+<div class="container my-4">
+    <div class="mb-4">
+        <h2 class="page-title m-0">📍 Our Cinema Branches</h2>
+        <p class="text-muted small mt-1">Find our flagship cinema halls and branch locations across Klang Valley.</p>
+    </div>
 
-    <div id="map" style="height: 480px; width: 100%;" class="rounded shadow border"></div>
+    <div class="content-card p-2 overflow-hidden shadow-sm">
+        <div id="map" style="height: 520px; width: 100%;" class="rounded"></div>
+    </div>
 </div>
 
 @section Scripts {
@@ -21,10 +25,10 @@
         }).addTo(map);
 
         L.marker([3.1587, 101.7142]).addTo(map)
-            .bindPopup('<b>Cinema HQ (Suria KLCC)</b><br>Hall 1 & IMAX 3D Screen')
+            .bindPopup('<div class="p-1"><b class="text-primary">Cinema HQ (Suria KLCC)</b><br><small class="text-muted">Hall 1 & IMAX 3D Screen</small></div>')
             .openPopup();
 
         L.marker([3.1186, 101.6761]).addTo(map)
-            .bindPopup('<b>Cinema Mid Valley</b><br>4DX & Dolby Atmos Motion Seats');
+            .bindPopup('<div class="p-1"><b class="text-primary">Cinema Mid Valley</b><br><small class="text-muted">4DX & Dolby Atmos Motion Seats</small></div>');
     </script>
 }

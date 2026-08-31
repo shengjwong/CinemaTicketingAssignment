@@ -1,25 +1,62 @@
 @model CinemaTicketingAssignment.Models.Booking
-@{ ViewData["Title"] = "E-ticket"; }
+@{
+    ViewData["Title"] = "E-ticket";
+}
 
 <div class="row justify-content-center my-4">
     <div class="col-lg-7">
-        <div class="card shadow ticket-card">
-            <div class="card-body p-4">
-                <div class="d-flex justify-content-between">
-                    <h2>🎬 E-Ticket</h2>
-                    <span class="badge bg-success align-self-start">PAID</span>
+        <div class="receipt-card shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="page-title m-0">🎬 E-Ticket</h2>
+                <span class="badge status-badge-active px-3 py-2 fw-bold">@Model.PaymentStatus.ToUpper()</span>
+            </div>
+
+            <hr class="text-muted" />
+
+            <div class="mb-4">
+                <h3 class="fw-bold text-primary mb-3">@Model.Showtime.Movie.Title</h3>
+
+                <div class="p-3 bg-light rounded-3 border">
+                    <div class="row g-2 small">
+                        <div class="col-sm-4 text-secondary">Booking ID:</div>
+                        <div class="col-sm-8 fw-bold text-dark">#@Model.Id</div>
+
+                        <div class="col-sm-4 text-secondary">Showtime:</div>
+                        <div class="col-sm-8 fw-bold text-dark">
+                            <i class="bi bi-calendar-event me-1"></i>@Model.Showtime.StartDateTime.ToString("dddd, dd MMM yyyy · h:mm tt")
+                        </div>
+
+                        <div class="col-sm-4 text-secondary">Cinema Hall:</div>
+                        <div class="col-sm-8 fw-bold text-dark">
+                            <i class="bi bi-geo-alt me-1"></i>@Model.Showtime.CinemaHall.HallName
+                        </div>
+
+                        <div class="col-sm-4 text-secondary">Seats:</div>
+                        <div class="col-sm-8 fw-bold text-dark">
+                            <span class="badge bg-white text-dark border px-2 py-1">@Model.SelectedSeats</span>
+                        </div>
+
+                        <div class="col-sm-4 text-secondary">Total Paid:</div>
+                        <div class="col-sm-8 fs-6 fw-bold text-success">RM @Model.TotalAmount.ToString("0.00")</div>
+                    </div>
                 </div>
-                <hr />
-                <h4>@Model.Showtime.Movie.Title</h4>
-                <p class="mb-1"><strong>Booking:</strong> @Model.Id</p>
-                <p class="mb-1"><strong>Showtime:</strong> @Model.Showtime.StartDateTime.ToString("dddd, dd MMM yyyy · h:mm tt")</p>
-                <p class="mb-1"><strong>Hall:</strong> @Model.Showtime.CinemaHall.HallName</p>
-                <p class="mb-1"><strong>Seats:</strong> @Model.SelectedSeats</p>
-                <p class="mb-1"><strong>Total paid:</strong> RM @Model.TotalAmount.ToString("0.00")</p>
-                <p class="small text-muted">@Model.PaymentStatus · @Model.PaymentReference</p>
-                <hr />
-                <a asp-action="DownloadTicket" asp-route-id="@Model.Id" class="btn btn-primary">Download printable PDF</a>
-                <a asp-action="History" class="btn btn-outline-secondary">My bookings</a>
+
+                <div class="mt-2 text-center">
+                    <small class="text-muted">
+                        Ref: @(string.IsNullOrEmpty(Model.PaymentReference) ? "-" : Model.PaymentReference)
+                    </small>
+                </div>
+            </div>
+
+            <hr class="text-muted" />
+
+            <div class="d-flex gap-2 justify-content-center mt-4">
+                <a asp-action="DownloadTicket" asp-route-id="@Model.Id" class="btn btn-primary fw-bold px-4">
+                    Download Printable PDF
+                </a>
+                <a asp-action="History" class="btn btn-outline-secondary fw-semibold px-4">
+                    My Bookings
+                </a>
             </div>
         </div>
     </div>

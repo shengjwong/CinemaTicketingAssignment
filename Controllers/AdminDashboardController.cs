@@ -25,33 +25,68 @@ namespace CinemaTicketingAssignment.Controllers
             return View(users);
         }
 
-        // 2. Edit User Details (GET)
-        [HttpGet]
-        public async Task<IActionResult> EditUser(string id)
-        {
-            var user = await _db.Users.FindAsync(id);
-            if (user == null) return NotFound();
-            return View(user);
-        }
-
-        // 2. Edit User Details (POST)
+        // 2. Create User / Admin (Via Modal)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditUser(User model)
+        public async Task<IActionResult> CreateUser(string name, string email, string phone, string password, string role)
         {
-            var user = await _db.Users.FindAsync(model.Id);
-            if (user == null) return NotFound();
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            {
+                TempData["Error"] = "Name, Email, and Password are required.";
+                return RedirectToAction(nameof(ManageMember));
+            }
 
-            user.Name = model.Name;
-            user.Email = model.Email;
-            user.Phone = model.Phone;
+            if (await _db.Users.AnyAsync(u => u.Email == email))
+            {
+                TempData["Error"] = "Email address is already registered.";
+                return RedirectToAction(nameof(ManageMember));
+            }
 
+            string prefix = role == "Admin" ? "ADM" : "MBR";
+            string newId = prefix + Guid.NewGuid().ToString("N")[..4].ToUpper();
+
+            User newUser = role == "Admin"
+                ? new Admin { Id = newId, Name = name, Email = email, Phone = phone }
+                : new Member { Id = newId, Name = name, Email = email, Phone = phone };
+
+            newUser.Hash = _passwordHasher.HashPassword(newUser, password);
+
+            _db.Users.Add(newUser);
             await _db.SaveChangesAsync();
-            TempData["Success"] = "User details updated successfully.";
+
+            TempData["Success"] = $"New {role} account ({name}) created successfully!";
             return RedirectToAction(nameof(ManageMember));
         }
 
-        // 3. Block / Unblock Account
+        // 3. Edit User Details (Via Modal POST)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUser(string id, string name, string email, string phone)
+        {
+            var user = await _db.Users.FindAsync(id);
+            if (user == null)
+            {
+                TempData["Error"] = "User not found.";
+                return RedirectToAction(nameof(ManageMember));
+            }
+
+            // 检查邮箱重复（排除自己）
+            if (await _db.Users.AnyAsync(u => u.Email == email && u.Id != id))
+            {
+                TempData["Error"] = "Email address is already used by another user.";
+                return RedirectToAction(nameof(ManageMember));
+            }
+
+            user.Name = name;
+            user.Email = email;
+            user.Phone = phone;
+
+            await _db.SaveChangesAsync();
+            TempData["Success"] = $"Details for {user.Name} updated successfully.";
+            return RedirectToAction(nameof(ManageMember));
+        }
+
+        // 4. Block / Unblock Account
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ToggleBlock(string id)
@@ -61,14 +96,12 @@ namespace CinemaTicketingAssignment.Controllers
 
             if (user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.UtcNow)
             {
-                // Unblock user
                 user.LockoutEnd = null;
                 user.FailedLoginAttempts = 0;
                 TempData["Success"] = $"User {user.Name} has been unblocked.";
             }
             else
             {
-                // Block user for 100 years
                 user.LockoutEnd = DateTime.UtcNow.AddYears(100);
                 TempData["Success"] = $"User {user.Name} has been blocked.";
             }
@@ -77,7 +110,7 @@ namespace CinemaTicketingAssignment.Controllers
             return RedirectToAction(nameof(ManageMember));
         }
 
-        // 4. Reset User Password
+        // 5. Reset User Password
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(string id, string newPassword)
@@ -100,7 +133,7 @@ namespace CinemaTicketingAssignment.Controllers
             return RedirectToAction(nameof(ManageMember));
         }
 
-        // 5. Delete User Account Safely
+        // 6. Delete User Account Safely
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteUser(string id)
@@ -120,7 +153,6 @@ namespace CinemaTicketingAssignment.Controllers
             }
             catch (DbUpdateException)
             {
-                // Catch foreign key violations (e.g., user has existing bookings or cart records)
                 TempData["Error"] = $"Cannot delete {user.Name} because they have existing transaction records (Bookings/Reviews). Please Block them instead.";
             }
 
