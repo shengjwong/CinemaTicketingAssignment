@@ -16,6 +16,9 @@ public class FoodOrder
     [MaxLength(30)]
     public string PaymentStatus { get; set; } = "Paid";
 
+    [MaxLength(50)]
+    public string PaymentReference { get; set; } = string.Empty;
+
     public string UserId { get; set; } = string.Empty;
     public User User { get; set; } = null!;
 

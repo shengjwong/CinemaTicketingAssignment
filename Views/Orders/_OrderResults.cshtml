@@ -1,0 +1,13 @@
+@model OrderListViewModel
+<div class="content-card p-0 overflow-hidden">
+    <div class="p-3 border-bottom text-muted small">@Model.TotalCount order(s) found</div>
+    @if (!Model.Orders.Any()) { <div class="p-4 text-center text-muted">No matching orders found.</div> }
+    else {
+    <div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead class="table-light"><tr><th>Order</th><th>Customer</th><th>Summary</th><th>Amount</th><th>Status</th><th>Date</th><th></th></tr></thead><tbody>
+    @foreach (var order in Model.Orders) {
+        <tr><td><strong>#@order.Id</strong><br /><small class="text-muted">@order.Type</small></td><td>@order.CustomerName<br /><small class="text-muted">@order.CustomerEmail</small></td><td>@order.Summary</td><td>RM @order.TotalAmount.ToString("0.00")</td><td><span class="badge @(order.CanCancel ? "bg-success" : "bg-secondary")">@order.Status</span></td><td>@order.OrderedAt.ToLocalTime().ToString("dd MMM yyyy, HH:mm")</td><td class="text-nowrap"><a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-type="@order.Type" asp-route-id="@order.Id">Details</a> @if (order.CanCancel) { <button class="btn btn-outline-danger btn-sm cancel-order" data-type="@order.Type" data-id="@order.Id">Cancel</button> }</td></tr>
+    }
+    </tbody></table></div>
+    @if (Model.TotalPages > 1) { <nav class="p-3"><ul class="pagination pagination-sm mb-0 justify-content-end">@for (var p = 1; p <= Model.TotalPages; p++) { <li class="page-item @(p == Model.Page ? "active" : "")"><button class="page-link order-page" data-page="@p">@p</button></li> }</ul></nav> }
+    }
+</div>

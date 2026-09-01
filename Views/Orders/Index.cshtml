@@ -1,0 +1,53 @@
+@model OrderListViewModel
+@{
+    ViewData["Title"] = "Order Management";
+}
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div><h2 class="page-title m-0">Order Management</h2><p class="text-muted small mb-0 mt-1">Ticket and F&amp;B orders in one place</p></div>
+    </div>
+    <div class="content-card p-4 mb-4">
+        <div class="row g-3">
+            <div class="col-md-5"><input id="orderSearch" class="form-control" type="search" placeholder="Search order ID, customer or item..." value="@Model.Search" autocomplete="off" /></div>
+            <div class="col-md-3"><select id="orderStatus" class="form-select"><option value="All" selected="@(Model.Status == "All" ? "selected" : null)">All statuses</option><option value="Paid" selected="@(Model.Status == "Paid" ? "selected" : null)">Paid</option><option value="Cancelled" selected="@(Model.Status == "Cancelled" ? "selected" : null)">Cancelled</option></select></div>
+            <div class="col-md-3"><select id="orderSort" class="form-select"><option value="date_desc" selected="@(Model.Sort == "date_desc" ? "selected" : null)">Newest first</option><option value="date_asc" selected="@(Model.Sort == "date_asc" ? "selected" : null)">Oldest first</option><option value="amount_desc" selected="@(Model.Sort == "amount_desc" ? "selected" : null)">Amount: high to low</option><option value="amount_asc" selected="@(Model.Sort == "amount_asc" ? "selected" : null)">Amount: low to high</option><option value="customer_asc" selected="@(Model.Sort == "customer_asc" ? "selected" : null)">Customer A–Z</option></select></div>
+            <div class="col-md-1"><button id="clearOrders" class="btn btn-outline-secondary w-100" title="Clear filters">×</button></div>
+        </div>
+    </div>
+    <div id="orderMessage"></div>
+    <div id="orderResults">@await Html.PartialAsync("_OrderResults", Model)</div>
+    <form id="orderAntiForgery">@Html.AntiForgeryToken()</form>
+</div>
+
+@section Scripts {
+<script>
+(() => {
+    let debounce;
+    const results = document.getElementById('orderResults');
+    const message = document.getElementById('orderMessage');
+    const load = (page = 1) => {
+        const params = new URLSearchParams({ search: orderSearch.value, status: orderStatus.value, sort: orderSort.value, page });
+        history.replaceState(null, '', `/Orders?${params}`);
+        fetch(`/Orders/Search?${params}`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(r => r.ok ? r.text() : Promise.reject())
+            .then(html => results.innerHTML = html)
+            .catch(() => results.innerHTML = '<div class="alert alert-danger">Unable to load orders.</div>');
+    };
+    orderSearch.addEventListener('input', () => { clearTimeout(debounce); debounce = setTimeout(() => load(), 250); });
+    [orderStatus, orderSort].forEach(x => x.addEventListener('change', () => load()));
+    clearOrders.addEventListener('click', () => { orderSearch.value = ''; orderStatus.value = 'All'; orderSort.value = 'date_desc'; load(); });
+    results.addEventListener('click', async event => {
+        const page = event.target.closest('.order-page');
+        if (page) { load(page.dataset.page); return; }
+        const cancel = event.target.closest('.cancel-order');
+        if (!cancel || !confirm(`Cancel order ${cancel.dataset.id}?`)) return;
+        const token = document.querySelector('#orderAntiForgery input').value;
+        const response = await fetch('/Orders/Cancel', { method: 'POST', headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': token }, body: JSON.stringify({ type: cancel.dataset.type, id: cancel.dataset.id }) });
+        const data = await response.json().catch(() => ({}));
+        message.innerHTML = `<div class="alert alert-${response.ok ? 'success' : 'danger'}">${data.message || 'Unable to cancel order.'}</div>`;
+        if (response.ok) load();
+    });
+})();
+</script>
+}

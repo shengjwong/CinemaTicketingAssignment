@@ -156,6 +156,7 @@ public class BookingsController : Controller
                 "Paid (Stripe Sandbox)",
                 "pi_test_" + Guid.NewGuid().ToString("N")[..12]);
 
+            TempData["PaymentSuccess"] = "Payment successful! Your movie tickets have been confirmed.";
             return RedirectToAction(nameof(Receipt), new { id = booking.Id });
         }
         catch (Exception ex) when (ex is DbUpdateException or InvalidOperationException)
@@ -183,6 +184,7 @@ public class BookingsController : Controller
                 "Paid (PayPal Client Demo)",
                 $"paypal_{request.OrderId}");
 
+            TempData["PaymentSuccess"] = "PayPal Sandbox payment successful! Your movie tickets have been confirmed.";
             return Ok(new { receiptUrl = Url.Action(nameof(Receipt), new { id = booking.Id }) });
         }
         catch (InvalidOperationException ex)
@@ -206,6 +208,35 @@ public class BookingsController : Controller
             .ToListAsync();
 
         return View(bookings);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Cancel(string id)
+    {
+        var booking = await _db.Bookings
+            .Include(b => b.Seats)
+            .Include(b => b.Showtime)
+            .FirstOrDefaultAsync(b => b.Id == id && b.UserId == CurrentUserId());
+
+        if (booking is null) return NotFound();
+        if (booking.PaymentStatus.StartsWith("Cancelled", StringComparison.OrdinalIgnoreCase))
+        {
+            TempData["Error"] = "This booking has already been cancelled.";
+            return RedirectToAction(nameof(History));
+        }
+        if (booking.Showtime.StartDateTime <= DateTime.Now)
+        {
+            TempData["Error"] = "A booking cannot be cancelled after its showtime has started.";
+            return RedirectToAction(nameof(History));
+        }
+
+        booking.PaymentStatus = "Cancelled";
+        booking.PaymentReference = $"Cancelled {DateTime.UtcNow:yyyyMMddHHmm}";
+        _db.BookingSeats.RemoveRange(booking.Seats);
+        await _db.SaveChangesAsync();
+        TempData["Success"] = "Booking cancelled. Your seats are available again.";
+        return RedirectToAction(nameof(History));
     }
 
     // ==========================================

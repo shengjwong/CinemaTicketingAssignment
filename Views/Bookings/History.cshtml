@@ -7,6 +7,8 @@
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h2 class="page-title m-0">My Bookings</h2>
     </div>
+    @if (TempData["Success"] is string success) { <div class="alert alert-success">@success</div> }
+    @if (TempData["Error"] is string error) { <div class="alert alert-danger">@error</div> }
 
     @if (!Model.Any())
     {
@@ -59,6 +61,14 @@
                                     <a asp-action="Receipt" asp-route-id="@booking.Id" class="btn btn-outline-primary btn-sm px-3 fw-semibold">
                                         Receipt
                                     </a>
+                                    @if (!booking.PaymentStatus.StartsWith("Cancelled", StringComparison.OrdinalIgnoreCase) && booking.Showtime.StartDateTime > DateTime.Now)
+                                    {
+                                        <form asp-action="Cancel" method="post" class="d-inline" onsubmit="return confirm('Cancel this booking? Your seats will become available again.');">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@booking.Id" />
+                                            <button class="btn btn-outline-danger btn-sm px-3 fw-semibold">Cancel</button>
+                                        </form>
+                                    }
                                 </td>
                             </tr>
                         }

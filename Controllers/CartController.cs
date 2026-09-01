@@ -32,51 +32,38 @@ public class CartController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ConfirmPurchase([FromBody] List<CartItemRequest> items)
     {
-        if (items is null || items.Count == 0)
-            return BadRequest(new { message = "Your cart is empty." });
-
-        var requestedItems = items
-            .Where(i => !string.IsNullOrWhiteSpace(i.Id) && i.Quantity is >= 1 and <= 10)
-            .GroupBy(i => i.Id)
-            .Select(g => new { Id = g.Key, Quantity = g.Sum(i => i.Quantity) })
-            .ToList();
-
-        if (requestedItems.Count == 0 || requestedItems.Any(i => i.Quantity > 10))
-            return BadRequest(new { message = "The cart contains an invalid quantity." });
-
-        var concessions = await _db.Concessions
-            .Where(c => requestedItems.Select(i => i.Id).Contains(c.Id))
-            .ToDictionaryAsync(c => c.Id);
-
-        if (concessions.Count != requestedItems.Count)
-            return BadRequest(new { message = "One or more food items are no longer available." });
-
-        var userId = CurrentUserId();
-        var order = new FoodOrder
+        try
         {
-            Id = "FOOD" + Guid.NewGuid().ToString("N")[..8].ToUpperInvariant(),
-            UserId = userId,
-            OrderDate = DateTime.UtcNow,
-            PaymentStatus = "Paid"
-        };
-
-        foreach (var requested in requestedItems)
-        {
-            var concession = concessions[requested.Id];
-            order.Items.Add(new FoodOrderItem
-            {
-                ConcessionId = concession.Id,
-                ItemName = concession.ItemName,
-                UnitPrice = concession.Price,
-                Quantity = requested.Quantity
-            });
+            var order = await CreateFoodOrderAsync(items, "Paid", string.Empty);
+            TempData["PaymentSuccess"] = "Payment successful! Your food order has been placed.";
+            return Ok(new { redirectUrl = Url.Action(nameof(Receipt), new { id = order.Id }) });
         }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 
-        order.TotalAmount = order.Items.Sum(i => i.Subtotal);
-        _db.FoodOrders.Add(order);
-        await _db.SaveChangesAsync();
+    [HttpPost]
+    [Authorize(Roles = "MEMBER")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ConfirmPayPalPurchase([FromBody] PayPalFoodOrderRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.OrderId))
+            return BadRequest(new { message = "A PayPal order ID is required." });
 
-        return Ok(new { redirectUrl = Url.Action(nameof(Receipt), new { id = order.Id }) });
+        try
+        {
+            // Client-ID-only Sandbox demo: the browser captures the PayPal order.
+            // Live payments must be verified on the server using a Client Secret.
+            var order = await CreateFoodOrderAsync(request.Items, "Paid (PayPal Client Demo)", $"paypal_{request.OrderId}");
+            TempData["PaymentSuccess"] = "PayPal Sandbox payment successful! Your food order has been placed.";
+            return Ok(new { redirectUrl = Url.Action(nameof(Receipt), new { id = order.Id }) });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     // ==========================================
@@ -114,9 +101,41 @@ public class CartController : Controller
     // ==========================================
     private string CurrentUserId() => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new UnauthorizedAccessException();
 
+    private async Task<FoodOrder> CreateFoodOrderAsync(List<CartItemRequest>? items, string paymentStatus, string paymentReference)
+    {
+        if (items is null || items.Count == 0)
+            throw new InvalidOperationException("Your cart is empty.");
+
+        var requestedItems = items.Where(i => !string.IsNullOrWhiteSpace(i.Id) && i.Quantity is >= 1 and <= 10)
+            .GroupBy(i => i.Id).Select(g => new { Id = g.Key, Quantity = g.Sum(i => i.Quantity) }).ToList();
+        if (requestedItems.Count == 0 || requestedItems.Any(i => i.Quantity > 10))
+            throw new InvalidOperationException("The cart contains an invalid quantity.");
+
+        var concessions = await _db.Concessions.Where(c => requestedItems.Select(i => i.Id).Contains(c.Id)).ToDictionaryAsync(c => c.Id);
+        if (concessions.Count != requestedItems.Count)
+            throw new InvalidOperationException("One or more food items are no longer available.");
+
+        var order = new FoodOrder { Id = "FOOD" + Guid.NewGuid().ToString("N")[..8].ToUpperInvariant(), UserId = CurrentUserId(), OrderDate = DateTime.UtcNow, PaymentStatus = paymentStatus, PaymentReference = paymentReference };
+        foreach (var requested in requestedItems)
+        {
+            var concession = concessions[requested.Id];
+            order.Items.Add(new FoodOrderItem { ConcessionId = concession.Id, ItemName = concession.ItemName, UnitPrice = concession.Price, Quantity = requested.Quantity });
+        }
+        order.TotalAmount = order.Items.Sum(i => i.Subtotal);
+        _db.FoodOrders.Add(order);
+        await _db.SaveChangesAsync();
+        return order;
+    }
+
     public sealed class CartItemRequest
     {
         public string Id { get; set; } = string.Empty;
         public int Quantity { get; set; }
+    }
+
+    public sealed class PayPalFoodOrderRequest
+    {
+        public List<CartItemRequest> Items { get; set; } = [];
+        public string OrderId { get; set; } = string.Empty;
     }
 }

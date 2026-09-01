@@ -40,6 +40,9 @@ using (var scope = app.Services.CreateScope())
             ALTER TABLE dbo.Bookings ADD PaymentStatus nvarchar(30) NOT NULL CONSTRAINT DF_Bookings_PaymentStatus DEFAULT 'Paid';
         IF COL_LENGTH('dbo.Bookings', 'PaymentReference') IS NULL
             ALTER TABLE dbo.Bookings ADD PaymentReference nvarchar(50) NOT NULL CONSTRAINT DF_Bookings_PaymentReference DEFAULT '';
+        IF OBJECT_ID(N'dbo.FoodOrders', N'U') IS NOT NULL
+           AND COL_LENGTH('dbo.FoodOrders', 'PaymentReference') IS NULL
+            ALTER TABLE dbo.FoodOrders ADD PaymentReference nvarchar(50) NOT NULL CONSTRAINT DF_FoodOrders_PaymentReference DEFAULT '';
 
         IF OBJECT_ID(N'dbo.SeatHolds', N'U') IS NULL
         BEGIN
@@ -77,6 +80,7 @@ using (var scope = app.Services.CreateScope())
                 OrderDate datetime2 NOT NULL,
                 TotalAmount decimal(18,2) NOT NULL,
                 PaymentStatus nvarchar(30) NOT NULL,
+                PaymentReference nvarchar(50) NOT NULL,
                 UserId nvarchar(10) NOT NULL,
                 CONSTRAINT FK_FoodOrders_Users_UserId FOREIGN KEY (UserId) REFERENCES dbo.Users(Id)
             );

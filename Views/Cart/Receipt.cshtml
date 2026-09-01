@@ -2,6 +2,10 @@
 @{
     ViewData["Title"] = "Food Receipt";
 }
+@if (TempData["PaymentSuccess"] is string paymentSuccess)
+{
+    @await Html.PartialAsync("_PaymentSuccessModal", paymentSuccess)
+}
 
 <div class="row justify-content-center my-4">
     <div class="col-lg-7">

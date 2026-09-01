@@ -11,5 +11,6 @@ public class Concession
     public string ItemName { get; set; } = string.Empty;
 
     [Range(0, 1000)]
+    [System.ComponentModel.DataAnnotations.Schema.Column(TypeName = "decimal(18,2)")]
     public decimal Price { get; set; }
 }
