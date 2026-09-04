@@ -1843,7 +1843,6 @@ C:\Users\User\OneDrive\Documents\GitHub\TESTFORCODE\obj\Debug\net10.0\refint\Cin
 C:\Users\User\OneDrive\Documents\GitHub\TESTFORCODE\obj\Debug\net10.0\CinemaTicketingAssignment.pdb
 C:\Users\User\OneDrive\Documents\GitHub\TESTFORCODE\obj\Debug\net10.0\CinemaTicketingAssignment.genruntimeconfig.cache
 C:\Users\User\OneDrive\Documents\GitHub\TESTFORCODE\obj\Debug\net10.0\ref\CinemaTicketingAssignment.dll
-C:\Users\oscar\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\vw05hpltzo-{0}-6w3z1vx7oz-6w3z1vx7oz.gz
 C:\Users\User\source\repos\CinemaTicketingAssignment\bin\Debug\net10.0\BouncyCastle.Cryptography.dll
 C:\Users\User\source\repos\CinemaTicketingAssignment\bin\Debug\net10.0\EPPlus.dll
 C:\Users\User\source\repos\CinemaTicketingAssignment\bin\Debug\net10.0\EPPlus.Interfaces.dll
@@ -2546,3 +2545,4 @@ C:\Users\User\OneDrive\Documents\GitHub\CinemaTicketingAssignment2\obj\Debug\net
 C:\Users\User\OneDrive\Documents\GitHub\CinemaTicketingAssignment2\obj\Debug\net10.0\CinemaTi.3CBB9B5A.Up2Date
 C:\Users\User\OneDrive\Documents\GitHub\CinemaTicketingAssignment2\obj\Debug\net10.0\CinemaTicketingAssignment.genruntimeconfig.cache
 C:\Users\User\OneDrive\Documents\GitHub\CinemaTicketingAssignment2\obj\Debug\net10.0\ref\CinemaTicketingAssignment.dll
+C:\Users\oscar\source\repos\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\vw05hpltzo-{0}-v3zhr2q3lx-v3zhr2q3lx.gz
