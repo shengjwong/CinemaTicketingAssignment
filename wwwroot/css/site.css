@@ -11,8 +11,8 @@
     --radius-sm: 8px;
     --radius-md: 14px;
     --radius-lg: 20px;
-    --shadow-soft: 0 12px 35px rgba(0, 0, 0, 0.7);
-    --shadow-hover: 0 20px 40px -10px rgba(0, 242, 254, 0.4);
+    --shadow-soft: 0 10px 30px -5px rgba(0, 0, 0, 0.6);
+    --shadow-hover: 0 20px 40px -10px rgba(0, 242, 254, 0.3);
     --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -24,15 +24,12 @@ html, body {
     color: #e0f2fe !important;
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background-color: var(--bg-dark) !important;
-    background-image: linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px), 
-                      linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px), 
-                      radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.15) 0%, transparent 60%);
+    background-image: linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px), radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.15) 0%, transparent 60%);
     background-size: 32px 32px, 32px 32px, 100% 100%;
     background-attachment: fixed;
     -webkit-font-smoothing: antialiased;
 }
 
-<<<<<<< HEAD
     /* ===================================================
    2. 卡片与通用容器样式
    =================================================== */
@@ -133,15 +130,11 @@ html, body {
         color: #00f2fe !important;
     }
 
-=======
-/* 选中文本高亮 */
->>>>>>> 31d71efd4eb43d456d5d6899452854b859c1dbdb
 ::selection {
     background: #00f2fe !important;
     color: #08121e !important;
 }
 
-<<<<<<< HEAD
 /* ===================================================
    5. 客户评论区（Customer Reviews）文字修饰为红色
    =================================================== */
@@ -162,160 +155,6 @@ html body #reviewsList .text-warning {
 
 /* ===================================================
    6. TOP-DOWN CINEMA SEAT MAP (高级俯视影厅地图)
-=======
-
-/* ===================================================
-   2. REFINED CARDS & CONTAINER BOXES
-   =================================================== */
-
-/* 所有卡片背景与边框强制替换 */
-html body .card,
-html body .movie-card,
-html body .concession-card,
-html body .table-card,
-html body .form-card,
-html body [class*="card"] {
-    background-color: #0d1b2a !important;
-    background: #0d1b2a !important;
-    border: 1px solid rgba(0, 242, 254, 0.4) !important;
-    border-radius: var(--radius-md) !important;
-    box-shadow: var(--shadow-soft), 0 0 15px rgba(0, 242, 254, 0.1) !important;
-    transition: var(--transition-smooth) !important;
-}
-
-/* 1. 强制卡片内部的所有 标题 (H1-H6, .card-title) 变为电光高亮青 */
-html body .card h1, html body .card h2, html body .card h3,
-html body .card h4, html body .card h5, html body .card h6,
-html body .card .card-title, html body .card .movie-title,
-html body [class*="card"] h1, html body [class*="card"] h2,
-html body [class*="card"] h3, html body [class*="card"] h4,
-html body [class*="card"] h5, html body [class*="card"] h6,
-html body [class*="card"] .card-title {
-    color: #00f2fe !important;
-    font-weight: 800 !important;
-    opacity: 1 !important;
-    letter-spacing: -0.02em !important;
-    text-shadow: 0 0 12px rgba(0, 242, 254, 0.4) !important;
-}
-
-/* 2. 强制卡片内部的所有 描述段落 (.card-text, p) 变为亮浅青白 */
-html body .card p,
-html body .card .card-text,
-html body [class*="card"] p,
-html body [class*="card"] .card-text {
-    color: #cbd5e1 !important;
-    opacity: 0.95 !important;
-    font-size: 0.95rem !important;
-    line-height: 1.6 !important;
-}
-
-/* 3. 强行覆写 Bootstrap 默认的暗色文本类 变为高亮天空蓝 */
-html body .text-muted,
-html body .text-dark,
-html body .text-secondary,
-html body .card small,
-html body .card .small,
-html body .card span,
-html body [class*="card"] small,
-html body [class*="card"] span {
-    color: #38bdf8 !important;
-    opacity: 1 !important;
-}
-
-/* 鼠标悬停卡片效果 */
-html body .card:hover,
-html body .movie-card:hover,
-html body [class*="card"]:hover {
-    border-color: #00f2fe !important;
-    box-shadow: var(--shadow-hover) !important;
-    transform: translateY(-3px) !important;
-}
-
-/* 图片区域：防止无图时白块 */
-html body .card-img-top,
-html body .movie-poster,
-html body img {
-    background-color: #08121e !important;
-    border-bottom: 1px solid rgba(0, 242, 254, 0.2) !important;
-}
-
-
-/* ===================================================
-   3. CLEAR & HIGH-CONTRAST FORM INPUTS & BUTTONS
-   =================================================== */
-
-/* 表单 Label 标签 */
-html body label,
-html body .form-label {
-    color: #38bdf8 !important;
-    font-weight: 700 !important;
-    font-size: 0.88rem !important;
-    letter-spacing: 0.03em !important;
-    margin-bottom: 0.4rem !important;
-    display: inline-block !important;
-}
-
-/* 清晰高亮输入框 */
-html body .form-control,
-html body .form-select,
-html body input[type="text"],
-html body input[type="email"],
-html body input[type="password"],
-html body textarea {
-    background-color: #060e17 !important;
-    border: 1.5px solid rgba(0, 242, 254, 0.45) !important;
-    border-radius: var(--radius-sm) !important;
-    color: #ffffff !important;
-    font-size: 0.95rem !important;
-    padding: 12px 16px !important;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5) !important;
-    transition: all 0.25s ease !important;
-}
-
-/* Placeholder 占位符文字暗色修复 */
-html body .form-control::placeholder,
-html body input::placeholder {
-    color: #64748b !important;
-    opacity: 1 !important;
-}
-
-/* 输入框选中/聚焦状态 */
-html body .form-control:focus,
-html body .form-select:focus,
-html body input:focus {
-    background-color: #081422 !important;
-    border-color: #00f2fe !important;
-    box-shadow: 0 0 12px rgba(0, 242, 254, 0.5), inset 0 1px 3px rgba(0, 0, 0, 0.6) !important;
-    color: #ffffff !important;
-    outline: none !important;
-}
-
-/* 主要青色按钮 */
-html body .btn-primary,
-html body .btn-create,
-html body button[type="submit"] {
-    background: linear-gradient(135deg, #00f2fe 0%, #0284c7 100%) !important;
-    color: #040d1a !important;
-    border-radius: var(--radius-sm) !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.05em !important;
-    padding: 12px 24px !important;
-    border: none !important;
-    box-shadow: 0 4px 18px rgba(0, 242, 254, 0.4) !important;
-    transition: var(--transition-smooth) !important;
-}
-
-html body .btn-primary:hover,
-html body button[type="submit"]:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 24px rgba(0, 242, 254, 0.6) !important;
-    filter: brightness(1.1) !important;
-}
-
-
-/* ===================================================
-   4. TOP-DOWN CINEMA SEAT MAP
->>>>>>> 31d71efd4eb43d456d5d6899452854b859c1dbdb
    =================================================== */
 .cinema-map {
     position: relative;
@@ -323,13 +162,7 @@ html body button[type="submit"]:hover {
     padding: 1.25rem;
     border: 1px solid rgba(0, 242, 254, 0.22);
     border-radius: 18px;
-<<<<<<< HEAD
     background: radial-gradient(ellipse at 50% 0%, rgba(79, 172, 254, 0.18), transparent 42%), linear-gradient(180deg, rgba(4, 12, 23, 0.98), rgba(9, 25, 39, 0.98));
-=======
-    background:
-        radial-gradient(ellipse at 50% 0%, rgba(79, 172, 254, 0.18), transparent 42%),
-        linear-gradient(180deg, rgba(4, 12, 23, 0.98), rgba(9, 25, 39, 0.98));
->>>>>>> 31d71efd4eb43d456d5d6899452854b859c1dbdb
     box-shadow: inset 0 0 45px rgba(0, 0, 0, 0.55);
 }
 
@@ -394,19 +227,11 @@ html body button[type="submit"]:hover {
     font-size: 0.78rem;
 }
 
-<<<<<<< HEAD
     .seat-legend > span {
         display: inline-flex;
         align-items: center;
         gap: 0.45rem;
     }
-=======
-.seat-legend > span {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-}
->>>>>>> 31d71efd4eb43d456d5d6899452854b859c1dbdb
 
 .seat-swatch {
     display: inline-block;
@@ -415,7 +240,6 @@ html body button[type="submit"]:hover {
     border-radius: 5px 5px 3px 3px;
 }
 
-<<<<<<< HEAD
     .seat-swatch.available {
         border: 1px solid #39d5e6;
         background: #12374b;
@@ -432,11 +256,6 @@ html body button[type="submit"]:hover {
         background: #5c1414;
         opacity: 0.85;
     }
-=======
-.seat-swatch.available { border: 1px solid #39d5e6; background: #12374b; }
-.seat-swatch.selected { border: 1px solid #5cff9d; background: #18b96b; box-shadow: 0 0 8px rgba(92, 255, 157, 0.55); }
-.seat-swatch.occupied { border: 1px solid #516474; background: #273747; opacity: 0.7; }
->>>>>>> 31d71efd4eb43d456d5d6899452854b859c1dbdb
 
 .cinema-floor-scroll {
     overflow-x: auto;
@@ -452,14 +271,7 @@ html body button[type="submit"]:hover {
     padding: 1.35rem 2.7rem 1rem;
     border: 1px solid rgba(94, 198, 220, 0.24);
     border-radius: 42px 42px 16px 16px;
-<<<<<<< HEAD
     background: linear-gradient(90deg, transparent 49.8%, rgba(85, 195, 216, 0.08) 50%, transparent 50.2%), repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.016) 0, rgba(255, 255, 255, 0.016) 1px, transparent 1px, transparent 28px), linear-gradient(180deg, rgba(11, 31, 47, 0.92), rgba(5, 16, 27, 0.96));
-=======
-    background:
-        linear-gradient(90deg, transparent 49.8%, rgba(85, 195, 216, 0.08) 50%, transparent 50.2%),
-        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.016) 0, rgba(255, 255, 255, 0.016) 1px, transparent 1px, transparent 28px),
-        linear-gradient(180deg, rgba(11, 31, 47, 0.92), rgba(5, 16, 27, 0.96));
->>>>>>> 31d71efd4eb43d456d5d6899452854b859c1dbdb
     clip-path: polygon(7% 0, 93% 0, 100% 100%, 0 100%);
     box-shadow: inset 0 18px 40px rgba(0, 0, 0, 0.36), 0 18px 35px rgba(0, 0, 0, 0.3);
 }
@@ -473,7 +285,6 @@ html body button[type="submit"]:hover {
     pointer-events: none;
 }
 
-<<<<<<< HEAD
 .side-aisle-left {
     left: 7.5%;
     transform: rotate(2.5deg);
@@ -483,10 +294,6 @@ html body button[type="submit"]:hover {
     right: 7.5%;
     transform: rotate(-2.5deg);
 }
-=======
-.side-aisle-left { left: 7.5%; transform: rotate(2.5deg); }
-.side-aisle-right { right: 7.5%; transform: rotate(-2.5deg); }
->>>>>>> 31d71efd4eb43d456d5d6899452854b859c1dbdb
 
 .top-view-seat-grid {
     position: relative;
@@ -524,7 +331,6 @@ html body button[type="submit"]:hover {
     min-height: 38px;
 }
 
-<<<<<<< HEAD
     .centre-aisle::before {
         position: absolute;
         top: -0.35rem;
@@ -549,30 +355,6 @@ html body button[type="submit"]:hover {
 /* 基础座位元素 */
 html body .cinema-map .seat,
 html body .seat {
-=======
-.centre-aisle::before {
-    position: absolute;
-    top: -0.35rem;
-    bottom: -0.35rem;
-    left: 50%;
-    content: "";
-    border-left: 1px dashed rgba(101, 218, 235, 0.32);
-}
-
-.centre-aisle i {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: #3daac1;
-    box-shadow: 0 0 8px rgba(61, 170, 193, 0.7);
-    transform: translate(-50%, -50%);
-}
-
-html body .cinema-map .seat {
->>>>>>> 31d71efd4eb43d456d5d6899452854b859c1dbdb
     position: relative;
     min-width: 36px;
     height: 38px;
@@ -589,7 +371,6 @@ html body .cinema-map .seat {
     transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease !important;
 }
 
-<<<<<<< HEAD
     html body .cinema-map .seat::before,
     html body .cinema-map .seat::after {
         position: absolute;
@@ -645,48 +426,6 @@ html body .cinema-map .seat {
         opacity: 0.9 !important;
         transform: none !important;
     }
-=======
-html body .cinema-map .seat::before,
-html body .cinema-map .seat::after {
-    position: absolute;
-    bottom: 3px;
-    width: 4px;
-    height: 15px;
-    content: "";
-    border-radius: 3px;
-    background: currentColor;
-    opacity: 0.42;
-}
-
-html body .cinema-map .seat::before { left: -3px; }
-html body .cinema-map .seat::after { right: -3px; }
-
-html body .cinema-map .seat.available:hover,
-html body .cinema-map .seat.available:focus-visible {
-    z-index: 3;
-    color: #fff !important;
-    background: linear-gradient(180deg, #19758d, #0e4d64) !important;
-    box-shadow: 0 0 15px rgba(0, 242, 254, 0.62), inset 0 -5px 0 rgba(0, 0, 0, 0.18) !important;
-    transform: translateY(-3px) scale(1.08);
-}
-
-html body .cinema-map .seat.selected {
-    color: #04180d !important;
-    border-color: #75ffad !important;
-    background: linear-gradient(180deg, #62f59d, #19b96c) !important;
-    box-shadow: 0 0 14px rgba(74, 255, 148, 0.65), inset 0 -5px 0 rgba(0, 77, 38, 0.2) !important;
-    transform: translateY(-2px);
-}
-
-html body .cinema-map .seat.occupied {
-    color: #78909e !important;
-    border-color: #405566 !important;
-    background: repeating-linear-gradient(135deg, #263846 0, #263846 5px, #1d2b36 5px, #1d2b36 9px) !important;
-    box-shadow: inset 0 -5px 0 rgba(0, 0, 0, 0.25) !important;
-    cursor: not-allowed;
-    opacity: 0.48;
-}
->>>>>>> 31d71efd4eb43d456d5d6899452854b859c1dbdb
 
 .hall-rear {
     display: flex;
@@ -700,7 +439,6 @@ html body .cinema-map .seat.occupied {
     border-top: 1px solid rgba(72, 170, 191, 0.16);
 }
 
-<<<<<<< HEAD
     .hall-rear span:first-child,
     .hall-rear span:last-child {
         color: #55dca0;
@@ -729,15 +467,3 @@ html body .cinema-map .seat.occupied {
         font-size: 0.7rem;
     }
 }
-=======
-.hall-rear span:first-child,
-.hall-rear span:last-child { color: #55dca0; }
-
-@media (max-width: 767.98px) {
-    .cinema-map { padding: 0.9rem 0.55rem; }
-    .screen-zone { width: 94%; height: 98px; }
-    .cinema-screen { width: 92%; }
-    .cinema-floor-scroll { margin-inline: -0.2rem; }
-    .seat-legend { gap: 0.55rem 0.9rem; font-size: 0.7rem; }
-}
->>>>>>> 31d71efd4eb43d456d5d6899452854b859c1dbdb
