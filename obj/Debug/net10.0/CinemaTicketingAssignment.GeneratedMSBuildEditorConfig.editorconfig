@@ -20,201 +20,201 @@ build_property.TargetFrameworkVersion = v10.0
 build_property.EntryPointFilePath = 
 build_property.RootNamespace = CinemaTicketingAssignment
 build_property.RootNamespace = CinemaTicketingAssignment
-build_property.ProjectDir = C:\Users\User\OneDrive\Documents\GitHub\CinemaTicketingAssignment\
+build_property.ProjectDir = C:\CinemaTicketingAssignment\CinemaTicketingAssignment\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 10.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\User\OneDrive\Documents\GitHub\CinemaTicketingAssignment
+build_property.MSBuildProjectDirectory = C:\CinemaTicketingAssignment\CinemaTicketingAssignment
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Account/AdminLogin.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Account/AdminLogin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxBZG1pbkxvZ2luLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Account/ForgotPassword.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Account/ForgotPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxGb3Jnb3RQYXNzd29yZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Account/Login.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Account/Register.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Account/ResetPassword.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Account/ResetPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZXNldFBhc3N3b3JkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/AdminDashboard/ManageMember.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/AdminDashboard/ManageMember.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5EYXNoYm9hcmRcTWFuYWdlTWVtYmVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Bookings/History.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Bookings/History.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ3NcSGlzdG9yeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Bookings/Payment.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Bookings/Payment.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ3NcUGF5bWVudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Bookings/Receipt.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Bookings/Receipt.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ3NcUmVjZWlwdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Bookings/SelectSeats.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Bookings/SelectSeats.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ3NcU2VsZWN0U2VhdHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Cart/History.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Cart/History.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxIaXN0b3J5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Cart/Index.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Cart/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Cart/Receipt.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Cart/Receipt.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxSZWNlaXB0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/CinemaHalls/Create.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/CinemaHalls/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2luZW1hSGFsbHNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/CinemaHalls/Delete.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/CinemaHalls/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2luZW1hSGFsbHNcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/CinemaHalls/Details.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/CinemaHalls/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2luZW1hSGFsbHNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/CinemaHalls/Edit.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/CinemaHalls/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2luZW1hSGFsbHNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/CinemaHalls/Index.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/CinemaHalls/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2luZW1hSGFsbHNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Concessions/Index.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Concessions/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29uY2Vzc2lvbnNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Concessions/Manage.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Concessions/Manage.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29uY2Vzc2lvbnNcTWFuYWdlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Home/Index.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Home/Locations.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Home/Locations.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMb2NhdGlvbnMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Home/Privacy.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Movies/Admin.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Movies/Admin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVzXEFkbWluLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Movies/Create.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Movies/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVzXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Movies/Delete.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Movies/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVzXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Movies/Details.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Movies/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVzXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Movies/Edit.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Movies/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVzXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Movies/Index.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Movies/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Movies/_MovieCatalogResults.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Movies/_MovieCatalogResults.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVzXF9Nb3ZpZUNhdGFsb2dSZXN1bHRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Orders/Details.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Orders/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJzXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Orders/Index.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Orders/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Orders/_OrderResults.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Orders/_OrderResults.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJzXF9PcmRlclJlc3VsdHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Profile/Profile.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Profile/Profile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZmlsZVxQcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Reports/Dashboard.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Reports/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0c1xEYXNoYm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Shared/Error.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Shared/_PaymentSuccessModal.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Shared/_PaymentSuccessModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9QYXltZW50U3VjY2Vzc01vZGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Showtimes/Create.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Showtimes/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvd3RpbWVzXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Showtimes/CustomerIndex.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Showtimes/CustomerIndex.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvd3RpbWVzXEN1c3RvbWVySW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Showtimes/Delete.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Showtimes/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvd3RpbWVzXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Showtimes/Details.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Showtimes/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvd3RpbWVzXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Showtimes/Edit.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Showtimes/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvd3RpbWVzXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Showtimes/Index.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Showtimes/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hvd3RpbWVzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/_ViewImports.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/_ViewStart.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/OneDrive/Documents/GitHub/CinemaTicketingAssignment/Views/Shared/_Layout.cshtml]
+[C:/CinemaTicketingAssignment/CinemaTicketingAssignment/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-ozoielwoir

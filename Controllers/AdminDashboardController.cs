@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace CinemaTicketingAssignment.Controllers
 {
@@ -33,6 +34,13 @@ namespace CinemaTicketingAssignment.Controllers
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             {
                 TempData["Error"] = "Name, Email, and Password are required.";
+                return RedirectToAction(nameof(ManageMember));
+            }
+
+            // Phone validation: Digits only, 10 to 11 digits
+            if (!string.IsNullOrWhiteSpace(phone) && !Regex.IsMatch(phone, @"^[0-9]{10,11}$"))
+            {
+                TempData["Error"] = "Phone number must contain digits only (10 to 11 digits).";
                 return RedirectToAction(nameof(ManageMember));
             }
 
@@ -67,6 +75,13 @@ namespace CinemaTicketingAssignment.Controllers
             if (user == null)
             {
                 TempData["Error"] = "User not found.";
+                return RedirectToAction(nameof(ManageMember));
+            }
+
+            // Phone validation: Digits only, 10 to 11 digits
+            if (!string.IsNullOrWhiteSpace(phone) && !Regex.IsMatch(phone, @"^[0-9]{10,11}$"))
+            {
+                TempData["Error"] = "Phone number must contain digits only (10 to 11 digits).";
                 return RedirectToAction(nameof(ManageMember));
             }
 

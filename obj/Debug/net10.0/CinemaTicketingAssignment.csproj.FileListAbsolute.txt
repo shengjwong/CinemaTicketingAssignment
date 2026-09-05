@@ -2313,7 +2313,6 @@ C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\refint\
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\CinemaTicketingAssignment.pdb
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\CinemaTicketingAssignment.genruntimeconfig.cache
 C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\ref\CinemaTicketingAssignment.dll
-C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\vw05hpltzo-{0}-ztmppvun8v-ztmppvun8v.gz
 C:\Users\User\OneDrive\Documents\GitHub\CinemaTicketingAssignment2\obj\Debug\net10.0\CinemaTicketingAssignment.dll
 C:\Users\User\OneDrive\Documents\GitHub\CinemaTicketingAssignment2\obj\Debug\net10.0\refint\CinemaTicketingAssignment.dll
 C:\Users\User\OneDrive\Documents\GitHub\CinemaTicketingAssignment2\obj\Debug\net10.0\CinemaTicketingAssignment.pdb
@@ -2778,3 +2777,4 @@ C:\Users\User\OneDrive\Documents\GitHub\CinemaTicketingAssignment\obj\Debug\net1
 C:\Users\User\OneDrive\Documents\GitHub\CinemaTicketingAssignment\obj\Debug\net10.0\CinemaTicketingAssignment.genruntimeconfig.cache
 C:\Users\User\OneDrive\Documents\GitHub\CinemaTicketingAssignment\obj\Debug\net10.0\ref\CinemaTicketingAssignment.dll
 C:\Users\User\OneDrive\Documents\GitHub\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\vw05hpltzo-{0}-021h9kcyj2-021h9kcyj2.gz
+C:\CinemaTicketingAssignment\CinemaTicketingAssignment\obj\Debug\net10.0\compressed\vw05hpltzo-{0}-9rg6ghqv22-9rg6ghqv22.gz

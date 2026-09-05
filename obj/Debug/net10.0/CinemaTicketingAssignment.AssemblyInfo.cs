@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CinemaTicketingAssignment")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+196e188de6a62a12ae4354fc27b055f5f5815c0a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2cc05e2702a061a9c8d8e8188a5929cef7c6ca21")]
 [assembly: System.Reflection.AssemblyProductAttribute("CinemaTicketingAssignment")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CinemaTicketingAssignment")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
