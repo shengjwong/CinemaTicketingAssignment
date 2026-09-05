@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\oscar\\source\\repos\\CinemaTicketingAssignment\\CinemaTicketingAssignment.csproj": {}
+    "C:\\Users\\User\\OneDrive\\Documents\\GitHub\\CinemaTicketingAssignment\\CinemaTicketingAssignment.csproj": {}
   },
   "projects": {
-    "C:\\Users\\oscar\\source\\repos\\CinemaTicketingAssignment\\CinemaTicketingAssignment.csproj": {
+    "C:\\Users\\User\\OneDrive\\Documents\\GitHub\\CinemaTicketingAssignment\\CinemaTicketingAssignment.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\oscar\\source\\repos\\CinemaTicketingAssignment\\CinemaTicketingAssignment.csproj",
+        "projectUniqueName": "C:\\Users\\User\\OneDrive\\Documents\\GitHub\\CinemaTicketingAssignment\\CinemaTicketingAssignment.csproj",
         "projectName": "CinemaTicketingAssignment",
-        "projectPath": "C:\\Users\\oscar\\source\\repos\\CinemaTicketingAssignment\\CinemaTicketingAssignment.csproj",
-        "packagesPath": "C:\\Users\\oscar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\oscar\\source\\repos\\CinemaTicketingAssignment\\obj\\",
+        "projectPath": "C:\\Users\\User\\OneDrive\\Documents\\GitHub\\CinemaTicketingAssignment\\CinemaTicketingAssignment.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\OneDrive\\Documents\\GitHub\\CinemaTicketingAssignment\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\oscar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

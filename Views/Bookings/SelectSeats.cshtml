@@ -2,6 +2,8 @@
 @{
     ViewData["Title"] = "Choose your seats";
     var capacity = Model.Showtime.CinemaHall.SeatCapacity;
+    var halfColumns = Model.Columns / 2;
+    var rowCount = (int)Math.Ceiling(capacity / (double)Model.Columns);
 }
 
 <div class="container my-4">
@@ -22,32 +24,87 @@
                     </p>
                 </div>
 
-                <!-- Screen & Legend -->
-                <div class="screen">SCREEN</div>
+                <!-- Top-down cinema plan -->
+                <div class="cinema-map" aria-label="Top-down cinema seating plan">
+                    <div class="screen-zone" aria-hidden="true">
+                        <div class="screen-glow"></div>
+                        <div class="cinema-screen">SCREEN</div>
+                        <span class="screen-caption">FRONT OF HALL</span>
+                    </div>
 
-                <div class="seat-legend">
-                    <span><i class="seat available"></i> Available</span>
-                    <span><i class="seat selected"></i> Your selection</span>
-                    <span><i class="seat occupied"></i> Booked / Locked</span>
-                </div>
+                    <div class="seat-legend" aria-label="Seat status legend">
+                        <span><i class="seat-swatch available"></i> Available</span>
+                        <span><i class="seat-swatch selected"></i> Your selection</span>
+                        <span><i class="seat-swatch occupied"></i> Booked / Locked</span>
+                    </div>
 
-                <!-- Seats Grid Container -->
-                <div class="p-3 bg-light rounded-3 border">
-                    <div id="seat-grid" class="seat-grid" style="grid-template-columns: repeat(@Model.Columns, 1fr)">
-                        @for (var index = 0; index < capacity; index++)
-                        {
-                            var row = (char)('A' + index / Model.Columns);
-                            var seat = $"{row}{index % Model.Columns + 1}";
-                            var isBooked = Model.BookedSeats.Contains(seat);
-                            var isLocked = Model.LockedSeats.Contains(seat);
-                            var isMine = Model.MyHeldSeats.Contains(seat);
-                            <button type="button"
-                                    class="seat @(isBooked || isLocked ? "occupied" : isMine ? "selected" : "available")"
-                                    data-seat="@seat"
-                                    disabled="@(isBooked || isLocked)">
-                                @seat
-                            </button>
-                        }
+                    <div class="cinema-floor-scroll">
+                        <div class="cinema-floor">
+                            <div class="side-aisle side-aisle-left" aria-hidden="true"></div>
+                            <div class="side-aisle side-aisle-right" aria-hidden="true"></div>
+
+                            <div id="seat-grid" class="top-view-seat-grid">
+                                @for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                                {
+                                    var rowLetter = (char)('A' + rowIndex);
+                                    <div class="cinema-seat-row" style="--row-depth: @rowIndex">
+                                        <span class="row-label">@rowLetter</span>
+                                        <div class="row-seats" style="grid-template-columns: repeat(@halfColumns, minmax(36px, 1fr)) 42px repeat(@halfColumns, minmax(36px, 1fr));">
+                                            @for (var column = 0; column < halfColumns; column++)
+                                            {
+                                                var index = rowIndex * Model.Columns + column;
+                                                if (index < capacity)
+                                                {
+                                                    var seat = $"{rowLetter}{column + 1}";
+                                                    var isBooked = Model.BookedSeats.Contains(seat);
+                                                    var isLocked = Model.LockedSeats.Contains(seat);
+                                                    var isMine = Model.MyHeldSeats.Contains(seat);
+                                                    var seatState = isBooked || isLocked ? "occupied" : isMine ? "selected" : "available";
+                                                    <button type="button"
+                                                            class="seat @seatState"
+                                                            data-seat="@seat"
+                                                            aria-label="Seat @seat, @seatState"
+                                                            aria-pressed="@(isMine ? "true" : "false")"
+                                                            disabled="@(isBooked || isLocked)">
+                                                        <span>@seat</span>
+                                                    </button>
+                                                }
+                                            }
+
+                                            <span class="centre-aisle" aria-hidden="true"><i></i></span>
+
+                                            @for (var column = halfColumns; column < Model.Columns; column++)
+                                            {
+                                                var index = rowIndex * Model.Columns + column;
+                                                if (index < capacity)
+                                                {
+                                                    var seat = $"{rowLetter}{column + 1}";
+                                                    var isBooked = Model.BookedSeats.Contains(seat);
+                                                    var isLocked = Model.LockedSeats.Contains(seat);
+                                                    var isMine = Model.MyHeldSeats.Contains(seat);
+                                                    var seatState = isBooked || isLocked ? "occupied" : isMine ? "selected" : "available";
+                                                    <button type="button"
+                                                            class="seat @seatState"
+                                                            data-seat="@seat"
+                                                            aria-label="Seat @seat, @seatState"
+                                                            aria-pressed="@(isMine ? "true" : "false")"
+                                                            disabled="@(isBooked || isLocked)">
+                                                        <span>@seat</span>
+                                                    </button>
+                                                }
+                                            }
+                                        </div>
+                                        <span class="row-label">@rowLetter</span>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="hall-rear" aria-hidden="true">
+                                <span><i class="bi bi-box-arrow-left"></i> EXIT</span>
+                                <span>REAR OF HALL</span>
+                                <span>EXIT <i class="bi bi-box-arrow-right"></i></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -104,7 +161,12 @@
         const errorBox = document.getElementById('seat-error');
 
         function render() {
-            document.querySelectorAll('.seat:not(.occupied)').forEach(button => button.classList.toggle('selected', selected.has(button.dataset.seat)));
+            document.querySelectorAll('.seat:not(.occupied)').forEach(button => {
+                const isSelected = selected.has(button.dataset.seat);
+                button.classList.toggle('selected', isSelected);
+                button.classList.toggle('available', !isSelected);
+                button.setAttribute('aria-pressed', isSelected.toString());
+            });
             const seats = [...selected].sort();
             document.getElementById('chosen-seats').textContent = seats.length ? seats.join(', ') : 'None';
             document.getElementById('total').textContent = `RM ${(seats.length * price).toFixed(2)}`;
